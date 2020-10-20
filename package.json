@@ -1,0 +1,15 @@
+{
+  "name": "chouquette-api-gateway",
+  "version": "1.0.0",
+  "description": "The API Gateway for lachouqette",
+  "main": "index.js",
+  "author": "Fabrice Douchant",
+  "license": "lachouquette.ch",
+  "dependencies": {
+    "apollo-server-express": "^2.18.2",
+    "dotenv": "^8.2.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  }
+}
