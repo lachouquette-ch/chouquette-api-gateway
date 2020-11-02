@@ -1,11 +1,25 @@
 const {gql} = require('apollo-server-express');
 
 const typeDefs = gql`
+    # TO RESOLVE CACHE CONTROL
+    directive @cacheControl(
+        maxAge: Int,
+        scope: CacheControlScope
+    ) on OBJECT | FIELD_DEFINITION
+    
+    enum CacheControlScope {
+        PUBLIC
+        PRIVATE
+    }
+    
+    # Caching values
+    # 4 hours = 14400 / 2 hours = 7200 / 1 hours = 3600 / 30 min = 1800 / 5 min = 300  
+    
     type Menu {
         id: ID!
         name: String!
         slug: String!
-        items: [MenuItem!]
+        items: [MenuItem!] @cacheControl(maxAge: 14400)
     }
     
     enum MenuItemType {
@@ -78,8 +92,8 @@ const typeDefs = gql`
 
     type Query {
         latestPostsWithSticky(number: Int): [Post]
-        getMenus: [Menu!]
-        getRedirects: [Redirect!]
+        getMenus: [Menu!] @cacheControl(maxAge: 14400)
+        getRedirects: [Redirect!] @cacheControl(maxAge: 14400)
     }
 `;
 

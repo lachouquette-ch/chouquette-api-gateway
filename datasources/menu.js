@@ -13,7 +13,6 @@ class MenuAPI extends RESTDataSource {
         const menus = []
         await Promise.all(menuList.map(menu => {
             return this.get(`menus/${menu.term_id}`).then(data => {
-                console.log(data)
                 menus.push(this.menuReducer(data))
             })
         }))
