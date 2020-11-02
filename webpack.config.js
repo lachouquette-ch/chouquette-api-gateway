@@ -1,23 +1,31 @@
 const path = require('path')
 
 const cleanWebpackPlugin = require("clean-webpack-plugin");
-const nodeExternals = require("webpack-node-externals");
+const webpackNodeExternals = require("webpack-node-externals");
 
 module.exports = {
-    entry: [path.join(__dirname, "/index.js")],
-    externals: [nodeExternals({})],
-    module: {
-        rules: [
-            { test: /\.graphql|\.gql$/, loader: 'webpack-graphql-loader' }
-        ]
+    target: 'node',
+    entry: ['@babel/polyfill', './index.js'],
+    watchOptions: {
+        ignored: /node_modules/
     },
+    externals: [webpackNodeExternals()],
     output: {
         filename: "server.js",
         path: path.resolve(__dirname, 'dist')
     },
-    resolve: {
-        extensions: ['.js']
+    module: {
+        rules: [
+            {
+                test: /.js$/,
+                use: {
+                    loader: 'babel-loader',
+                    options: {
+                        presets: ['@babel/preset-env'],
+                    },
+                },
+            },
+        ]
     },
-    target: 'node',
     plugins: [new cleanWebpackPlugin.CleanWebpackPlugin()]
 };
