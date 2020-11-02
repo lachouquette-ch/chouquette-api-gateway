@@ -2,16 +2,16 @@ require('dotenv').config();
 const express = require('express');
 const {ApolloServer} = require('apollo-server-express');
 const typeDefs = require('./schema');
+const resolvers = require('./resolvers')
 
-const resolvers = {
-    Query: {
-        hello: () => 'Hello World!',
-    }
-};
+const WordpressAPI = require('./datasources/wordpress')
 
 const server = new ApolloServer({
     typeDefs,
     resolvers,
+    dataSources: () => ({
+       wordpressAPI: new WordpressAPI()
+    })
 });
 
 const app = express();

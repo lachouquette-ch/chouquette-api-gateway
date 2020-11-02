@@ -2,6 +2,7 @@ const {gql} = require('apollo-server-express');
 
 const typeDefs = gql`
     type Fiche {
+        id: ID!
         title: String!
         slug: String!
         date: String! # date format
@@ -15,10 +16,44 @@ const typeDefs = gql`
         criteria: [String!] # criteria.term_name
         tags: [String!] # tags.name
     }
+    
+    enum MediaSize {
+        thumbnail, medium, medium_large, large, full
+    }
+    
+    type MediaInfo {
+        width: Int!
+        height: Int!
+        source_url: String!
+    }
+    
+    type MediaDetail {
+        MediaSize: MediaInfo
+    }
+    
+    type Media {
+        id: ID!
+        alt: String
+        sizes: [MediaDetail!]
+    }
+    
+    type Category {
+        id: ID!
+        name: String
+        logoYellow: Media
+        logoWhite: Media
+        logoBlack: Media
+    }
+    
+    type Post {
+        id: ID!
+        title: String
+        cover: Media
+        category: Category
+    }
 
     type Query {
-        hello: String
-        fiche: Fiche
+        latestPostsWithSticky(number: Int): [Post]
     }
 `;
 

@@ -6,8 +6,10 @@
   "author": "Fabrice Douchant",
   "license": "lachouquette.ch",
   "dependencies": {
+    "apollo-datasource-rest": "^0.9.4",
     "apollo-server-express": "^2.18.2",
-    "dotenv": "^8.2.0"
+    "dotenv": "^8.2.0",
+    "he": "^1.2.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.4"

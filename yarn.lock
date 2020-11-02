@@ -348,6 +348,17 @@ apollo-cache-control@^0.11.3:
     apollo-server-env "^2.4.5"
     apollo-server-plugin-base "^0.10.1"
 
+apollo-datasource-rest@^0.9.4:
+  version "0.9.4"
+  resolved "https://registry.yarnpkg.com/apollo-datasource-rest/-/apollo-datasource-rest-0.9.4.tgz#b3a99bee82796e9a1a7b4147b8fdda930b6e4dbd"
+  integrity sha512-JBtjLsmYE+D8Vb5GPf6iRed5vIRpViifg9LVq1oSiBGc4oAhtvr07+gY89/bXU2XbznBF90AYt35j9d5881dMA==
+  dependencies:
+    apollo-datasource "^0.7.2"
+    apollo-server-caching "^0.5.2"
+    apollo-server-env "^2.4.5"
+    apollo-server-errors "^2.4.2"
+    http-cache-semantics "^4.0.0"
+
 apollo-datasource@^0.7.2:
   version "0.7.2"
   resolved "https://registry.yarnpkg.com/apollo-datasource/-/apollo-datasource-0.7.2.tgz#1662ee93453a9b89af6f73ce561bde46b41ebf31"
@@ -1129,6 +1140,11 @@ has@^1.0.3:
   integrity sha512-f2dvO0VU6Oej7RkWJGrehjbzMAjFp5/VKPp5tTpWIV4JHHZK1/BxbFRtf/siA2SWTe09caDmVtYYzWEIbBS4zw==
   dependencies:
     function-bind "^1.1.1"
+
+he@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/he/-/he-1.2.0.tgz#84ae65fa7eafb165fddb61566ae14baf05664f0f"
+  integrity sha512-F/1DnUGPopORZi0ni+CvrCgHQ5FyEAHRLSApuYWMmrbSwoN2Mn/7k+Gl38gJnR7yyDZk6WLXwiGod1JOWNDKGw==
 
 http-cache-semantics@^4.0.0:
   version "4.1.0"
