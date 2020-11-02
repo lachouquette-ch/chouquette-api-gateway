@@ -1,44 +1,10 @@
 const {gql} = require('apollo-server-express');
 
-const typeDefs = gql`
-    # TO RESOLVE CACHE CONTROL
-    directive @cacheControl(
-        maxAge: Int,
-        scope: CacheControlScope
-    ) on OBJECT | FIELD_DEFINITION
-    
-    enum CacheControlScope {
-        PUBLIC
-        PRIVATE
+exports.typeDefs = gql`
+    type Query {
+        latestPostsWithSticky(number: Int): [Post]
     }
     
-    # Caching values
-    # 4 hours = 14400 / 2 hours = 7200 / 1 hours = 3600 / 30 min = 1800 / 5 min = 300  
-    
-    type Menu {
-        id: ID!
-        name: String!
-        slug: String!
-        items: [MenuItem!] @cacheControl(maxAge: 14400)
-    }
-    
-    enum MenuItemType {
-        page, category
-    }
-    
-    type MenuItem {
-        id: ID!
-        type: MenuItemType!
-        slug: String!
-        url: String
-    }
-    
-    type Redirect {
-        from: String!
-        to: String!
-        status: Int!
-    }
-
     type Fiche {
         id: ID!
         title: String!
@@ -89,12 +55,21 @@ const typeDefs = gql`
         cover: Media
         category: Category
     }
-
-    type Query {
-        latestPostsWithSticky(number: Int): [Post]
-        getMenus: [Menu!] @cacheControl(maxAge: 14400)
-        getRedirects: [Redirect!] @cacheControl(maxAge: 14400)
-    }
 `;
 
-module.exports = typeDefs;
+exports.resolvers = {
+    Query: {
+        latestPostsWithSticky: (_, {number}, {dataSources}) => dataSources.wordpressAPI.getLatestPostsWithSticky(number),
+    },
+
+    Post: {
+        cover(parent) {
+            return {
+                id: 0
+            }
+        },
+        category(parent, _, {dataSources}) {
+            return dataSources.wordpressAPI.getCategoryById(parent.topCategory)
+        }
+    }
+}
