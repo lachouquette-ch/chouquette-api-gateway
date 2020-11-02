@@ -1,4 +1,4 @@
-import { RESTDataSource } from 'apollo-datasource-rest'
+import {RESTDataSource} from 'apollo-datasource-rest'
 import he from 'he'
 
 export default class WordpressAPI extends RESTDataSource {
@@ -23,6 +23,22 @@ export default class WordpressAPI extends RESTDataSource {
             id: post.id,
             title: he.decode(post.title.rendered),
             topCategory: post.top_categories[0]
+        }
+    }
+
+    async getLocations() {
+        const locations = await this.get(`locations`, {hide_empty: true, orderby: 'count', order: 'desc'})
+
+        return locations.map(this.locationReducer)
+    }
+
+    locationReducer(location) {
+        return {
+            id: location.id,
+            parentId: location.parent,
+            name: location.name,
+            slug: location.slug,
+            description: location.slug
         }
     }
 

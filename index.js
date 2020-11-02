@@ -19,8 +19,14 @@ dotenv.config()
 // Default
 const Query = gql`
     type Query {
+        # Wordpress API
         latestPostsWithSticky(number: Int): [Post]
+        getLocations: [Location!] @cacheControl(maxAge: 14400)
+        
+        # Menu API
         getMenus: [Menu!] @cacheControl(maxAge: 14400)
+        
+        # Yoast API
         getRedirects: [Redirect!] @cacheControl(maxAge: 14400)
     }
     
