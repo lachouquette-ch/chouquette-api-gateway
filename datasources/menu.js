@@ -2,9 +2,6 @@ const {RESTDataSource} = require('apollo-datasource-rest');
 
 class MenuAPI extends RESTDataSource {
 
-    HEADER_SLUG = 'chouquette'
-    FOOTER_SLUG = 'chouquette-footer'
-
     constructor() {
         super();
         this.baseURL = 'https://wordpress.lachouquette.ch/wp-json/menus/v1/';

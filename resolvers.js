@@ -1,7 +1,8 @@
 module.exports = {
     Query: {
         latestPostsWithSticky: (_, {number}, {dataSources}) => dataSources.wordpressAPI.getLatestPostsWithSticky(number),
-        getMenus: (_, __, {dataSources}) => dataSources.menuAPI.getMenus()
+        getMenus: (_, __, {dataSources}) => dataSources.menuAPI.getMenus(),
+        getRedirects: (_, __, {dataSources}) => dataSources.yoastAPI.getRedirects()
     },
     Post: {
         cover(parent) {

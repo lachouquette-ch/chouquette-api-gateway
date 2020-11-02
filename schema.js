@@ -18,6 +18,12 @@ const typeDefs = gql`
         slug: String!
         url: String
     }
+    
+    type Redirect {
+        from: String!
+        to: String!
+        status: Int!
+    }
 
     type Fiche {
         id: ID!
@@ -72,7 +78,8 @@ const typeDefs = gql`
 
     type Query {
         latestPostsWithSticky(number: Int): [Post]
-        getMenus: [Menu]
+        getMenus: [Menu!]
+        getRedirects: [Redirect!]
     }
 `;
 
