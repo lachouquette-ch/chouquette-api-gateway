@@ -1,10 +1,29 @@
-require('dotenv').config()
-const express = require('express')
-const {ApolloServer} = require('apollo-server-express')
+import dotenv from 'dotenv'
+import {merge} from 'lodash'
+
+import express from 'express'
+import {ApolloServer, gql} from 'apollo-server-express'
+import {makeExecutableSchema} from 'graphql-tools'
+import responseCachePlugin from 'apollo-server-plugin-response-cache'
+
+import {typeDefs as Wordpress, resolvers as wordpressResolvers} from './wordpress'
+import {typeDefs as Menu, resolvers as menuResolvers} from './menu'
+import {typeDefs as Yoast, resolvers as yoastResolvers} from './yoast'
+
+import WordpressAPI from './datasources/wordpress'
+import MenuAPI from './datasources/menu'
+import YoastAPI from './datasources/yoast'
+
+dotenv.config()
 
 // Default
-const {gql} = require('apollo-server-express');
 const Query = gql`
+    type Query {
+        latestPostsWithSticky(number: Int): [Post]
+        getMenus: [Menu!] @cacheControl(maxAge: 14400)
+        getRedirects: [Redirect!] @cacheControl(maxAge: 14400)
+    }
+    
     # TO RESOLVE CACHE CONTROL
     directive @cacheControl(
         maxAge: Int,
@@ -16,20 +35,16 @@ const Query = gql`
         PRIVATE
     }
 `
-const { typeDef: Wordpress, resolvers: wordpressResolvers } = require('./wordpress')
-const { typeDef: Menu, resolvers: menuResolvers } = require('./menu')
-const { typeDef: Yoast, resolvers: yoastResolvers } = require('./yoast')
 
-const WordpressAPI = require('./datasources/wordpress')
-const MenuAPI = require('./datasources/menu')
-const YoastAPI = require('./datasources/yoast')
+const resolvers = {}
 
-const responseCachePlugin = require('apollo-server-plugin-response-cache')
-
-const {merge} = require('lodash')
-const server = new ApolloServer({
+const schema = makeExecutableSchema({
     typeDefs: [Query, Wordpress, Menu, Yoast],
-    resolvers: merge(wordpressResolvers, menuResolvers, yoastResolvers),
+    resolvers: merge(resolvers, wordpressResolvers, menuResolvers, yoastResolvers),
+})
+
+const server = new ApolloServer({
+    schema,
     dataSources: () => ({
         wordpressAPI: new WordpressAPI(),
         menuAPI: new MenuAPI(),

@@ -1,10 +1,6 @@
-const {gql} = require('apollo-server-express');
+import { gql } from 'apollo-server-express'
 
-exports.typeDefs = gql`
-    type Query {
-        latestPostsWithSticky(number: Int): [Post]
-    }
-    
+export const typeDefs = gql`
     type Fiche {
         id: ID!
         title: String!
@@ -57,7 +53,7 @@ exports.typeDefs = gql`
     }
 `;
 
-exports.resolvers = {
+export const resolvers = {
     Query: {
         latestPostsWithSticky: (_, {number}, {dataSources}) => dataSources.wordpressAPI.getLatestPostsWithSticky(number),
     },

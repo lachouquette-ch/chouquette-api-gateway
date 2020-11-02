@@ -1,10 +1,6 @@
-const {gql} = require('apollo-server-express');
+import { gql } from 'apollo-server-express'
 
-exports.typeDefs = gql`
-    type Query {
-        getMenus: [Menu!] @cacheControl(maxAge: 14400)
-    }
-
+export const typeDefs = gql`
     type Menu {
         id: ID!
         name: String!
@@ -24,7 +20,7 @@ exports.typeDefs = gql`
     }
 `;
 
-exports.resolvers = {
+export const resolvers = {
     Query: {
         getMenus: (_, __, {dataSources}) => dataSources.menuAPI.getMenus(),
     }

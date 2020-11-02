@@ -2,9 +2,23 @@
   "name": "chouquette-api-gateway",
   "version": "1.0.0",
   "description": "The API Gateway for lachouqette",
-  "main": "index.js",
   "author": "Fabrice Douchant",
   "license": "lachouquette.ch",
+  "babel": {
+    "presets": [
+      "@babel/preset-env"
+    ]
+  },
+  "nodemonConfig": {
+    "watch": [
+      "dist/index.js"
+    ]
+  },
+  "scripts": {
+    "build": "webpack --config webpack.config.js",
+    "watch": "nodemon dist/server.js",
+    "start": "node dist/server.js"
+  },
   "dependencies": {
     "apollo-datasource-rest": "^0.9.4",
     "apollo-server-express": "^2.18.2",
@@ -14,6 +28,15 @@
     "lodash": "^4.17.20"
   },
   "devDependencies": {
-    "nodemon": "^2.0.4"
+    "@babel/cli": "^7.12.1",
+    "@babel/core": "^7.12.3",
+    "@babel/preset-env": "^7.12.1",
+    "clean-webpack-plugin": "^3.0.0",
+    "nodemon": "^2.0.6",
+    "npm-run-all": "^4.1.5",
+    "webpack": "^5.3.2",
+    "webpack-cli": "^4.1.0",
+    "webpack-merge": "^5.3.0",
+    "webpack-node-externals": "^2.5.2"
   }
 }

@@ -1,10 +1,6 @@
-const {gql} = require('apollo-server-express');
+import { gql } from 'apollo-server-express'
 
-exports.typeDefs = gql`
-    type Query {
-        getRedirects: [Redirect!] @cacheControl(maxAge: 14400)
-    }
-    
+export const typeDefs = gql`
     type Redirect {
         from: String!
         to: String!
@@ -12,6 +8,8 @@ exports.typeDefs = gql`
     }
 `;
 
-exports.resolvers = {
-    getRedirects: (_, __, {dataSources}) => dataSources.yoastAPI.getRedirects()
+export const resolvers = {
+    Query: {
+        getRedirects: (_, __, {dataSources}) => dataSources.yoastAPI.getRedirects()
+    }
 }

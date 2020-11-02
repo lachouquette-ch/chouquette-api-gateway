@@ -1,6 +1,6 @@
-const {RESTDataSource} = require('apollo-datasource-rest');
+import { RESTDataSource } from 'apollo-datasource-rest'
 
-class MenuAPI extends RESTDataSource {
+export default class MenuAPI extends RESTDataSource {
 
     constructor() {
         super();
@@ -41,5 +41,3 @@ class MenuAPI extends RESTDataSource {
         }
     }
 }
-
-module.exports = MenuAPI;

@@ -1,6 +1,6 @@
-const {RESTDataSource} = require('apollo-datasource-rest');
+import { RESTDataSource } from 'apollo-datasource-rest'
 
-class YoastAPI extends RESTDataSource {
+export default class YoastAPI extends RESTDataSource {
 
     constructor() {
         super();
@@ -22,5 +22,3 @@ class YoastAPI extends RESTDataSource {
         }
     }
 }
-
-module.exports = YoastAPI;

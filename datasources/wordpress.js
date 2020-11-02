@@ -1,7 +1,7 @@
-const {RESTDataSource} = require('apollo-datasource-rest');
-const he = require('he')
+import { RESTDataSource } from 'apollo-datasource-rest'
+import he from 'he'
 
-class WordpressAPI extends RESTDataSource {
+export default class WordpressAPI extends RESTDataSource {
     constructor() {
         super();
         this.baseURL = 'https://wordpress.lachouquette.ch/wp-json/wp/v2/';
@@ -40,5 +40,3 @@ class WordpressAPI extends RESTDataSource {
     }
 
 }
-
-module.exports = WordpressAPI;
