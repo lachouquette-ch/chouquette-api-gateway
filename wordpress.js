@@ -1,6 +1,12 @@
 import { gql } from 'apollo-server-express'
 
 export const typeDefs = gql`
+    type Settings {
+        name: String
+        description: String
+        url: String
+    }
+    
     type Location {
         id: ID!
         parentId: Int
@@ -64,7 +70,8 @@ export const typeDefs = gql`
 export const resolvers = {
     Query: {
         latestPostsWithSticky: (_, {number}, {dataSources}) => dataSources.wordpressAPI.getLatestPostsWithSticky(number),
-        getLocations: (_, __, {dataSources}) => dataSources.wordpressAPI.getLocations()
+        getLocations: (_, __, {dataSources}) => dataSources.wordpressAPI.getLocations(),
+        getSettings: (_, __, {dataSources}) => dataSources.wordpressAPI.getSettings()
     },
 
     Post: {

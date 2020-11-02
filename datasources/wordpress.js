@@ -7,6 +7,16 @@ export default class WordpressAPI extends RESTDataSource {
         this.baseURL = 'https://wordpress.lachouquette.ch/wp-json/wp/v2/';
     }
 
+    async getSettings() {
+        const settings = await this.get(`https://wordpress.lachouquette.ch/wp-json/`)
+
+        return {
+            name: settings.name,
+            description: settings.description,
+            url: settings.url
+        }
+    }
+
     async getLatestPostsWithSticky(number) {
         const posts = await this.get(`posts`, {sticky: true, per_page: number})
         const remainingPostCount = number - posts.length
@@ -18,18 +28,24 @@ export default class WordpressAPI extends RESTDataSource {
         return posts.map(this.ficheReducer)
     }
 
+    async getLocations() {
+        const locations = await this.get(`locations`, {hide_empty: true, orderby: 'count', order: 'desc'})
+
+        return locations.map(this.locationReducer)
+    }
+
+    async getCategoryById(id) {
+        const category = await this.get(`categories/${id}`)
+
+        return this.categoryReducer(category)
+    }
+
     ficheReducer(post) {
         return {
             id: post.id,
             title: he.decode(post.title.rendered),
             topCategory: post.top_categories[0]
         }
-    }
-
-    async getLocations() {
-        const locations = await this.get(`locations`, {hide_empty: true, orderby: 'count', order: 'desc'})
-
-        return locations.map(this.locationReducer)
     }
 
     locationReducer(location) {
@@ -42,17 +58,10 @@ export default class WordpressAPI extends RESTDataSource {
         }
     }
 
-    async getCategoryById(id) {
-        const category = await this.get(`categories/${id}`)
-
-        return this.categoryReducer(category)
-    }
-
     categoryReducer(category) {
         return {
             id: category.id,
             name: he.decode(category.name)
         }
     }
-
 }

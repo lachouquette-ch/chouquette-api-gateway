@@ -22,6 +22,7 @@ const Query = gql`
         # Wordpress API
         latestPostsWithSticky(number: Int): [Post]
         getLocations: [Location!] @cacheControl(maxAge: 14400)
+        getSettings: Settings @cacheControl(maxAge: 14400)
         
         # Menu API
         getMenus: [Menu!] @cacheControl(maxAge: 14400)
