@@ -5,12 +5,14 @@ const typeDefs = require('./schema');
 const resolvers = require('./resolvers')
 
 const WordpressAPI = require('./datasources/wordpress')
+const MenuAPI = require('./datasources/menu')
 
 const server = new ApolloServer({
     typeDefs,
     resolvers,
     dataSources: () => ({
-       wordpressAPI: new WordpressAPI()
+       wordpressAPI: new WordpressAPI(),
+       menuAPI: new MenuAPI()
     })
 });
 

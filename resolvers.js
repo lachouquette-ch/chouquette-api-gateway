@@ -1,6 +1,7 @@
 module.exports = {
     Query: {
         latestPostsWithSticky: (_, {number}, {dataSources}) => dataSources.wordpressAPI.getLatestPostsWithSticky(number),
+        getMenus: (_, __, {dataSources}) => dataSources.menuAPI.getMenus()
     },
     Post: {
         cover(parent) {

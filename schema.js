@@ -1,6 +1,24 @@
 const {gql} = require('apollo-server-express');
 
 const typeDefs = gql`
+    type Menu {
+        id: ID!
+        name: String!
+        slug: String!
+        items: [MenuItem!]
+    }
+    
+    enum MenuItemType {
+        page, category
+    }
+    
+    type MenuItem {
+        id: ID!
+        type: MenuItemType!
+        slug: String!
+        url: String
+    }
+
     type Fiche {
         id: ID!
         title: String!
@@ -54,6 +72,7 @@ const typeDefs = gql`
 
     type Query {
         latestPostsWithSticky(number: Int): [Post]
+        getMenus: [Menu]
     }
 `;
 
