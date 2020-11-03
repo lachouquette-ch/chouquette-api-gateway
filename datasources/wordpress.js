@@ -95,6 +95,7 @@ export default class WordpressAPI extends RESTDataSource {
         return {
             id: category.id,
             name: he.decode(category.name),
+            parentId: category.parent,
             logoYellowId: category.logos.logo_yellow,
             logoWhiteId: category.logos.logo_white,
             logoBlackId: category.logos.logo_black,

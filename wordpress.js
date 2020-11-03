@@ -51,6 +51,7 @@ export const typeDefs = gql`
     type Category @cacheControl(maxAge: 7200) {
         id: ID!
         name: String
+        parentId: Int!
         logoYellow: Media
         logoWhite: Media
         logoBlack: Media
