@@ -1,13 +1,13 @@
 import { gql } from 'apollo-server-express'
 
 export const typeDefs = gql`
-    type Settings {
+    type Settings @cacheControl(maxAge: 14400) {
         name: String
         description: String
         url: String
     }
     
-    type Location {
+    type Location @cacheControl(maxAge: 7200) {
         id: ID!
         parentId: Int
         name: String
@@ -31,27 +31,24 @@ export const typeDefs = gql`
         tags: [String!] # tags.name
     }
     
-    enum MediaSize {
-        thumbnail, medium, medium_large, large, full
-    }
-    
-    type MediaInfo {
+    type MediaInfo @cacheControl(maxAge: 7200) {
         width: Int!
         height: Int!
-        source_url: String!
+        url: String!
     }
     
-    type MediaDetail {
-        MediaSize: MediaInfo
+    type MediaDetail @cacheControl(maxAge: 7200) {
+        size: String!
+        info: MediaInfo!
     }
     
-    type Media {
+    type Media @cacheControl(maxAge: 7200) {
         id: ID!
         alt: String
         sizes: [MediaDetail!]
     }
     
-    type Category {
+    type Category @cacheControl(maxAge: 7200) {
         id: ID!
         name: String
         logoYellow: Media
@@ -71,7 +68,20 @@ export const resolvers = {
     Query: {
         latestPostsWithSticky: (_, {number}, {dataSources}) => dataSources.wordpressAPI.getLatestPostsWithSticky(number),
         getLocations: (_, __, {dataSources}) => dataSources.wordpressAPI.getLocations(),
-        getSettings: (_, __, {dataSources}) => dataSources.wordpressAPI.getSettings()
+        getSettings: (_, __, {dataSources}) => dataSources.wordpressAPI.getSettings(),
+        getCategories: (_, __, {dataSources}) => dataSources.wordpressAPI.getCategories()
+    },
+
+    Category: {
+        logoYellow(parent, _, {dataSources}) {
+            return dataSources.wordpressAPI.getMediaById(parent.logoYellowId)
+        },
+        logoWhite(parent, _, {dataSources}) {
+            return dataSources.wordpressAPI.getMediaById(parent.logoWhiteId)
+        },
+        logoBlack(parent, _, {dataSources}) {
+            return dataSources.wordpressAPI.getMediaById(parent.logoBlackId)
+        },
     },
 
     Post: {

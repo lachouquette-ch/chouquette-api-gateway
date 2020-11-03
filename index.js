@@ -21,14 +21,15 @@ const Query = gql`
     type Query {
         # Wordpress API
         latestPostsWithSticky(number: Int): [Post]
-        getLocations: [Location!] @cacheControl(maxAge: 14400)
-        getSettings: Settings @cacheControl(maxAge: 14400)
+        getLocations: [Location!]
+        getSettings: Settings
+        getCategories: [Category!]
         
         # Menu API
-        getMenus: [Menu!] @cacheControl(maxAge: 14400)
+        getMenus: [Menu!]
         
         # Yoast API
-        getRedirects: [Redirect!] @cacheControl(maxAge: 14400)
+        getRedirects: [Redirect!]
     }
     
     # TO RESOLVE CACHE CONTROL

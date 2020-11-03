@@ -1,7 +1,7 @@
 import { gql } from 'apollo-server-express'
 
 export const typeDefs = gql`
-    type Redirect {
+    type Redirect @cacheControl(maxAge: 14400) {
         from: String!
         to: String!
         status: Int!

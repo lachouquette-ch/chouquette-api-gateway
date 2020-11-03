@@ -34,10 +34,43 @@ export default class WordpressAPI extends RESTDataSource {
         return locations.map(this.locationReducer)
     }
 
+    async getCategories() {
+        const categories = await this.get(`categories`)
+
+        return categories.map(this.categoryReducer)
+    }
+
     async getCategoryById(id) {
         const category = await this.get(`categories/${id}`)
 
         return this.categoryReducer(category)
+    }
+
+    async getMediaById(id) {
+        const media = await this.get(`media/${id}`)
+
+        return this.mediaReducer(media)
+    }
+
+    mediaReducer(media) {
+        const mediaDTO = {
+            id: media.id,
+            alt: he.decode(media.alt_text),
+            sizes: []
+        }
+
+        for (const [size, rawInfo] of Object.entries(media.media_details.sizes)) {
+            mediaDTO.sizes.push({
+                size,
+                info: {
+                    width: rawInfo.width,
+                    height: rawInfo.height,
+                    url: rawInfo.source_url
+                }
+            })
+        }
+
+        return mediaDTO
     }
 
     ficheReducer(post) {
@@ -61,7 +94,10 @@ export default class WordpressAPI extends RESTDataSource {
     categoryReducer(category) {
         return {
             id: category.id,
-            name: he.decode(category.name)
+            name: he.decode(category.name),
+            logoYellowId: category.logos.logo_yellow,
+            logoWhiteId: category.logos.logo_white,
+            logoBlackId: category.logos.logo_black,
         }
     }
 }

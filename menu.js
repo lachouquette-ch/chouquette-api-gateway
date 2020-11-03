@@ -1,18 +1,18 @@
 import { gql } from 'apollo-server-express'
 
 export const typeDefs = gql`
-    type Menu {
+    type Menu @cacheControl(maxAge: 14400) {
         id: ID!
         name: String!
         slug: String!
-        items: [MenuItem!] @cacheControl(maxAge: 14400)
+        items: [MenuItem!]
     }
 
     enum MenuItemType {
         page, category
     }
 
-    type MenuItem {
+    type MenuItem @cacheControl(maxAge: 14400) {
         id: ID!
         type: MenuItemType!
         slug: String!
