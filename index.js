@@ -24,6 +24,7 @@ const Query = gql`
         getLocations: [Location!]
         getSettings: Settings
         getCategories: [Category!]
+        getMediaForCategories: [Media!]
         
         # Menu API
         getMenus: [Menu!]

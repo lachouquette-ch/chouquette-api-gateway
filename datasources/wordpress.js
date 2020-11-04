@@ -7,6 +7,16 @@ export default class WordpressAPI extends RESTDataSource {
         this.baseURL = 'https://wordpress.lachouquette.ch/wp-json/wp/v2/';
     }
 
+    async getByIds(resource, ids, queryParams = {}) {
+        queryParams = {
+            include: ids.join(','),
+            per_page: ids.length,
+            ...queryParams,
+        }
+
+        return this.get(resource, queryParams)
+    }
+
     async getSettings() {
         const settings = await this.get(`https://wordpress.lachouquette.ch/wp-json/`)
 
@@ -46,10 +56,18 @@ export default class WordpressAPI extends RESTDataSource {
         return this.categoryReducer(category)
     }
 
-    async getMediaById(id) {
-        const media = await this.get(`media/${id}`)
+    async getMediaForCategories() {
+        const categories = await this.getCategories()
 
-        return this.mediaReducer(media)
+        const categoryLogoIds = categories.flatMap(({logoYellowId, logoWhiteId, logoBlackId}) => [logoYellowId, logoWhiteId, logoBlackId])
+
+        return this.getMediaByIds(categoryLogoIds)
+    }
+
+    async getMediaByIds(ids) {
+        const mediaList = await this.getByIds('media', ids)
+
+        return mediaList.map(this.mediaReducer)
     }
 
     mediaReducer(media) {

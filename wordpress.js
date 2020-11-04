@@ -52,9 +52,9 @@ export const typeDefs = gql`
         id: ID!
         name: String
         parentId: Int!
-        logoYellow: Media
-        logoWhite: Media
-        logoBlack: Media
+        logoYellowId: Int
+        logoWhiteId: Int
+        logoBlackId: Int
     }
     
     type Post {
@@ -70,19 +70,8 @@ export const resolvers = {
         latestPostsWithSticky: (_, {number}, {dataSources}) => dataSources.wordpressAPI.getLatestPostsWithSticky(number),
         getLocations: (_, __, {dataSources}) => dataSources.wordpressAPI.getLocations(),
         getSettings: (_, __, {dataSources}) => dataSources.wordpressAPI.getSettings(),
-        getCategories: (_, __, {dataSources}) => dataSources.wordpressAPI.getCategories()
-    },
-
-    Category: {
-        logoYellow(parent, _, {dataSources}) {
-            return dataSources.wordpressAPI.getMediaById(parent.logoYellowId)
-        },
-        logoWhite(parent, _, {dataSources}) {
-            return dataSources.wordpressAPI.getMediaById(parent.logoWhiteId)
-        },
-        logoBlack(parent, _, {dataSources}) {
-            return dataSources.wordpressAPI.getMediaById(parent.logoBlackId)
-        },
+        getCategories: (_, __, {dataSources}) => dataSources.wordpressAPI.getCategories(),
+        getMediaForCategories: (_, __, {dataSources}) => dataSources.wordpressAPI.getMediaForCategories()
     },
 
     Post: {
