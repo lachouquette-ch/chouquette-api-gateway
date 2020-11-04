@@ -2,6 +2,7 @@ import dotenv from 'dotenv'
 import {merge} from 'lodash'
 
 import express from 'express'
+import cors from 'cors'
 import {ApolloServer, gql} from 'apollo-server-express'
 import {makeExecutableSchema} from 'graphql-tools'
 import responseCachePlugin from 'apollo-server-plugin-response-cache'
@@ -65,6 +66,8 @@ const server = new ApolloServer({
 });
 
 const app = express();
+// TODO better restrict CORS origins
+app.use(cors())
 server.applyMiddleware({app});
 
 app.listen({port: 4000}, () =>
