@@ -102,6 +102,8 @@ export default class WordpressAPI extends RESTDataSource {
       address: fiche.info.location.address,
       poi: fiche.info.location ? this.poiReducer(fiche.info.location) : null,
       info: this.chouquettiseInfoReducer(fiche.info),
+      locationId: fiche.locations[0],
+      categoryId: fiche.main_category.id,
 
       featured_media: fiche.featured_media,
       linked_posts: fiche.linked_posts,
@@ -155,6 +157,16 @@ export default class WordpressAPI extends RESTDataSource {
     return posts.map(this.ficheReducer);
   }
 
+  locationReducer(location) {
+    return {
+      id: location.id,
+      parentId: location.parent,
+      name: location.name,
+      slug: location.slug,
+      description: location.slug,
+    };
+  }
+
   async getLocations() {
     const locations = await this.get(`locations`, {
       hide_empty: true,
@@ -163,6 +175,12 @@ export default class WordpressAPI extends RESTDataSource {
     });
 
     return locations.map(this.locationReducer);
+  }
+
+  async getLocationById(id) {
+    const location = await this.get(`locations/${id}`);
+
+    return this.locationReducer(location);
   }
 
   async getCategories() {
@@ -224,16 +242,6 @@ export default class WordpressAPI extends RESTDataSource {
       id: post.id,
       title: he.decode(post.title.rendered),
       topCategory: post.top_categories[0],
-    };
-  }
-
-  locationReducer(location) {
-    return {
-      id: location.id,
-      parentId: location.parent,
-      name: location.name,
-      slug: location.slug,
-      description: location.slug,
     };
   }
 

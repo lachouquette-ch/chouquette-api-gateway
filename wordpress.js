@@ -1,5 +1,4 @@
 import { gql } from "apollo-server-express";
-import lodash from "lodash";
 
 export const typeDefs = gql`
   type Settings {
@@ -60,18 +59,17 @@ export const typeDefs = gql`
     id: ID!
     slug: String!
     title: String!
-    date: String! # date format
-    content: String # content
-    address: String # location.address
+    date: String!
+    content: String
+    address: String
     isChouquettise: Boolean! # computed
     poi: POI
     info: ChouquettiseInfo
-
+    categoryId: Int! # should be fetched once
+    locationId: Location! # should be fetched once
     image: Media
     criteria: [Criteria!]
 
-    # location.position
-    localisation: String # localisation.name
     # postCards: [PostCard!]
   }
 
@@ -95,7 +93,7 @@ export const typeDefs = gql`
   type Category {
     id: ID!
     name: String
-    parentId: Int!
+    parentId: Int
     logoYellow: Media
     logoWhite: Media
     logoBlack: Media
