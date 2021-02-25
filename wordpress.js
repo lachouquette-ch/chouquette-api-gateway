@@ -2,13 +2,13 @@ import { gql } from "apollo-server-express";
 import lodash from "lodash";
 
 export const typeDefs = gql`
-  type Settings @cacheControl(maxAge: 14400) {
+  type Settings {
     name: String
     description: String
     url: String
   }
 
-  type Location @cacheControl(maxAge: 7200) {
+  type Location {
     id: ID!
     parentId: Int
     name: String
@@ -16,14 +16,14 @@ export const typeDefs = gql`
     description: String
   }
 
-  type Criteria @cacheControl(maxAge: 7200) {
+  type Criteria {
     id: ID!
     slug: String!
     name: String
     description: String
   }
 
-  type CriteriaType @cacheControl(maxAge: 7200) {
+  type CriteriaType {
     id: ID!
     taxonomy: String!
     name: String
@@ -45,24 +45,24 @@ export const typeDefs = gql`
     postCards: [PostCard!]
   }
 
-  type MediaSize @cacheControl(maxAge: 7200) {
+  type MediaSize {
     width: Int!
     height: Int!
     url: String!
   }
 
-  type MediaDetail @cacheControl(maxAge: 7200) {
+  type MediaDetail {
     name: String!
     image: MediaSize!
   }
 
-  type Media @cacheControl(maxAge: 7200) {
+  type Media {
     id: ID!
     alt: String
     sizes: [MediaDetail!]
   }
 
-  type Category @cacheControl(maxAge: 7200) {
+  type Category {
     id: ID!
     name: String
     parentId: Int!
@@ -71,7 +71,7 @@ export const typeDefs = gql`
     logoBlack: Media
   }
 
-  type PostCard @cacheControl(maxAge: 7200) {
+  type PostCard {
     id: ID!
     slug: String!
     title: String

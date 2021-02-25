@@ -73,7 +73,9 @@ const server = new ApolloServer({
   }),
   plugins: [responseCachePlugin()],
   // tracing: true,
-  cacheControl: true,
+  cacheControl: {
+    defaultMaxAge: 60,
+  },
 });
 
 const app = express();
