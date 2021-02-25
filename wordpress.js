@@ -1,4 +1,5 @@
 import { gql } from "apollo-server-express";
+import lodash from "lodash";
 
 export const typeDefs = gql`
   type Settings @cacheControl(maxAge: 14400) {
@@ -15,31 +16,44 @@ export const typeDefs = gql`
     description: String
   }
 
-  type Fiche {
+  type Criteria @cacheControl(maxAge: 7200) {
     id: ID!
-    title: String!
     slug: String!
+    name: String
+    description: String
+  }
+
+  type CriteriaType @cacheControl(maxAge: 7200) {
+    id: ID!
+    taxonomy: String!
+    name: String
+    values: Criteria
+  }
+
+  type Fiche @cacheControl(maxAge: 7200) {
+    id: ID!
+    slug: String!
+    title: String!
     date: String! # date format
-    description: String # content
+    content: String # content
     isChouquettise: Boolean! # computed
-    endOfChouquettisation: String # chouquettise_end, date format
     address: String # location.address
     # location.position
     localisation: String # localisation.name
-    categories: [String!]
-    criteria: [String!] # criteria.term_name
-    tags: [String!] # tags.name
+    image: Media
+    criteria: [Criteria!]
+    postCards: [PostCard!]
   }
 
-  type MediaInfo @cacheControl(maxAge: 7200) {
+  type MediaSize @cacheControl(maxAge: 7200) {
     width: Int!
     height: Int!
     url: String!
   }
 
   type MediaDetail @cacheControl(maxAge: 7200) {
-    size: String!
-    info: MediaInfo!
+    name: String!
+    image: MediaSize!
   }
 
   type Media @cacheControl(maxAge: 7200) {
@@ -52,41 +66,75 @@ export const typeDefs = gql`
     id: ID!
     name: String
     parentId: Int!
-    logoYellowId: Int
-    logoWhiteId: Int
-    logoBlackId: Int
+    logoYellow: Media
+    logoWhite: Media
+    logoBlack: Media
   }
 
-  type Post {
+  type PostCard @cacheControl(maxAge: 7200) {
     id: ID!
+    slug: String!
     title: String
     cover: Media
-    category: Category
+    categories: [Category!]
   }
 `;
 
 export const resolvers = {
   Query: {
+    settings: (_, __, { dataSources }) =>
+      dataSources.wordpressAPI.getSettings(),
+    ficheBySlug: (_, { slug }, { dataSources }) =>
+      dataSources.wordpressAPI.getFicheBySlug(slug),
+
     latestPostsWithSticky: (_, { number }, { dataSources }) =>
       dataSources.wordpressAPI.getLatestPostsWithSticky(number),
     getLocations: (_, __, { dataSources }) =>
       dataSources.wordpressAPI.getLocations(),
-    settings: (_, __, { dataSources }) =>
-      dataSources.wordpressAPI.getSettings(),
     getCategories: (_, __, { dataSources }) =>
       dataSources.wordpressAPI.getCategories(),
     getMediaForCategories: (_, __, { dataSources }) =>
       dataSources.wordpressAPI.getMediaForCategories(),
   },
 
-  Post: {
-    cover(parent) {
-      return {
-        id: 0,
-      };
+  Fiche: {
+    image(parent, _, { dataSources }) {
+      const media = parent.featured_media
+        ? dataSources.wordpressAPI.getMediaById(parent.featured_media)
+        : null;
+
+      return media;
     },
-    category(parent, _, { dataSources }) {
-      return dataSources.wordpressAPI.getCategoryById(parent.topCategory);
+    criteria(parent, _, { dataSources }) {
+      return dataSources.wordpressAPI.getCriteriaForFiche(parent.id);
+    },
+    postCards(parent, _, { dataSources }) {
+      const postCardIds = parent.linked_posts.map(({ id }) => id);
+
+      return lodash.isEmpty(postCardIds)
+        ? null
+        : dataSources.wordpressAPI.getPostCardByIds(postCardIds);
+    },
+  },
+
+  PostCard: {
+    cover(parent, _, { dataSources }) {
+      return dataSources.wordpressAPI.getMediaById(parent.featured_media);
+    },
+    categories(parent, _, { dataSources }) {
+      return dataSources.wordpressAPI.getCategoryByIds(parent.top_categories);
+    },
+  },
+
+  Category: {
+    logoYellow(parent, _, { dataSources }) {
+      return dataSources.wordpressAPI.getMediaById(parent.logoYellowId);
+    },
+    logoWhite(parent, _, { dataSources }) {
+      return dataSources.wordpressAPI.getMediaById(parent.logoWhiteId);
+    },
+    logoBlack(parent, _, { dataSources }) {
+      return dataSources.wordpressAPI.getMediaById(parent.logoBlackId);
     },
   },
 };

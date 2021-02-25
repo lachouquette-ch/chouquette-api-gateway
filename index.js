@@ -24,9 +24,11 @@ dotenv.config();
 const Query = gql`
   type Query {
     # Wordpress API
-    latestPostsWithSticky(number: Int): [Post]
-    getLocations: [Location!]
     settings: Settings
+    ficheBySlug(slug: String!): Fiche
+
+    latestPostsWithSticky(number: Int): [PostCard]
+    getLocations: [Location!]
     getCategories: [Category!]
     getMediaForCategories: [Media!]
 

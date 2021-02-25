@@ -1,5 +1,8 @@
 import { RESTDataSource } from "apollo-datasource-rest";
 import he from "he";
+import _ from "lodash";
+
+const IMAGE_SIZES = ["medium", "medium_large", "large", "thumbnail"];
 
 export default class WordpressAPI extends RESTDataSource {
   constructor() {
@@ -26,6 +29,80 @@ export default class WordpressAPI extends RESTDataSource {
       name: settings.name,
       description: settings.description,
       url: settings.url,
+    };
+  }
+
+  async getCriteriaForFiche(id) {
+    const criteriaCategories = await this.get(
+      `https://wordpress.lachouquette.ch/wp-json/chouquette/v1/criteria/fiche/${id}`
+    );
+
+    const result = [];
+    for (const criteriaCategory of criteriaCategories) {
+      result.push(
+        ...criteriaCategory.flatMap(({ values }) =>
+          values.map(this.criteriaReducer)
+        )
+      );
+    }
+    return result;
+  }
+
+  criteriaReducer(criteria) {
+    return {
+      id: criteria.id,
+      slug: criteria.slug,
+      name: criteria.name,
+      description: criteria.description,
+    };
+  }
+
+  async getPostCardByIds(ids) {
+    const DEFAULT_FIELDS = [
+      "id",
+      "slug",
+      "title",
+      "categories",
+      "top_categories",
+      "featured_media",
+    ];
+
+    const postCards = await this.getByIds(`posts`, ids, {
+      _fields: DEFAULT_FIELDS.join(","),
+    });
+
+    return postCards.map(this.postCardReducer);
+  }
+
+  postCardReducer(postCard) {
+    return {
+      id: postCard.id,
+      slug: postCard.slug,
+      title: he.decode(postCard.title.rendered),
+      featured_media: postCard.featured_media,
+      top_categories: postCard.top_categories,
+    };
+  }
+
+  async getFicheBySlug(slug) {
+    const result = await this.get(`fiches`, { slug });
+
+    if (_.isEmpty(result)) {
+      return null;
+    }
+    const fiche = result[0];
+
+    return {
+      id: fiche.id,
+      slug,
+      title: he.decode(fiche.title.rendered),
+      date: new Date(fiche.date).toISOString(),
+      content: he.decode(fiche.content.rendered),
+      isChouquettise: fiche.info.chouquettise,
+      address: fiche.info.location.address,
+
+      featured_media: fiche.featured_media,
+      linked_posts: fiche.linked_posts,
     };
   }
 
@@ -58,10 +135,10 @@ export default class WordpressAPI extends RESTDataSource {
     return categories.map(this.categoryReducer);
   }
 
-  async getCategoryById(id) {
-    const category = await this.get(`categories/${id}`);
+  async getCategoryByIds(ids) {
+    const categories = await this.getByIds(`categories`, ids);
 
-    return this.categoryReducer(category);
+    return categories.map(this.categoryReducer);
   }
 
   async getMediaForCategories() {
@@ -77,10 +154,10 @@ export default class WordpressAPI extends RESTDataSource {
     return this.getMediaByIds(categoryLogoIds);
   }
 
-  async getMediaByIds(ids) {
-    const mediaList = await this.getByIds("media", ids);
+  async getMediaById(id) {
+    const media = await this.get(`media/${id}`);
 
-    return mediaList.map(this.mediaReducer);
+    return this.mediaReducer(media);
   }
 
   mediaReducer(media) {
@@ -90,15 +167,17 @@ export default class WordpressAPI extends RESTDataSource {
       sizes: [],
     };
 
-    for (const [size, rawInfo] of Object.entries(media.media_details.sizes)) {
-      mediaDTO.sizes.push({
-        size,
-        info: {
-          width: rawInfo.width,
-          height: rawInfo.height,
-          url: rawInfo.source_url,
-        },
-      });
+    for (const [name, rawInfo] of Object.entries(media.media_details.sizes)) {
+      if (IMAGE_SIZES.includes(name)) {
+        mediaDTO.sizes.push({
+          name,
+          image: {
+            width: rawInfo.width,
+            height: rawInfo.height,
+            url: rawInfo.source_url,
+          },
+        });
+      }
     }
 
     return mediaDTO;
