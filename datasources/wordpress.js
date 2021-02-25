@@ -100,9 +100,45 @@ export default class WordpressAPI extends RESTDataSource {
       content: he.decode(fiche.content.rendered),
       isChouquettise: fiche.info.chouquettise,
       address: fiche.info.location.address,
+      poi: fiche.info.location ? this.poiReducer(fiche.info.location) : null,
+      info: this.chouquettiseInfoReducer(fiche.info),
 
       featured_media: fiche.featured_media,
       linked_posts: fiche.linked_posts,
+    };
+  }
+
+  chouquettiseInfoReducer(info) {
+    return {
+      mail: info.mail,
+      telephone: info.telephone,
+      website: info.website,
+      facebook: info.sn_facebook,
+      instagram: info.sn_instagram,
+      cost: info.cost,
+      openings: info.openings
+        ? Object.entries(info.openings).map(this.openingReducer)
+        : null,
+    };
+  }
+
+  openingReducer([key, value]) {
+    return {
+      dayOfWeek: key,
+      opening: value,
+    };
+  }
+
+  poiReducer(location) {
+    return {
+      street: location.street_name,
+      number: location.street_number,
+      postCode: location.post_code,
+      state: location.state,
+      city: location.city,
+      country: location.country,
+      lat: location.lat,
+      lng: location.lng,
     };
   }
 

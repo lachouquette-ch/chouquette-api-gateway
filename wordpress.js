@@ -30,19 +30,49 @@ export const typeDefs = gql`
     values: Criteria
   }
 
-  type Fiche @cacheControl(maxAge: 7200) {
+  type POI {
+    street: String!
+    number: Int
+    postCode: Int!
+    state: String
+    city: String!
+    country: String!
+    lat: Float
+    lng: Float
+  }
+
+  type ChouquettiseInfo {
+    mail: String
+    telephone: String
+    website: String
+    facebook: String
+    instagram: String
+    cost: Int
+    openings: [Opening]
+  }
+
+  type Opening {
+    dayOfWeek: Int
+    opening: String
+  }
+
+  type Fiche {
     id: ID!
     slug: String!
     title: String!
     date: String! # date format
     content: String # content
-    isChouquettise: Boolean! # computed
     address: String # location.address
-    # location.position
-    localisation: String # localisation.name
+    isChouquettise: Boolean! # computed
+    poi: POI
+    info: ChouquettiseInfo
+
     image: Media
     criteria: [Criteria!]
-    postCards: [PostCard!]
+
+    # location.position
+    localisation: String # localisation.name
+    # postCards: [PostCard!]
   }
 
   type MediaSize {
@@ -108,13 +138,13 @@ export const resolvers = {
     criteria(parent, _, { dataSources }) {
       return dataSources.wordpressAPI.getCriteriaForFiche(parent.id);
     },
-    postCards(parent, _, { dataSources }) {
-      const postCardIds = parent.linked_posts.map(({ id }) => id);
-
-      return lodash.isEmpty(postCardIds)
-        ? null
-        : dataSources.wordpressAPI.getPostCardByIds(postCardIds);
-    },
+    // postCards(parent, _, { dataSources }) {
+    //   const postCardIds = parent.linked_posts.map(({ id }) => id);
+    //
+    //   return lodash.isEmpty(postCardIds)
+    //     ? null
+    //     : dataSources.wordpressAPI.getPostCardByIds(postCardIds);
+    // },
   },
 
   PostCard: {
