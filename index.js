@@ -15,11 +15,16 @@ import {
   typeDefs as WordpressFiche,
   resolvers as wordpressFicheResolvers,
 } from "./wordpress_fiche";
+import {
+  typeDefs as WordpressPost,
+  resolvers as wordpressPostResolvers,
+} from "./wordpress_post";
 import { typeDefs as Menu, resolvers as menuResolvers } from "./menu";
 import { typeDefs as Yoast, resolvers as yoastResolvers } from "./yoast";
 
 import WordpressBaseAPI from "./datasources/wordpress_base";
 import WordpressFicheAPI from "./datasources/wordpress_fiche";
+import WordpressPostAPI from "./datasources/wordpress_post";
 import MenuAPI from "./datasources/menu";
 import YoastAPI from "./datasources/yoast";
 
@@ -60,11 +65,12 @@ const Query = gql`
 const resolvers = {};
 
 const schema = makeExecutableSchema({
-  typeDefs: [Query, WordpressBase, WordpressFiche, Menu, Yoast],
+  typeDefs: [Query, WordpressBase, WordpressFiche, WordpressPost, Menu, Yoast],
   resolvers: merge(
     resolvers,
     wordpressBaseResolvers,
     wordpressFicheResolvers,
+    wordpressPostResolvers,
     menuResolvers,
     yoastResolvers
   ),
@@ -75,6 +81,7 @@ const server = new ApolloServer({
   dataSources: () => ({
     wordpressBaseAPI: new WordpressBaseAPI(),
     wordpressFicheAPI: new WordpressFicheAPI(),
+    wordpressPostAPI: new WordpressPostAPI(),
     menuAPI: new MenuAPI(),
     yoastAPI: new YoastAPI(),
   }),
