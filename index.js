@@ -8,13 +8,18 @@ import { makeExecutableSchema } from "graphql-tools";
 import responseCachePlugin from "apollo-server-plugin-response-cache";
 
 import {
-  typeDefs as Wordpress,
-  resolvers as wordpressResolvers,
-} from "./wordpress";
+  typeDefs as WordpressBase,
+  resolvers as wordpressBaseResolvers,
+} from "./wordpress_base";
+import {
+  typeDefs as WordpressFiche,
+  resolvers as wordpressFicheResolvers,
+} from "./wordpress_fiche";
 import { typeDefs as Menu, resolvers as menuResolvers } from "./menu";
 import { typeDefs as Yoast, resolvers as yoastResolvers } from "./yoast";
 
-import WordpressAPI from "./datasources/wordpress";
+import WordpressBaseAPI from "./datasources/wordpress_base";
+import WordpressFicheAPI from "./datasources/wordpress_fiche";
 import MenuAPI from "./datasources/menu";
 import YoastAPI from "./datasources/yoast";
 
@@ -55,10 +60,11 @@ const Query = gql`
 const resolvers = {};
 
 const schema = makeExecutableSchema({
-  typeDefs: [Query, Wordpress, Menu, Yoast],
+  typeDefs: [Query, WordpressBase, WordpressFiche, Menu, Yoast],
   resolvers: merge(
     resolvers,
-    wordpressResolvers,
+    wordpressBaseResolvers,
+    wordpressFicheResolvers,
     menuResolvers,
     yoastResolvers
   ),
@@ -67,7 +73,8 @@ const schema = makeExecutableSchema({
 const server = new ApolloServer({
   schema,
   dataSources: () => ({
-    wordpressAPI: new WordpressAPI(),
+    wordpressBaseAPI: new WordpressBaseAPI(),
+    wordpressFicheAPI: new WordpressFicheAPI(),
     menuAPI: new MenuAPI(),
     yoastAPI: new YoastAPI(),
   }),
