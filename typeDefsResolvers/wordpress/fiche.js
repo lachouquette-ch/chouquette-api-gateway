@@ -75,7 +75,7 @@ export const resolvers = {
       return media;
     },
     criteria(parent, _, { dataSources }) {
-      return dataSources.wordpressFicheAPI.getCriteriaForFiche(parent.id);
+      return dataSources.wordpressChouquetteAPI.getCriteriaForFiche(parent.id);
     },
     // postCards(parent, _, { dataSources }) {
     //   const postCardIds = parent.linked_posts.map(({ id }) => id);

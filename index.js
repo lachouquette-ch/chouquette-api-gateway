@@ -10,23 +10,30 @@ import responseCachePlugin from "apollo-server-plugin-response-cache";
 import {
   typeDefs as WordpressBase,
   resolvers as wordpressBaseResolvers,
-} from "./wordpress_base";
+} from "./typeDefsResolvers/wordpress/base";
 import {
   typeDefs as WordpressFiche,
   resolvers as wordpressFicheResolvers,
-} from "./wordpress_fiche";
+} from "./typeDefsResolvers/wordpress/fiche";
 import {
   typeDefs as WordpressPost,
   resolvers as wordpressPostResolvers,
-} from "./wordpress_post";
-import { typeDefs as Menu, resolvers as menuResolvers } from "./menu";
-import { typeDefs as Yoast, resolvers as yoastResolvers } from "./yoast";
+} from "./typeDefsResolvers/wordpress/post";
+import {
+  typeDefs as Menu,
+  resolvers as menuResolvers,
+} from "./typeDefsResolvers/wordpress/menu";
+import {
+  typeDefs as Yoast,
+  resolvers as yoastResolvers,
+} from "./typeDefsResolvers/wordpress/yoast";
 
-import WordpressBaseAPI from "./datasources/wordpress_base";
-import WordpressFicheAPI from "./datasources/wordpress_fiche";
-import WordpressPostAPI from "./datasources/wordpress_post";
-import MenuAPI from "./datasources/menu";
-import YoastAPI from "./datasources/yoast";
+import WordpressBaseAPI from "./datasources/wordpress/base";
+import WordpressFicheAPI from "./datasources/wordpress/fiche";
+import WordpressPostAPI from "./datasources/wordpress/post";
+import WordpressChouquetteAPI from "./datasources/wordpress/chouquette";
+import MenuAPI from "./datasources/wordpress/menu";
+import YoastAPI from "./datasources/wordpress/yoast";
 
 dotenv.config();
 
@@ -82,6 +89,7 @@ const server = new ApolloServer({
     wordpressBaseAPI: new WordpressBaseAPI(),
     wordpressFicheAPI: new WordpressFicheAPI(),
     wordpressPostAPI: new WordpressPostAPI(),
+    wordpressChouquetteAPI: new WordpressChouquetteAPI(),
     menuAPI: new MenuAPI(),
     yoastAPI: new YoastAPI(),
   }),

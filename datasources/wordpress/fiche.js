@@ -8,31 +8,6 @@ export default class WordpressFicheAPI extends RESTDataSource {
     this.baseURL = "https://wordpress.lachouquette.ch/wp-json/wp/v2/";
   }
 
-  async getCriteriaForFiche(id) {
-    const criteriaCategories = await this.get(
-      `https://wordpress.lachouquette.ch/wp-json/chouquette/v1/criteria/fiche/${id}`
-    );
-
-    const result = [];
-    for (const criteriaCategory of criteriaCategories) {
-      result.push(
-        ...criteriaCategory.flatMap(({ values }) =>
-          values.map(this.criteriaReducer)
-        )
-      );
-    }
-    return result;
-  }
-
-  criteriaReducer(criteria) {
-    return {
-      id: criteria.id,
-      slug: criteria.slug,
-      name: criteria.name,
-      description: criteria.description,
-    };
-  }
-
   async getFicheBySlug(slug) {
     const result = await this.get(`fiches`, { slug });
 
