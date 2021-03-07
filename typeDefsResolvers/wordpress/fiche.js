@@ -15,11 +15,13 @@ export const typeDefs = gql`
     locationId: Int! # should be fetched once
     image: Media
     criteria: [FicheCriteria!]
+    seo: Seo
 
     # postCards: [PostCard!]
   }
 
   type FichePOI {
+    address: String
     street: String!
     number: Int
     postCode: Int!
@@ -37,12 +39,7 @@ export const typeDefs = gql`
     facebook: String
     instagram: String
     cost: Int
-    openings: [FicheOpening]
-  }
-
-  type FicheOpening {
-    dayOfWeek: Int
-    opening: String
+    openings: [String]
   }
 
   type FicheCriteria {
@@ -76,6 +73,9 @@ export const resolvers = {
     },
     criteria(parent, _, { dataSources }) {
       return dataSources.wordpressChouquetteAPI.getCriteriaForFiche(parent.id);
+    },
+    seo(parent) {
+      return parent;
     },
     // postCards(parent, _, { dataSources }) {
     //   const postCardIds = parent.linked_posts.map(({ id }) => id);

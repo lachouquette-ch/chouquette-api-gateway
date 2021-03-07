@@ -31,6 +31,10 @@ export default class WordpressFicheAPI extends RESTDataSource {
 
       featured_media: fiche.featured_media,
       linked_posts: fiche.linked_posts,
+
+      yoast_json_ld: fiche.yoast_json_ld,
+      yoast_meta: fiche.yoast_meta,
+      yoast_title: fiche.yoast_title,
     };
   }
 
@@ -42,21 +46,13 @@ export default class WordpressFicheAPI extends RESTDataSource {
       facebook: info.sn_facebook,
       instagram: info.sn_instagram,
       cost: info.cost,
-      openings: info.openings
-        ? Object.entries(info.openings).map(this.openingReducer)
-        : null,
-    };
-  }
-
-  openingReducer([key, value]) {
-    return {
-      dayOfWeek: key,
-      opening: value,
+      openings: info.openings,
     };
   }
 
   poiReducer(location) {
     return {
+      address: location.address,
       street: location.street_name,
       number: location.street_number,
       postCode: location.post_code,

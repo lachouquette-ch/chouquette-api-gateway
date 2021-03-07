@@ -1,6 +1,5 @@
 import { RESTDataSource } from "apollo-datasource-rest";
 import he from "he";
-import _ from "lodash";
 
 const IMAGE_SIZES = ["medium", "medium_large", "large", "thumbnail"];
 
