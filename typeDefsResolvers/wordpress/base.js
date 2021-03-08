@@ -29,6 +29,7 @@ export const typeDefs = gql`
   type Media {
     id: ID!
     alt: String
+    source: String
     sizes: [MediaDetail!]
   }
 

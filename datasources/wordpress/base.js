@@ -92,6 +92,7 @@ export default class WordpressBaseAPI extends RESTDataSource {
     const mediaDTO = {
       id: media.id,
       alt: he.decode(media.alt_text),
+      source: media.source_url,
       sizes: [],
     };
 
