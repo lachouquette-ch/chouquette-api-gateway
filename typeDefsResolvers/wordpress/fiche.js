@@ -1,4 +1,5 @@
 import { gql } from "apollo-server-express";
+import lodash from "lodash";
 
 export const typeDefs = gql`
   type Fiche {
@@ -17,19 +18,20 @@ export const typeDefs = gql`
     criteria: [FicheCriteria!]
     seo: Seo
 
-    # postCards: [PostCard!]
+    categories: [Int!]
+    postCards: [PostCard!]
   }
 
   type FichePOI {
-    address: String
-    street: String!
+    address: String!
+    street: String
     number: Int
-    postCode: Int!
+    postCode: Int
     state: String
-    city: String!
-    country: String!
-    lat: Float
-    lng: Float
+    city: String
+    country: String
+    lat: Float!
+    lng: Float!
   }
 
   type FicheInfo {
@@ -77,12 +79,11 @@ export const resolvers = {
     seo(parent) {
       return parent;
     },
-    // postCards(parent, _, { dataSources }) {
-    //   const postCardIds = parent.linked_posts.map(({ id }) => id);
-    //
-    //   return lodash.isEmpty(postCardIds)
-    //     ? null
-    //     : dataSources.wordpressAPI.getPostCardByIds(postCardIds);
-    // },
+    postCards(parent, _, { dataSources }) {
+      const postIds = parent.linked_posts.map(({ id }) => id);
+      return lodash.isEmpty(postIds)
+        ? null
+        : dataSources.wordpressPostAPI.getPostCardByIds(postIds);
+    },
   },
 };

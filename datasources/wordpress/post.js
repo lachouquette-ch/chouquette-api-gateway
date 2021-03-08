@@ -8,6 +8,15 @@ export default class WordpressPostAPI extends RESTDataSource {
     this.baseURL = "https://wordpress.lachouquette.ch/wp-json/wp/v2/";
   }
 
+  async getByIds(path, ids, queryParams = {}) {
+    queryParams = {
+      include: ids.join(","),
+      per_page: ids.length,
+      ...queryParams,
+    };
+    return this.get(path, queryParams);
+  }
+
   async getPostCardByIds(ids) {
     const DEFAULT_FIELDS = [
       "id",
@@ -31,7 +40,7 @@ export default class WordpressPostAPI extends RESTDataSource {
       slug: postCard.slug,
       title: he.decode(postCard.title.rendered),
       featured_media: postCard.featured_media,
-      top_categories: postCard.top_categories,
+      categories: postCard.top_categories,
     };
   }
 

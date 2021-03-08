@@ -30,6 +30,7 @@ export default class WordpressFicheAPI extends RESTDataSource {
       categoryId: fiche.main_category.id,
 
       featured_media: fiche.featured_media,
+      categories: fiche.categories,
       linked_posts: fiche.linked_posts,
 
       yoast_json_ld: fiche.yoast_json_ld,

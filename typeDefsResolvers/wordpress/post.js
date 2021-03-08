@@ -5,8 +5,8 @@ export const typeDefs = gql`
     id: ID!
     slug: String!
     title: String
-    cover: Media
-    categories: [Category!]
+    image: Media
+    categories: [Int!]
   }
 `;
 
@@ -17,13 +17,8 @@ export const resolvers = {
   },
 
   PostCard: {
-    cover(parent, _, { dataSources }) {
+    image(parent, _, { dataSources }) {
       return dataSources.wordpressBaseAPI.getMediaById(parent.featured_media);
-    },
-    categories(parent, _, { dataSources }) {
-      return dataSources.wordpressBaseAPI.getCategoryByIds(
-        parent.top_categories
-      );
     },
   },
 };
