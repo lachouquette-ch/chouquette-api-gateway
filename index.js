@@ -28,12 +28,12 @@ import {
   resolvers as WordpressYoastResolvers,
 } from "./typeDefsResolvers/wordpress/yoast";
 
-import WordpressBaseAPI from "./datasources/wordpress/base";
-import WordpressFicheAPI from "./datasources/wordpress/fiche";
-import WordpressPostAPI from "./datasources/wordpress/post";
-import WordpressChouquetteAPI from "./datasources/wordpress/chouquette";
-import WordpressMenuAPI from "./datasources/wordpress/menu";
-import WordpressYoastAPI from "./datasources/wordpress/yoast";
+import WordpressBaseAPI from "./typeDefsResolvers/wordpress/baseEndpoint";
+import WordpressFicheAPI from "./typeDefsResolvers/wordpress/ficheEndpoint";
+import WordpressPostAPI from "./typeDefsResolvers/wordpress/rootEndpoint";
+import WordpressChouquetteAPI from "./typeDefsResolvers/wordpress/chouquetteEndpoint";
+import WordpressMenuAPI from "./typeDefsResolvers/wordpress/menuEndpoint";
+import WordpressYoastAPI from "./typeDefsResolvers/wordpress/yoastEndpoint";
 
 dotenv.config();
 
