@@ -17,6 +17,7 @@ export const typeDefs = gql`
     locationId: Int!
     # embedded
     info: FicheInfo
+    logo: FicheLogo
     image: Media
     criteria: [Criteria!]
     poi: FichePOI
@@ -25,12 +26,10 @@ export const typeDefs = gql`
     postCards: [PostCard!]
   }
 
-  type FicheCategory {
-    id: ID!
+  type FicheLogo {
     slug: String!
-    title: String!
-    logo: String!
-    markerIcon: String!
+    name: String!
+    url: String!
   }
 
   type FichePOI {
@@ -43,6 +42,8 @@ export const typeDefs = gql`
     country: String
     lat: Float!
     lng: Float!
+
+    marker: String!
   }
 
   type FicheInfo {

@@ -23,16 +23,19 @@ export default class WordpressFicheAPI extends RESTDataSource {
       title: he.decode(fiche.title.rendered),
       date: new Date(fiche.date).toISOString(),
       content: he.decode(fiche.content.rendered),
-
-      isChouquettise: fiche.info.chouquettise,
-      address: fiche.info.location.address,
-      poi: fiche.info.location ? this.poiReducer(fiche.info.location) : null,
-      info: this.infoReducer(fiche.info),
-
-      principalCategoryId: fiche.main_category.id,
       categoryIds: fiche.categories,
       locationId: fiche.locations[0],
       linkedPostIds: fiche.linked_posts,
+
+      info: this.infoReducer(fiche.info),
+      isChouquettise: fiche.info.chouquettise,
+      address: fiche.info.location.address,
+
+      principalCategoryId: fiche.main_category.id,
+      logo: this.logoReducer(fiche.main_category),
+      poi: fiche.info.location
+        ? this.poiReducer(fiche.info.location, fiche.main_category.marker_icon)
+        : null,
 
       // embedded
       featuredMedia: fiche._embedded["wp:featuredmedia"][0],
@@ -57,7 +60,16 @@ export default class WordpressFicheAPI extends RESTDataSource {
     };
   }
 
-  poiReducer(location) {
+  logoReducer(category) {
+    console.log(category);
+    return {
+      slug: category.slug,
+      name: category.name,
+      url: category.logo,
+    };
+  }
+
+  poiReducer(location, marker) {
     return {
       address: location.address,
       street: location.street_name,
@@ -68,6 +80,8 @@ export default class WordpressFicheAPI extends RESTDataSource {
       country: location.country,
       lat: location.lat,
       lng: location.lng,
+
+      marker,
     };
   }
 
