@@ -29,8 +29,8 @@ export default class WordpressFicheAPI extends RESTDataSource {
       poi: fiche.info.location ? this.poiReducer(fiche.info.location) : null,
       info: this.infoReducer(fiche.info),
 
-      categoryIds: fiche.categories,
       principalCategoryId: fiche.main_category.id,
+      categoryIds: fiche.categories,
       locationId: fiche.locations[0],
       linkedPostIds: fiche.linked_posts,
 

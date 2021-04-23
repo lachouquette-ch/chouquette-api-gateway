@@ -9,18 +9,19 @@ export const typeDefs = gql`
     title: String!
     date: String!
     content: String
-    address: String
     isChouquettise: Boolean! # computed
-    poi: FichePOI
-    info: FicheInfo
-    categoryId: Int! # should be fetched once
-    locationId: Int! # should be fetched once
-    image: Media
-    criteria: [Criteria!]
+    address: String
+    # ids (should be fetched once)
     principalCategoryId: Int
     categoryIds: [Int!]
+    locationId: Int!
+    # embedded
+    info: FicheInfo
+    image: Media
+    criteria: [Criteria!]
+    poi: FichePOI
     seo: Seo
-
+    # external
     postCards: [PostCard!]
   }
 
