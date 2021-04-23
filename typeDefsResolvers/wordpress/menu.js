@@ -1,7 +1,7 @@
 import { gql } from "apollo-server-express";
 
 export const typeDefs = gql`
-  type Menu @cacheControl(maxAge: 14400) {
+  type Menu {
     id: ID!
     name: String!
     slug: String!
@@ -13,7 +13,7 @@ export const typeDefs = gql`
     category
   }
 
-  type MenuItem @cacheControl(maxAge: 14400) {
+  type MenuItem {
     id: ID!
     type: MenuItemType!
     slug: String!
@@ -21,10 +21,4 @@ export const typeDefs = gql`
   }
 `;
 
-export const resolvers = {
-  Query: {
-    menus: (_, __, { dataSources }) => dataSources.menuAPI.getMenu(),
-    menu: (_, { slug }, { dataSources }) =>
-      dataSources.menuAPI.getMenuById(slug),
-  },
-};
+export const resolvers = {};

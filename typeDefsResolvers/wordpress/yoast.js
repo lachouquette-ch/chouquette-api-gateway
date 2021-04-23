@@ -1,7 +1,7 @@
 import { gql } from "apollo-server-express";
 
 export const typeDefs = gql`
-  type Redirect @cacheControl(maxAge: 14400) {
+  type Redirect {
     from: String!
     to: String!
     status: Int!
@@ -15,20 +15,15 @@ export const typeDefs = gql`
 `;
 
 export const resolvers = {
-  Query: {
-    getRedirects: (_, __, { dataSources }) =>
-      dataSources.yoastAPI.getRedirects(),
-  },
-
   Seo: {
     title(parent) {
-      return parent.yoast_title;
+      return parent.seoTitle;
     },
     metadata(parent) {
-      return JSON.stringify(parent.yoast_meta);
+      return JSON.stringify(parent.seoMeta);
     },
     jsonLD(parent) {
-      return JSON.stringify(parent.yoast_json_ld);
+      return JSON.stringify(parent.seoJsonLd);
     },
   },
 };

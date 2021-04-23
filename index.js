@@ -20,41 +20,32 @@ import {
   resolvers as wordpressPostResolvers,
 } from "./typeDefsResolvers/wordpress/post";
 import {
-  typeDefs as Menu,
-  resolvers as menuResolvers,
+  typeDefs as WordpressMenu,
+  resolvers as wordpressMenuResolvers,
 } from "./typeDefsResolvers/wordpress/menu";
 import {
-  typeDefs as Yoast,
-  resolvers as yoastResolvers,
+  typeDefs as WordpressYoast,
+  resolvers as WordpressYoastResolvers,
 } from "./typeDefsResolvers/wordpress/yoast";
 
 import WordpressBaseAPI from "./datasources/wordpress/base";
 import WordpressFicheAPI from "./datasources/wordpress/fiche";
 import WordpressPostAPI from "./datasources/wordpress/post";
 import WordpressChouquetteAPI from "./datasources/wordpress/chouquette";
-import MenuAPI from "./datasources/wordpress/menu";
-import YoastAPI from "./datasources/wordpress/yoast";
+import WordpressMenuAPI from "./datasources/wordpress/menu";
+import WordpressYoastAPI from "./datasources/wordpress/yoast";
 
 dotenv.config();
 
-// Default
+// Queries
 const Query = gql`
   type Query {
     # Wordpress API
-    settings: Settings
+    nuxtServerInit: NuxtServerInit!
     ficheBySlug(slug: String!): Fiche
 
     latestPostsWithSticky(number: Int): [PostCard]
-    getLocations: [Location!]
-    getCategories: [Category!]
     getMediaForCategories: [Media!]
-
-    # Menu API
-    menus: [Menu!]
-    menu: Menu
-
-    # Yoast API
-    getRedirects: [Redirect!]
   }
 
   # TO RESOLVE CACHE CONTROL
@@ -72,14 +63,21 @@ const Query = gql`
 const resolvers = {};
 
 const schema = makeExecutableSchema({
-  typeDefs: [Query, WordpressBase, WordpressFiche, WordpressPost, Menu, Yoast],
+  typeDefs: [
+    Query,
+    WordpressBase,
+    WordpressFiche,
+    WordpressPost,
+    WordpressMenu,
+    WordpressYoast,
+  ],
   resolvers: merge(
     resolvers,
     wordpressBaseResolvers,
     wordpressFicheResolvers,
     wordpressPostResolvers,
-    menuResolvers,
-    yoastResolvers
+    wordpressMenuResolvers,
+    WordpressYoastResolvers
   ),
 });
 
@@ -90,8 +88,8 @@ const server = new ApolloServer({
     wordpressFicheAPI: new WordpressFicheAPI(),
     wordpressPostAPI: new WordpressPostAPI(),
     wordpressChouquetteAPI: new WordpressChouquetteAPI(),
-    menuAPI: new MenuAPI(),
-    yoastAPI: new YoastAPI(),
+    wordpressMenuAPI: new WordpressMenuAPI(),
+    wordpressYoastAPI: new WordpressYoastAPI(),
   }),
   plugins: [responseCachePlugin()],
   // tracing: true,

@@ -31,16 +31,6 @@ export default class WordpressBaseAPI extends RESTDataSource {
     };
   }
 
-  locationReducer(location) {
-    return {
-      id: location.id,
-      parentId: location.parent,
-      name: location.name,
-      slug: location.slug,
-      description: location.slug,
-    };
-  }
-
   async getLocations() {
     const locations = await this.get(`locations`, {
       hide_empty: true,
@@ -48,30 +38,37 @@ export default class WordpressBaseAPI extends RESTDataSource {
       order: "desc",
     });
 
-    return locations.map(this.locationReducer);
+    return locations.map(WordpressBaseAPI.locationReducer);
   }
 
-  async getLocationById(id) {
-    const location = await this.get(`locations/${id}`);
-
-    return this.locationReducer(location);
+  static locationReducer(location) {
+    return {
+      id: location.id,
+      parentId: location.parent,
+      name: location.name,
+      slug: location.slug,
+      description: location.description,
+    };
   }
 
-  async getCategories() {
-    const categories = await this.get(`categories`);
+  static categoryReducer(category) {
+    return {
+      id: category.id,
+      name: he.decode(category.name),
+      parentId: category.parent,
+      logoYellowId: category.logos.logo_yellow,
+      logoWhiteId: category.logos.logo_white,
+      logoBlackId: category.logos.logo_black,
+    };
+  }
+
+  async getCategories(dataSources) {
+    const categories = await this.get(`categories`, { per_page: 100 });
 
     return categories.map(this.categoryReducer);
   }
 
-  async getCategoryByIds(ids) {
-    const categories = await this.getByIds(`categories`, ids);
-
-    return categories.map(this.categoryReducer);
-  }
-
-  async getMediaForCategories() {
-    const categories = await this.getCategories();
-
+  async getMediaForCategories(categories) {
     const categoryLogoIds = categories.flatMap(
       ({ logoYellowId, logoWhiteId, logoBlackId }) => [
         logoYellowId,
@@ -79,16 +76,19 @@ export default class WordpressBaseAPI extends RESTDataSource {
         logoBlackId,
       ]
     );
-    return this.getMediaByIds(categoryLogoIds);
+
+    const media = await this.getByIds(`media`, categoryLogoIds);
+
+    return media.map(WordpressBaseAPI.mediaReducer);
   }
 
   async getMediaById(id) {
     const media = await this.get(`media/${id}`);
 
-    return this.mediaReducer(media);
+    return WordpressBaseAPI.mediaReducer(media);
   }
 
-  mediaReducer(media) {
+  static mediaReducer(media) {
     const mediaDTO = {
       id: media.id,
       alt: he.decode(media.alt_text),
@@ -110,16 +110,5 @@ export default class WordpressBaseAPI extends RESTDataSource {
     }
 
     return mediaDTO;
-  }
-
-  categoryReducer(category) {
-    return {
-      id: category.id,
-      name: he.decode(category.name),
-      parentId: category.parent,
-      logoYellowId: category.logos.logo_yellow,
-      logoWhiteId: category.logos.logo_white,
-      logoBlackId: category.logos.logo_black,
-    };
   }
 }

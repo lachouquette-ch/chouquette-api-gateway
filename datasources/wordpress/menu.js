@@ -6,12 +6,6 @@ export default class MenuAPI extends RESTDataSource {
     this.baseURL = "https://wordpress.lachouquette.ch/wp-json/menus/v1/";
   }
 
-  async getMenuBySlug(slug) {
-    const menu = await this.get(`menus`, { slug });
-
-    return this.menuReducer(menu);
-  }
-
   async getMenus() {
     const menuList = await this.get(`menus`);
 

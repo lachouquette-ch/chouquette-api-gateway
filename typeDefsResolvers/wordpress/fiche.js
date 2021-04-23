@@ -1,5 +1,6 @@
 import { gql } from "apollo-server-express";
 import lodash from "lodash";
+import WordpressBaseAPI from "../../datasources/wordpress/base";
 
 export const typeDefs = gql`
   type Fiche {
@@ -15,11 +16,20 @@ export const typeDefs = gql`
     categoryId: Int! # should be fetched once
     locationId: Int! # should be fetched once
     image: Media
-    criteria: [FicheCriteria!]
+    criteria: [Criteria!]
+    principalCategoryId: Int
+    categoryIds: [Int!]
     seo: Seo
 
-    categories: [Int!]
     postCards: [PostCard!]
+  }
+
+  type FicheCategory {
+    id: ID!
+    slug: String!
+    title: String!
+    logo: String!
+    markerIcon: String!
   }
 
   type FichePOI {
@@ -44,18 +54,18 @@ export const typeDefs = gql`
     openings: [String]
   }
 
-  type FicheCriteria {
+  type CriteriaTerm {
     id: ID!
     slug: String!
     name: String
     description: String
   }
 
-  type FicheCriteriaType {
+  type Criteria {
     id: ID!
     taxonomy: String!
     name: String
-    values: FicheCriteria
+    values: [CriteriaTerm!]
   }
 `;
 
@@ -66,21 +76,17 @@ export const resolvers = {
   },
 
   Fiche: {
-    image(parent, _, { dataSources }) {
-      const media = parent.featured_media
-        ? dataSources.wordpressBaseAPI.getMediaById(parent.featured_media)
-        : null;
-
-      return media;
+    image(parent) {
+      return WordpressBaseAPI.mediaReducer(parent.featuredMedia);
     },
-    criteria(parent, _, { dataSources }) {
-      return dataSources.wordpressChouquetteAPI.getCriteriaForFiche(parent.id);
+    criteria(parent) {
+      return parent.criteria[0].flat();
     },
     seo(parent) {
       return parent;
     },
     postCards(parent, _, { dataSources }) {
-      const postIds = parent.linked_posts.map(({ id }) => id);
+      const postIds = parent.linkedPostIds.map(({ id }) => id);
       return lodash.isEmpty(postIds)
         ? null
         : dataSources.wordpressPostAPI.getPostCardByIds(postIds);
