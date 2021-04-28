@@ -61,7 +61,6 @@ export default class WordpressFicheAPI extends RESTDataSource {
   }
 
   logoReducer(category) {
-    console.log(category);
     return {
       slug: category.slug,
       name: category.name,
