@@ -8,9 +8,8 @@ export default class WordpressFicheAPI extends RESTDataSource {
     this.baseURL = "https://wordpress.lachouquette.ch/wp-json/wp/v2/";
   }
 
-  async getFicheBySlug(slug, embed = true) {
-    const params = embed ? { slug, _embed: true } : { slug };
-    const result = await this.get(`fiches`, params);
+  async getFicheBySlug(slug) {
+    const result = await this.get(`fiches`, { slug, _embed: true });
 
     if (_.isEmpty(result)) {
       return null;
