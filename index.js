@@ -30,7 +30,7 @@ import {
 
 import WordpressBaseAPI from "./typeDefsResolvers/wordpress/baseEndpoint";
 import WordpressFicheAPI from "./typeDefsResolvers/wordpress/ficheEndpoint";
-import WordpressPostAPI from "./typeDefsResolvers/wordpress/rootEndpoint";
+import WordpressPostAPI from "./typeDefsResolvers/wordpress/postEndpoint";
 import WordpressChouquetteAPI from "./typeDefsResolvers/wordpress/chouquetteEndpoint";
 import WordpressMenuAPI from "./typeDefsResolvers/wordpress/menuEndpoint";
 import WordpressYoastAPI from "./typeDefsResolvers/wordpress/yoastEndpoint";

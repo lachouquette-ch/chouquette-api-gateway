@@ -26,6 +26,7 @@ export const typeDefs = gql`
     postCards: [PostCard!]
   }
 
+  # TODO : use categoryId instead ?
   type FicheLogo {
     slug: String!
     name: String!

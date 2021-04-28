@@ -6,7 +6,7 @@ export const typeDefs = gql`
     slug: String!
     title: String
     image: Media
-    categories: [Int!]
+    categoryId: Int
   }
 `;
 

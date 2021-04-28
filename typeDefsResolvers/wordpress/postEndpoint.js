@@ -40,7 +40,7 @@ export default class WordpressPostAPI extends RESTDataSource {
       slug: postCard.slug,
       title: he.decode(postCard.title.rendered),
       featured_media: postCard.featured_media,
-      categories: postCard.top_categories,
+      categoryId: postCard.top_categories[0],
     };
   }
 
