@@ -1,4 +1,5 @@
 import { gql } from "apollo-server-express";
+import WordpressBaseAPI from "./baseEndpoint";
 
 export const typeDefs = gql`
   type PostCard {
@@ -18,7 +19,7 @@ export const resolvers = {
 
   PostCard: {
     image(parent, _, { dataSources }) {
-      return dataSources.wordpressBaseAPI.getMediaById(parent.featured_media);
+      return WordpressBaseAPI.mediaReducer(parent.featuredMedia);
     },
   },
 };
