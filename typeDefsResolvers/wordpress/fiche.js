@@ -10,7 +10,7 @@ export const typeDefs = gql`
     content: String
     isChouquettise: Boolean! # computed
     address: String
-    # ids (should be fetched once)
+    # ids (should be prefetched)
     principalCategoryId: Int
     categoryIds: [Int!]
     locationId: Int!
@@ -74,7 +74,7 @@ export const typeDefs = gql`
 export const resolvers = {
   Query: {
     ficheBySlug: (_, { slug }, { dataSources }) =>
-      dataSources.wordpressFicheAPI.getFicheBySlug(slug),
+      dataSources.wordpressFicheAPI.getBySlug(slug),
   },
 
   Fiche: {

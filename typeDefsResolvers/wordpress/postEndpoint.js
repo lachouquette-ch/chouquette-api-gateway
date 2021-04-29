@@ -1,11 +1,42 @@
 import { RESTDataSource } from "apollo-datasource-rest";
 import he from "he";
 import _ from "lodash";
+import WordpressBaseAPI from "./baseEndpoint";
 
 export default class WordpressPostAPI extends RESTDataSource {
   constructor() {
     super();
     this.baseURL = "https://wordpress.lachouquette.ch/wp-json/wp/v2/posts";
+  }
+
+  async getBySlug(slug) {
+    const result = await this.get("", { slug, _embed: true });
+
+    if (_.isEmpty(result)) {
+      return null;
+    }
+    const post = result[0];
+
+    return {
+      id: post.id,
+      slug,
+      title: he.decode(post.title.rendered),
+      date: new Date(post.date).toISOString(),
+      modified: new Date(post.modified).toISOString(),
+      content: he.decode(post.content.rendered),
+      categoryIds: post.categories,
+
+      // embedded
+      image: WordpressBaseAPI.mediaReducer(
+        post._embedded["wp:featuredmedia"][0]
+      ),
+      author: WordpressBaseAPI.authorReducer(post._embedded.author[0]),
+
+      // seo
+      seoMeta: post.yoast_meta,
+      seoTitle: post.yoast_title,
+      seoJsonLd: post.yoast_json_ld,
+    };
   }
 
   async getByIds(path, ids, queryParams = {}) {

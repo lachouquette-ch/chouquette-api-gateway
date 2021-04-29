@@ -111,4 +111,22 @@ export default class WordpressBaseAPI extends RESTDataSource {
 
     return mediaDTO;
   }
+
+  static authorReducer(author) {
+    return {
+      id: author.id,
+      slug: author.id,
+      name: author.name,
+      description: he.decode(author.description),
+      avatar: this.avatarReducer(author.avatar_urls),
+    };
+  }
+
+  static avatarReducer(avatar) {
+    return {
+      size24: avatar["24"],
+      size48: avatar["48"],
+      size96: avatar["96"],
+    };
+  }
 }

@@ -49,6 +49,20 @@ export const typeDefs = gql`
     logoWhite: Media
     logoBlack: Media
   }
+
+  type Author {
+    id: ID!
+    slug: String!
+    name: String
+    description: String
+    avatar: Avatar
+  }
+
+  type Avatar {
+    size24: String!
+    size48: String!
+    size96: String!
+  }
 `;
 
 export const resolvers = {

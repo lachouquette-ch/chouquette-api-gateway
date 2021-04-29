@@ -49,6 +49,7 @@ const Query = gql`
     nuxtServerInit: NuxtServerInit!
     ficheBySlug(slug: String!): Fiche
     pageBySlug(slug: String!): Page
+    postBySlug(slug: String!): Post
 
     latestPostsWithSticky(number: Int): [PostCard]
     getMediaForCategories: [Media!]

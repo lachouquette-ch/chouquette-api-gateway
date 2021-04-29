@@ -5,11 +5,11 @@ import _ from "lodash";
 export default class WordpressFicheAPI extends RESTDataSource {
   constructor() {
     super();
-    this.baseURL = "https://wordpress.lachouquette.ch/wp-json/wp/v2/";
+    this.baseURL = "https://wordpress.lachouquette.ch/wp-json/wp/v2/fiches";
   }
 
-  async getFicheBySlug(slug) {
-    const result = await this.get(`fiches`, { slug, _embed: true });
+  async getBySlug(slug) {
+    const result = await this.get("", { slug, _embed: true });
 
     if (_.isEmpty(result)) {
       return null;
