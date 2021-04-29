@@ -1,6 +1,8 @@
 import { RESTDataSource } from "apollo-datasource-rest";
 import he from "he";
 import _ from "lodash";
+import YoastAPI from "./yoastEndpoint";
+import WordpressBaseAPI from "./baseEndpoint";
 
 export default class WordpressFicheAPI extends RESTDataSource {
   constructor() {
@@ -37,13 +39,11 @@ export default class WordpressFicheAPI extends RESTDataSource {
         : null,
 
       // embedded
-      featuredMedia: fiche._embedded["wp:featuredmedia"][0],
-      criteria: fiche._embedded.criteria,
-
-      // seo
-      seoMeta: fiche.yoast_meta,
-      seoTitle: fiche.yoast_title,
-      seoJsonLd: fiche.yoast_json_ld,
+      image: WordpressBaseAPI.mediaReducer(
+        fiche._embedded["wp:featuredmedia"][0]
+      ),
+      criteria: fiche._embedded.criteria[0].flat(),
+      seo: YoastAPI.seoReducer(fiche),
     };
   }
 

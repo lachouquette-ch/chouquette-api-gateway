@@ -1,6 +1,7 @@
 import { RESTDataSource } from "apollo-datasource-rest";
 import he from "he";
 import _ from "lodash";
+import YoastAPI from "./yoastEndpoint";
 
 export default class WordpressPageAPI extends RESTDataSource {
   constructor() {
@@ -24,10 +25,8 @@ export default class WordpressPageAPI extends RESTDataSource {
       modified: page.modified,
       content: he.decode(page.content.rendered),
 
-      // seo
-      seoMeta: page.yoast_meta,
-      seoTitle: page.yoast_title,
-      seoJsonLd: page.yoast_json_ld,
+      // embedded
+      seo: YoastAPI.seoReducer(page),
     };
   }
 }

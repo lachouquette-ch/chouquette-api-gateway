@@ -78,15 +78,6 @@ export const resolvers = {
   },
 
   Fiche: {
-    image(parent) {
-      return WordpressBaseAPI.mediaReducer(parent.featuredMedia);
-    },
-    criteria(parent) {
-      return parent.criteria[0].flat();
-    },
-    seo(parent) {
-      return parent;
-    },
     postCards(parent, _, { dataSources }) {
       const postIds = parent.linkedPostIds.map(({ id }) => id);
       return lodash.isEmpty(postIds)

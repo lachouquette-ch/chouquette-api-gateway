@@ -38,12 +38,6 @@ export const resolvers = {
       dataSources.wordpressPostAPI.getBySlug(slug),
   },
 
-  Post: {
-    seo(parent) {
-      return parent;
-    },
-  },
-
   PostCard: {
     image(parent, _, { dataSources }) {
       return WordpressBaseAPI.mediaReducer(parent.featuredMedia);

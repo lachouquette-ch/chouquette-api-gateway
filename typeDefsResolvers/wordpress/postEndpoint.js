@@ -2,6 +2,7 @@ import { RESTDataSource } from "apollo-datasource-rest";
 import he from "he";
 import _ from "lodash";
 import WordpressBaseAPI from "./baseEndpoint";
+import YoastAPI from "./yoastEndpoint";
 
 export default class WordpressPostAPI extends RESTDataSource {
   constructor() {
@@ -35,11 +36,7 @@ export default class WordpressPostAPI extends RESTDataSource {
       tags: post._embedded["wp:term"]
         .flat()
         .filter((term) => term.taxonomy === "post_tag"),
-
-      // seo
-      seoMeta: post.yoast_meta,
-      seoTitle: post.yoast_title,
-      seoJsonLd: post.yoast_json_ld,
+      seo: YoastAPI.seoReducer(post),
     };
   }
 

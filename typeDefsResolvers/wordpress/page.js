@@ -19,10 +19,4 @@ export const resolvers = {
     pageBySlug: (_, { slug }, { dataSources }) =>
       dataSources.wordpressPageAPI.getBySlug(slug),
   },
-
-  Page: {
-    seo(parent) {
-      return parent;
-    },
-  },
 };

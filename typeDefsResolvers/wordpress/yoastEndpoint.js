@@ -21,4 +21,12 @@ export default class YoastAPI extends RESTDataSource {
       status: parseInt(status),
     };
   }
+
+  static seoReducer(entity) {
+    return {
+      title: entity.yoast_title,
+      metadata: JSON.stringify(entity.yoast_meta),
+      jsonLD: JSON.stringify(entity.yoast_json_ld),
+    };
+  }
 }

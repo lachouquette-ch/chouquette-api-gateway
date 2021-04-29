@@ -13,17 +13,3 @@ export const typeDefs = gql`
     jsonLD: String
   }
 `;
-
-export const resolvers = {
-  Seo: {
-    title(parent) {
-      return parent.seoTitle;
-    },
-    metadata(parent) {
-      return JSON.stringify(parent.seoMeta);
-    },
-    jsonLD(parent) {
-      return JSON.stringify(parent.seoJsonLd);
-    },
-  },
-};
