@@ -63,6 +63,12 @@ export const typeDefs = gql`
     size48: String!
     size96: String!
   }
+
+  type Tag {
+    id: ID!
+    slug: String!
+    name: String
+  }
 `;
 
 export const resolvers = {

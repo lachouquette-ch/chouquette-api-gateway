@@ -11,8 +11,10 @@ export const typeDefs = gql`
     content: String
     # ids (should be prefetched)
     categoryId: Int
+    ficheIds: [Int!]
     # embedded
     image: Media
+    tags: [Tag!]
     seo: Seo
     author: Author
   }

@@ -24,13 +24,17 @@ export default class WordpressPostAPI extends RESTDataSource {
       date: new Date(post.date).toISOString(),
       modified: new Date(post.modified).toISOString(),
       content: he.decode(post.content.rendered),
-      categoryIds: post.categories,
+
+      ficheIds: post.meta.link_fiche,
 
       // embedded
       image: WordpressBaseAPI.mediaReducer(
         post._embedded["wp:featuredmedia"][0]
       ),
       author: WordpressBaseAPI.authorReducer(post._embedded.author[0]),
+      tags: post._embedded["wp:term"]
+        .flat()
+        .filter((term) => term.taxonomy === "post_tag"),
 
       // seo
       seoMeta: post.yoast_meta,
