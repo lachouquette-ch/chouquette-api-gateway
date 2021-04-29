@@ -20,17 +20,22 @@ import {
   resolvers as wordpressPostResolvers,
 } from "./typeDefsResolvers/wordpress/post";
 import {
+  typeDefs as WordpressPage,
+  resolvers as wordpressPageResolvers,
+} from "./typeDefsResolvers/wordpress/page";
+import {
   typeDefs as WordpressMenu,
   resolvers as wordpressMenuResolvers,
 } from "./typeDefsResolvers/wordpress/menu";
 import {
   typeDefs as WordpressYoast,
-  resolvers as WordpressYoastResolvers,
+  resolvers as wordpressYoastResolvers,
 } from "./typeDefsResolvers/wordpress/yoast";
 
 import WordpressBaseAPI from "./typeDefsResolvers/wordpress/baseEndpoint";
 import WordpressFicheAPI from "./typeDefsResolvers/wordpress/ficheEndpoint";
 import WordpressPostAPI from "./typeDefsResolvers/wordpress/postEndpoint";
+import WordpressPageAPI from "./typeDefsResolvers/wordpress/pageEndpoint";
 import WordpressChouquetteAPI from "./typeDefsResolvers/wordpress/chouquetteEndpoint";
 import WordpressMenuAPI from "./typeDefsResolvers/wordpress/menuEndpoint";
 import WordpressYoastAPI from "./typeDefsResolvers/wordpress/yoastEndpoint";
@@ -43,6 +48,7 @@ const Query = gql`
     # Wordpress API
     nuxtServerInit: NuxtServerInit!
     ficheBySlug(slug: String!): Fiche
+    pageBySlug(slug: String!): Page
 
     latestPostsWithSticky(number: Int): [PostCard]
     getMediaForCategories: [Media!]
@@ -68,6 +74,7 @@ const schema = makeExecutableSchema({
     WordpressBase,
     WordpressFiche,
     WordpressPost,
+    WordpressPage,
     WordpressMenu,
     WordpressYoast,
   ],
@@ -76,8 +83,9 @@ const schema = makeExecutableSchema({
     wordpressBaseResolvers,
     wordpressFicheResolvers,
     wordpressPostResolvers,
+    wordpressPageResolvers,
     wordpressMenuResolvers,
-    WordpressYoastResolvers
+    wordpressYoastResolvers
   ),
 });
 
@@ -87,6 +95,7 @@ const server = new ApolloServer({
     wordpressBaseAPI: new WordpressBaseAPI(),
     wordpressFicheAPI: new WordpressFicheAPI(),
     wordpressPostAPI: new WordpressPostAPI(),
+    wordpressPageAPI: new WordpressPageAPI(),
     wordpressChouquetteAPI: new WordpressChouquetteAPI(),
     wordpressMenuAPI: new WordpressMenuAPI(),
     wordpressYoastAPI: new WordpressYoastAPI(),

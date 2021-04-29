@@ -1,6 +1,5 @@
 import { gql } from "apollo-server-express";
 import lodash from "lodash";
-import WordpressBaseAPI from "./baseEndpoint";
 
 export const typeDefs = gql`
   type Fiche {
