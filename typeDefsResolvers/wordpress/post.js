@@ -43,9 +43,6 @@ export const typeDefs = gql`
 
 export const resolvers = {
   Query: {
-    latestPostsWithSticky: (_, { number }, { dataSources }) =>
-      dataSources.wordpressBaseAPI.getLatestPostsWithSticky(number),
-
     postBySlug: (_, { slug }, { dataSources }) =>
       dataSources.wordpressPostAPI.getBySlug(slug),
 
