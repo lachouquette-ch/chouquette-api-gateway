@@ -104,7 +104,8 @@ const server = new ApolloServer({
   plugins: [responseCachePlugin()],
   // tracing: true,
   cacheControl: {
-    defaultMaxAge: 60,
+    // TODO fix which default age for app...
+    // defaultMaxAge: 60,
   },
 });
 
