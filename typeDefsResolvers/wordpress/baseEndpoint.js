@@ -9,14 +9,12 @@ export default class WordpressBaseAPI extends RESTDataSource {
     this.baseURL = "https://wordpress.lachouquette.ch/wp-json/wp/v2/";
   }
 
-  async getByIds(resource, ids, queryParams = {}) {
-    queryParams = {
+  static queryParamBuilderForIds(ids, queryParams = {}) {
+    return {
       include: ids.join(","),
       per_page: ids.length,
       ...queryParams,
     };
-
-    return this.get(resource, queryParams);
   }
 
   async getSettings() {
@@ -77,7 +75,10 @@ export default class WordpressBaseAPI extends RESTDataSource {
       ]
     );
 
-    const media = await this.getByIds(`media`, categoryLogoIds);
+    const media = await this.get(
+      `media`,
+      this.queryParamBuilderForIds(ids, queryParams)
+    );
 
     return media.map(WordpressBaseAPI.mediaReducer);
   }
@@ -127,6 +128,27 @@ export default class WordpressBaseAPI extends RESTDataSource {
       size24: avatar["24"],
       size48: avatar["48"],
       size96: avatar["96"],
+    };
+  }
+
+  async getCommentsByPostId(postId) {
+    const comments = await this.get(`comments`, {
+      post: postId,
+      per_page: 100,
+    });
+
+    return comments.map(this.commentReducer, this);
+  }
+
+  commentReducer(comment) {
+    return {
+      id: comment.id,
+      parentId: comment.parent,
+      authorId: comment.author ? comment.author : null,
+      authorName: comment.author_name,
+      authorAvatar: WordpressBaseAPI.avatarReducer(comment.author_avatar_urls),
+      date: new Date(comment.date).toISOString(),
+      content: he.decode(comment.content.rendered),
     };
   }
 }

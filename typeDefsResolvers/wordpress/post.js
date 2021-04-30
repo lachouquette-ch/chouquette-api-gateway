@@ -17,6 +17,8 @@ export const typeDefs = gql`
     tags: [Tag!]
     seo: Seo
     author: Author
+    # external
+    comments: [Comment!]
   }
 
   type PostCard {
@@ -27,6 +29,16 @@ export const typeDefs = gql`
     # embedded
     image: Media
   }
+
+  type Comment {
+    id: ID!
+    parentId: Int!
+    authorId: Int
+    authorName: String
+    authorAvatar: Avatar
+    date: String
+    content: String
+  }
 `;
 
 export const resolvers = {
@@ -36,11 +48,14 @@ export const resolvers = {
 
     postBySlug: (_, { slug }, { dataSources }) =>
       dataSources.wordpressPostAPI.getBySlug(slug),
+
+    postCardsByIds: (_, { ids }, { dataSources }) =>
+      dataSources.wordpressPostAPI.getPostCardByIds(ids),
   },
 
-  PostCard: {
-    image(parent, _, { dataSources }) {
-      return WordpressBaseAPI.mediaReducer(parent.featuredMedia);
+  Post: {
+    comments(parent, _, { dataSources }) {
+      return dataSources.wordpressBaseAPI.getCommentsByPostId(parent.id);
     },
   },
 };

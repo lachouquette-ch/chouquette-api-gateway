@@ -10,6 +10,15 @@ export default class WordpressFicheAPI extends RESTDataSource {
     this.baseURL = "https://wordpress.lachouquette.ch/wp-json/wp/v2/fiches";
   }
 
+  async getByIds(ids) {
+    const fiches = await this.get(
+      "",
+      WordpressBaseAPI.queryParamBuilderForIds(ids, { _embed: true })
+    );
+
+    return fiches.map(this.ficheReducer, this);
+  }
+
   async getBySlug(slug) {
     const result = await this.get("", { slug, _embed: true });
 
@@ -17,10 +26,13 @@ export default class WordpressFicheAPI extends RESTDataSource {
       return null;
     }
     const fiche = result[0];
+    return this.ficheReducer(fiche);
+  }
 
+  ficheReducer(fiche) {
     return {
       id: fiche.id,
-      slug,
+      slug: fiche.slug,
       title: he.decode(fiche.title.rendered),
       date: new Date(fiche.date).toISOString(),
       content: he.decode(fiche.content.rendered),
@@ -80,14 +92,6 @@ export default class WordpressFicheAPI extends RESTDataSource {
       lng: location.lng,
 
       marker,
-    };
-  }
-
-  ficheReducer(post) {
-    return {
-      id: post.id,
-      title: he.decode(post.title.rendered),
-      topCategory: post.top_categories[0],
     };
   }
 }

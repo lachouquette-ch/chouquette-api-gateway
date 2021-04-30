@@ -40,15 +40,6 @@ export default class WordpressPostAPI extends RESTDataSource {
     };
   }
 
-  async getByIds(path, ids, queryParams = {}) {
-    queryParams = {
-      include: ids.join(","),
-      per_page: ids.length,
-      ...queryParams,
-    };
-    return this.get(path, queryParams);
-  }
-
   async getPostCardByIds(ids) {
     const DEFAULT_FIELDS = [
       "id",
@@ -60,12 +51,15 @@ export default class WordpressPostAPI extends RESTDataSource {
       "_links.wp:featuredmedia",
     ];
 
-    const postCards = await this.getByIds("", ids, {
-      _fields: DEFAULT_FIELDS.join(","),
-      _embed: "wp:featuredmedia",
-    });
+    const postCards = await this.get(
+      "",
+      WordpressBaseAPI.queryParamBuilderForIds(ids, {
+        _fields: DEFAULT_FIELDS.join(","),
+        _embed: "wp:featuredmedia",
+      })
+    );
 
-    return postCards.map(this.postCardReducer);
+    return postCards.map(this.postCardReducer, this);
   }
 
   postCardReducer(postCard) {
@@ -76,7 +70,9 @@ export default class WordpressPostAPI extends RESTDataSource {
       categoryId: postCard.top_categories[0],
 
       // embedded
-      featuredMedia: postCard._embedded["wp:featuredmedia"][0],
+      image: WordpressBaseAPI.mediaReducer(
+        postCard._embedded["wp:featuredmedia"][0]
+      ),
     };
   }
 

@@ -27,10 +27,7 @@ import {
   typeDefs as WordpressMenu,
   resolvers as wordpressMenuResolvers,
 } from "./typeDefsResolvers/wordpress/menu";
-import {
-  typeDefs as WordpressYoast,
-  resolvers as wordpressYoastResolvers,
-} from "./typeDefsResolvers/wordpress/yoast";
+import { typeDefs as WordpressYoast } from "./typeDefsResolvers/wordpress/yoast";
 
 import WordpressBaseAPI from "./typeDefsResolvers/wordpress/baseEndpoint";
 import WordpressFicheAPI from "./typeDefsResolvers/wordpress/ficheEndpoint";
@@ -47,9 +44,13 @@ const Query = gql`
   type Query {
     # Wordpress API
     nuxtServerInit: NuxtServerInit!
+
     ficheBySlug(slug: String!): Fiche
     pageBySlug(slug: String!): Page
     postBySlug(slug: String!): Post
+
+    ficheByIds(ids: [Int!]!): [Fiche]
+    postCardsByIds(ids: [Int!]!): [PostCard]
 
     latestPostsWithSticky(number: Int): [PostCard]
     getMediaForCategories: [Media!]
@@ -85,8 +86,7 @@ const schema = makeExecutableSchema({
     wordpressFicheResolvers,
     wordpressPostResolvers,
     wordpressPageResolvers,
-    wordpressMenuResolvers,
-    wordpressYoastResolvers
+    wordpressMenuResolvers
   ),
 });
 
