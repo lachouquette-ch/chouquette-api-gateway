@@ -1,5 +1,5 @@
 import { gql } from "apollo-server-express";
-import WordpressBaseAPI from "./baseEndpoint";
+import lodash from "lodash";
 
 export const typeDefs = gql`
   type Post {
@@ -18,6 +18,7 @@ export const typeDefs = gql`
     seo: Seo
     author: Author
     # external
+    fiches: [Fiche!]
     comments: [Comment!]
     similarPosts: [PostCard!]
   }
@@ -52,6 +53,11 @@ export const resolvers = {
   },
 
   Post: {
+    fiches(parent, _, { dataSources }) {
+      return !lodash.isEmpty(parent.ficheIds)
+        ? dataSources.wordpressFicheAPI.getByIds(parent.ficheIds)
+        : null;
+    },
     comments(parent, _, { dataSources }) {
       return dataSources.wordpressBaseAPI.getCommentsByPostId(parent.id);
     },
