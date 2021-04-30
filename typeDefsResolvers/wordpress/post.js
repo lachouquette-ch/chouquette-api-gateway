@@ -19,7 +19,7 @@ export const typeDefs = gql`
     author: Author
     # external
     comments: [Comment!]
-    similarPostCards: [PostCard!]
+    similarPosts: [PostCard!]
   }
 
   type PostCard {
@@ -55,7 +55,7 @@ export const resolvers = {
     comments(parent, _, { dataSources }) {
       return dataSources.wordpressBaseAPI.getCommentsByPostId(parent.id);
     },
-    similarPostCards(parent, _, { dataSources }) {
+    similarPosts(parent, _, { dataSources }) {
       const tagIds = parent.tags.map(({ id }) => id);
 
       return dataSources.wordpressPostAPI.getPostCardByTagIds(
