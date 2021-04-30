@@ -4,6 +4,16 @@ import _ from "lodash";
 import WordpressBaseAPI from "./baseEndpoint";
 import YoastAPI from "./yoastEndpoint";
 
+const POST_CARD_FIELDS = [
+  "id",
+  "slug",
+  "title",
+  "categories",
+  "top_categories",
+  "featured_media",
+  "_links.wp:featuredmedia",
+];
+
 export default class WordpressPostAPI extends RESTDataSource {
   constructor() {
     super();
@@ -41,23 +51,25 @@ export default class WordpressPostAPI extends RESTDataSource {
   }
 
   async getPostCardByIds(ids) {
-    const DEFAULT_FIELDS = [
-      "id",
-      "slug",
-      "title",
-      "categories",
-      "top_categories",
-      "featured_media",
-      "_links.wp:featuredmedia",
-    ];
-
     const postCards = await this.get(
       "",
       WordpressBaseAPI.queryParamBuilderForIds(ids, {
-        _fields: DEFAULT_FIELDS.join(","),
+        _fields: POST_CARD_FIELDS.join(","),
         _embed: "wp:featuredmedia",
       })
     );
+
+    return postCards.map(this.postCardReducer, this);
+  }
+
+  async getPostCardByTagIds(ids, postId = null) {
+    const postCards = await this.get("", {
+      tags: ids,
+      exclude: postId,
+      per_page: 6,
+      _fields: POST_CARD_FIELDS.join(","),
+      _embed: "wp:featuredmedia",
+    });
 
     return postCards.map(this.postCardReducer, this);
   }
