@@ -63,7 +63,7 @@ export default class WordpressBaseAPI extends RESTDataSource {
   async getCategories(dataSources) {
     const categories = await this.get(`categories`, { per_page: 100 });
 
-    return categories.map(this.categoryReducer);
+    return categories.map(WordpressBaseAPI.categoryReducer);
   }
 
   async getMediaForCategories(categories) {
@@ -77,7 +77,7 @@ export default class WordpressBaseAPI extends RESTDataSource {
 
     const media = await this.get(
       `media`,
-      this.queryParamBuilderForIds(ids, queryParams)
+      WordpressBaseAPI.queryParamBuilderForIds(categoryLogoIds)
     );
 
     return media.map(WordpressBaseAPI.mediaReducer);
