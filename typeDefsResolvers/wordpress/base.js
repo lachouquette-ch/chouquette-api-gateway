@@ -73,7 +73,7 @@ export const typeDefs = gql`
 
 export const resolvers = {
   Query: {
-    nuxtServerInit(parent, _, { dataSources }) {
+    nuxtServerInit() {
       return {};
     },
   },

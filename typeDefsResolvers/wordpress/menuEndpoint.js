@@ -38,6 +38,7 @@ export default class MenuAPI extends RESTDataSource {
       id: menuItem.object_id,
       type: menuItem.object,
       slug: menuItem.slug,
+      title: menuItem.title,
       url: menuItem.url,
     };
   }

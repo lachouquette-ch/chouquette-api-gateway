@@ -17,7 +17,7 @@ export const typeDefs = gql`
     id: ID!
     type: MenuItemType!
     slug: String!
-    url: String
+    title: String
   }
 `;
 
