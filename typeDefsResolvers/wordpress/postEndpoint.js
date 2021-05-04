@@ -14,6 +14,8 @@ const POST_CARD_FIELDS = [
   "_links.wp:featuredmedia",
 ];
 
+const TOPS_TAG_ID = 1246;
+
 export default class WordpressPostAPI extends RESTDataSource {
   constructor() {
     super();
@@ -88,16 +90,37 @@ export default class WordpressPostAPI extends RESTDataSource {
     };
   }
 
-  async getLatestPostsWithSticky(number) {
-    const posts = await this.get(`posts`, { sticky: true, per_page: number });
-    const remainingPostCount = number - posts.length;
-    if (remainingPostCount) {
-      const remainingPosts = await this.get(`posts`, {
-        per_page: remainingPostCount,
+  async getLatestPostsWithSticky(number = 6) {
+    // first get sticky posts (mise en avant)
+    const postCards = await this.get("", {
+      sticky: true,
+      per_page: number,
+      _fields: POST_CARD_FIELDS.join(","),
+      _embed: "wp:featuredmedia",
+    });
+    // any left to fetch ?
+    number -= postCards.length;
+    if (number) {
+      const remainingPostCards = await this.get("", {
+        per_page: number,
+        exclude: postCards.map(({ id }) => id),
+        _fields: POST_CARD_FIELDS.join(","),
+        _embed: "wp:featuredmedia",
       });
-      posts.push(...remainingPosts);
+      postCards.push(...remainingPostCards);
     }
 
-    return posts.map(this.ficheReducer);
+    return postCards.map(this.postCardReducer, this);
+  }
+
+  async getTopPostCards(number = 8) {
+    const postCards = await this.get("", {
+      tags: TOPS_TAG_ID,
+      per_page: number,
+      _fields: POST_CARD_FIELDS.join(","),
+      _embed: "wp:featuredmedia",
+    });
+
+    return postCards.map(this.postCardReducer, this);
   }
 }

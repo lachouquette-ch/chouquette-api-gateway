@@ -64,10 +64,9 @@ export const resolvers = {
     similarPosts(parent, _, { dataSources }) {
       const tagIds = parent.tags.map(({ id }) => id);
 
-      return dataSources.wordpressPostAPI.getPostCardByTagIds(
-        tagIds,
-        parent.id
-      );
+      return dataSources.wordpressPostAPI.getPostCardByTagIds(tagIds, {
+        postId: parent.id,
+      });
     },
   },
 };

@@ -13,6 +13,12 @@ export default class YoastAPI extends RESTDataSource {
     return redirects.map(this.redirectReducer);
   }
 
+  async getHome() {
+    const home = await this.get(`home`);
+
+    return YoastAPI.seoReducer(home);
+  }
+
   redirectReducer(redirect) {
     const [from, to, status] = redirect.split(" ");
     return {

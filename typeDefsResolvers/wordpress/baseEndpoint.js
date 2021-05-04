@@ -1,7 +1,7 @@
 import { RESTDataSource } from "apollo-datasource-rest";
 import he from "he";
 
-const IMAGE_SIZES = ["medium", "medium_large", "large", "thumbnail"];
+const IMAGE_SIZES = ["medium", "medium_large", "large", "thumbnail", "full"];
 
 export default class WordpressBaseAPI extends RESTDataSource {
   constructor() {

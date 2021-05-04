@@ -49,6 +49,8 @@ const Query = gql`
     pageBySlug(slug: String!): Page
     postBySlug(slug: String!): Post
 
+    home: Home!
+
     ficheByIds(ids: [Int!]!): [Fiche]
     postCardsByIds(ids: [Int!]!): [PostCard]
 

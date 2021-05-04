@@ -9,6 +9,12 @@ export const typeDefs = gql`
     locations: [Location!]
   }
 
+  type Home {
+    latestPosts: [PostCard!]
+    topPosts: [PostCard!]
+    seo: Seo
+  }
+
   type Settings {
     name: String
     description: String
@@ -76,6 +82,9 @@ export const resolvers = {
     nuxtServerInit() {
       return {};
     },
+    home() {
+      return {};
+    },
   },
 
   NuxtServerInit: {
@@ -110,6 +119,18 @@ export const resolvers = {
     },
     locations(parent, _, { dataSources }) {
       return dataSources.wordpressBaseAPI.getLocations();
+    },
+  },
+
+  Home: {
+    latestPosts(parent, _, { dataSources }) {
+      return dataSources.wordpressPostAPI.getLatestPostsWithSticky();
+    },
+    topPosts(parent, _, { dataSources }) {
+      return dataSources.wordpressPostAPI.getTopPostCards();
+    },
+    seo(parent, _, { dataSources }) {
+      return dataSources.wordpressYoastAPI.getHome();
     },
   },
 };
