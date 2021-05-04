@@ -52,6 +52,7 @@ export default class WordpressBaseAPI extends RESTDataSource {
   static categoryReducer(category) {
     return {
       id: category.id,
+      slug: category.slug,
       name: he.decode(category.name),
       parentId: category.parent,
       logoYellowId: category.logos.logo_yellow,

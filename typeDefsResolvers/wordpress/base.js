@@ -49,6 +49,7 @@ export const typeDefs = gql`
 
   type Category {
     id: ID!
+    slug: String!
     name: String
     parentId: Int
     logoYellow: Media
