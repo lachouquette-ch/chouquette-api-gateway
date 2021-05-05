@@ -1,10 +1,10 @@
-import { RESTDataSource } from "apollo-datasource-rest";
 import he from "he";
 import _ from "lodash";
 import YoastAPI from "./yoastEndpoint";
 import WordpressBaseAPI from "./baseEndpoint";
+import CustomRESTDataSource from "../CustomRESTDataSource";
 
-export default class WordpressFicheAPI extends RESTDataSource {
+export default class WordpressFicheAPI extends CustomRESTDataSource {
   constructor() {
     super();
     this.baseURL = "https://wordpress.lachouquette.ch/wp-json/wp/v2/fiches";
@@ -29,6 +29,38 @@ export default class WordpressFicheAPI extends RESTDataSource {
     return this.ficheReducer(fiche);
   }
 
+  async getByCategorySlug(
+    slug,
+    page = 1,
+    pageSize = 10,
+    locationId = null,
+    search = null
+  ) {
+    const params = _.omitBy(
+      {
+        category: slug,
+        location: locationId,
+        search,
+        page,
+        per_page: pageSize,
+        _embed: true,
+      },
+      _.isNil
+    );
+
+    const result = await this.getWithHeader("", params);
+    const { body: fiches, headers } = result;
+    const total = parseInt(headers["x-wp-total"]);
+    const totalPages = parseInt(headers["x-wp-totalpages"]);
+
+    return {
+      fiches: fiches.map(this.ficheReducer, this),
+      hasMore: page < totalPages,
+      total,
+      totalPages,
+    };
+  }
+
   ficheReducer(fiche) {
     return {
       id: fiche.id,
@@ -42,7 +74,7 @@ export default class WordpressFicheAPI extends RESTDataSource {
 
       info: this.infoReducer(fiche.info),
       isChouquettise: fiche.info.chouquettise,
-      address: fiche.info.location.address,
+      address: fiche.info.location && fiche.info.location.address,
 
       principalCategoryId: fiche.main_category.id,
       logo: this.logoReducer(fiche.main_category),

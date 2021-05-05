@@ -25,6 +25,13 @@ export const typeDefs = gql`
     postCards: [PostCard!]
   }
 
+  type FichesPage implements Pagination {
+    fiches: [Fiche!]
+    hasMore: Boolean!
+    total: Int!
+    totalPages: Int!
+  }
+
   # TODO : use categoryId instead ?
   type FicheLogo {
     slug: String!
@@ -78,6 +85,19 @@ export const resolvers = {
 
     ficheByIds: (_, { ids }, { dataSources }) =>
       dataSources.wordpressFicheAPI.getByIds(ids),
+
+    fichesByCategory: (
+      _,
+      { slug, page, pageSize, locationId, search },
+      { dataSources }
+    ) =>
+      dataSources.wordpressFicheAPI.getByCategorySlug(
+        slug,
+        page,
+        pageSize,
+        locationId,
+        search
+      ),
   },
 
   Fiche: {
