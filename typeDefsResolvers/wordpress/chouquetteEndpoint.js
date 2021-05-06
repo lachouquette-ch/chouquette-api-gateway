@@ -8,6 +8,12 @@ export default class WordpressChouquetteAPI extends RESTDataSource {
     this.baseURL = "https://wordpress.lachouquette.ch/wp-json/chouquette/v1/";
   }
 
+  async getCriteriaForCategory(id) {
+    const criteria = await this.get(`criteria/category/${id}`);
+
+    return criteria.map(this.criteriaReducer, this);
+  }
+
   async getCriteriaForFiche(id) {
     const criteriaCategories = await this.get(`criteria/fiche/${id}`);
 
@@ -15,7 +21,7 @@ export default class WordpressChouquetteAPI extends RESTDataSource {
     for (const criteriaCategory of criteriaCategories) {
       result.push(
         ...criteriaCategory.flatMap(({ values }) =>
-          values.map(this.criteriaReducer)
+          values.map(this.criteriaTermReducer, this)
         )
       );
     }
@@ -25,9 +31,18 @@ export default class WordpressChouquetteAPI extends RESTDataSource {
   criteriaReducer(criteria) {
     return {
       id: criteria.id,
-      slug: criteria.slug,
       name: criteria.name,
-      description: criteria.description,
+      taxonomy: criteria.taxonomy,
+      values: criteria.values.map(this.criteriaTermReducer),
+    };
+  }
+
+  criteriaTermReducer(criteriaTerm) {
+    return {
+      id: criteriaTerm.id,
+      slug: criteriaTerm.slug,
+      name: criteriaTerm.name,
+      description: criteriaTerm.description,
     };
   }
 }

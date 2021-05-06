@@ -63,18 +63,18 @@ export const typeDefs = gql`
     openings: [String]
   }
 
-  type CriteriaTerm {
-    id: ID!
-    slug: String!
-    name: String
-    description: String
-  }
-
   type Criteria {
     id: ID!
     taxonomy: String!
     name: String
     values: [CriteriaTerm!]
+  }
+
+  type CriteriaTerm {
+    id: ID!
+    slug: String!
+    name: String
+    description: String
   }
 `;
 

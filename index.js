@@ -46,8 +46,18 @@ const Query = gql`
     nuxtServerInit: NuxtServerInit!
 
     ficheBySlug(slug: String!): Fiche
+    fichesByCategory(
+      slug: String!
+      page: Int!
+      pageSize: Int!
+      locationId: Int
+      search: String
+      criteria: [Int!]
+    ): FichesPage!
     pageBySlug(slug: String!): Page
     postBySlug(slug: String!): Post
+
+    criteriaByCategory(id: Int!): [Criteria!]
 
     home: Home!
 
@@ -56,6 +66,12 @@ const Query = gql`
 
     latestPostsWithSticky(number: Int): [PostCard]
     getMediaForCategories: [Media!]
+  }
+
+  interface Pagination {
+    hasMore: Boolean!
+    total: Int!
+    totalPages: Int!
   }
 
   # TO RESOLVE CACHE CONTROL
@@ -70,7 +86,12 @@ const Query = gql`
   }
 `;
 
-const resolvers = {};
+const resolvers = {
+  Query: {
+    criteriaByCategory: (_, { id }, { dataSources }) =>
+      dataSources.wordpressChouquetteAPI.getCriteriaForCategory(id),
+  },
+};
 
 const schema = makeExecutableSchema({
   typeDefs: [
