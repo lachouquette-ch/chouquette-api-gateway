@@ -33,13 +33,14 @@ export default class WordpressFicheAPI extends CustomRESTDataSource {
     slug,
     page = 1,
     pageSize = 10,
-    locationId = null,
-    search = null
+    location = null,
+    search = null,
+    criteria = null
   ) {
     const params = _.omitBy(
       {
         category: slug,
-        location: locationId,
+        location,
         search,
         page,
         per_page: pageSize,
@@ -47,8 +48,14 @@ export default class WordpressFicheAPI extends CustomRESTDataSource {
       },
       _.isNil
     );
+    const urlSearchParams = new URLSearchParams(params);
+    if (criteria) {
+      criteria.forEach(({ taxonomy, values }) => {
+        urlSearchParams.append(`filter[${taxonomy}]`, values.join(","));
+      });
+    }
 
-    const result = await this.getWithHeader("", params);
+    const result = await this.getWithHeader("", urlSearchParams);
     const { body: fiches, headers } = result;
     const total = parseInt(headers["x-wp-total"]);
     const totalPages = parseInt(headers["x-wp-totalpages"]);

@@ -50,11 +50,11 @@ const Query = gql`
     ficheBySlug(slug: String!): Fiche
     fichesByCategory(
       slug: String!
+      location: String
+      search: String
+      criteria: [CriteriaSearch!]
       page: Int!
       pageSize: Int!
-      locationId: Int
-      search: String
-      criteria: [Int!]
     ): FichesPage!
     pageBySlug(slug: String!): Page
     postBySlug(slug: String!): Post
@@ -70,10 +70,9 @@ const Query = gql`
     getMediaForCategories: [Media!]
   }
 
-  interface Pagination {
-    hasMore: Boolean!
-    total: Int!
-    totalPages: Int!
+  input CriteriaSearch {
+    taxonomy: String!
+    values: [String!]
   }
 
   # TO RESOLVE CACHE CONTROL

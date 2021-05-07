@@ -51,6 +51,7 @@ export const typeDefs = gql`
     id: ID!
     slug: String!
     name: String
+    description: String
     parentId: Int
     logoYellow: Media
     logoWhite: Media

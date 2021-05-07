@@ -25,7 +25,7 @@ export const typeDefs = gql`
     postCards: [PostCard!]
   }
 
-  type FichesPage implements Pagination {
+  type FichesPage {
     fiches: [Fiche!]
     hasMore: Boolean!
     total: Int!
@@ -88,15 +88,16 @@ export const resolvers = {
 
     fichesByCategory: (
       _,
-      { slug, page, pageSize, locationId, search },
+      { slug, location, search, criteria, page, pageSize },
       { dataSources }
     ) =>
       dataSources.wordpressFicheAPI.getByCategorySlug(
         slug,
         page,
         pageSize,
-        locationId,
-        search
+        location,
+        search,
+        criteria
       ),
   },
 
