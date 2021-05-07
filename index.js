@@ -2,6 +2,8 @@ import dotenv from "dotenv";
 import { merge } from "lodash";
 
 import express from "express";
+import rateLimit from "express-rate-limit";
+import slowDown from "express-slow-down";
 import cors from "cors";
 import { ApolloServer, gql } from "apollo-server-express";
 import { makeExecutableSchema } from "graphql-tools";
@@ -135,6 +137,21 @@ const server = new ApolloServer({
 const app = express();
 // TODO better restrict CORS origins
 app.use(cors());
+// TODO fine tune slow down
+const speedLimit = slowDown({
+  windowMs: 5 * 60 * 100, // 5 minutes window
+  delayAfter: 10, // after 10 requests
+  delayMs: 100, // add 100ms each request
+  maxDelayMs: 5000, // to max 5 seconds of delay
+});
+app.use(speedLimit);
+// TODO fine tune rate timit
+const limiter = rateLimit({
+  windowMs: 60 * 1000, // 1 minute window
+  max: 25, // limit to 25 requests
+});
+app.use(limiter);
+
 server.applyMiddleware({ app });
 
 app.listen({ port: 4000 }, () =>
