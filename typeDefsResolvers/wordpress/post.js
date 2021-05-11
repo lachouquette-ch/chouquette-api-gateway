@@ -47,9 +47,6 @@ export const resolvers = {
   Query: {
     postBySlug: (_, { slug }, { dataSources }) =>
       dataSources.wordpressPostAPI.getBySlug(slug),
-
-    postCardsByIds: (_, { ids }, { dataSources }) =>
-      dataSources.wordpressPostAPI.getPostCardByIds(ids),
   },
 
   Post: {

@@ -6,7 +6,7 @@ import YoastAPI from "./yoastEndpoint";
 export default class WordpressPageAPI extends RESTDataSource {
   constructor() {
     super();
-    this.baseURL = "https://wordpress.lachouquette.ch/wp-json/wp/v2/pages";
+    this.baseURL = `${process.env.WP_URL}/wp-json/wp/v2/pages`;
   }
 
   async getBySlug(slug) {

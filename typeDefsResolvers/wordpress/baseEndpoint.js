@@ -6,7 +6,7 @@ const IMAGE_SIZES = ["medium", "medium_large", "large", "thumbnail", "full"];
 export default class WordpressBaseAPI extends RESTDataSource {
   constructor() {
     super();
-    this.baseURL = "https://wordpress.lachouquette.ch/wp-json/wp/v2/";
+    this.baseURL = `${process.env.WP_URL}/wp-json/wp/v2`;
   }
 
   static queryParamBuilderForIds(ids, queryParams = {}) {
@@ -18,9 +18,7 @@ export default class WordpressBaseAPI extends RESTDataSource {
   }
 
   async getSettings() {
-    const settings = await this.get(
-      `https://wordpress.lachouquette.ch/wp-json/`
-    );
+    const settings = await this.get(`${process.env.WP_URL}/wp-json/`);
 
     return {
       name: settings.name,

@@ -83,9 +83,6 @@ export const resolvers = {
     ficheBySlug: (_, { slug }, { dataSources }) =>
       dataSources.wordpressFicheAPI.getBySlug(slug),
 
-    ficheByIds: (_, { ids }, { dataSources }) =>
-      dataSources.wordpressFicheAPI.getByIds(ids),
-
     fichesByCategory: (
       _,
       { slug, location, search, criteria, page, pageSize },

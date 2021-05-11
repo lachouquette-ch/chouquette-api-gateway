@@ -3,7 +3,7 @@ import { RESTDataSource } from "apollo-datasource-rest";
 export default class MenuAPI extends RESTDataSource {
   constructor() {
     super();
-    this.baseURL = "https://wordpress.lachouquette.ch/wp-json/menus/v1/";
+    this.baseURL = `${process.env.WP_URL}/wp-json/menus/v1`;
   }
 
   async getMenus() {

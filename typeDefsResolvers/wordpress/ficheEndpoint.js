@@ -7,7 +7,7 @@ import CustomRESTDataSource from "../CustomRESTDataSource";
 export default class WordpressFicheAPI extends CustomRESTDataSource {
   constructor() {
     super();
-    this.baseURL = "https://wordpress.lachouquette.ch/wp-json/wp/v2/fiches";
+    this.baseURL = `${process.env.WP_URL}/wp-json/wp/v2/fiches`;
   }
 
   async getByIds(ids) {

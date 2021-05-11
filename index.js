@@ -56,18 +56,26 @@ const Query = gql`
       page: Int!
       pageSize: Int!
     ): FichesPage!
+
     pageBySlug(slug: String!): Page
+
     postBySlug(slug: String!): Post
 
     criteriaByCategory(id: Int!): [Criteria!]
 
     home: Home!
 
-    ficheByIds(ids: [Int!]!): [Fiche]
-    postCardsByIds(ids: [Int!]!): [PostCard]
-
     latestPostsWithSticky(number: Int): [PostCard]
-    getMediaForCategories: [Media!]
+  }
+
+  type Mutation {
+    ficheReport(
+      ficheId: Int!
+      name: String!
+      email: String!
+      message: String!
+      recaptcha: String!
+    ): String
   }
 
   input CriteriaSearch {
@@ -126,10 +134,10 @@ const server = new ApolloServer({
     wordpressYoastAPI: new WordpressYoastAPI(),
   }),
   plugins: [responseCachePlugin()],
-  // tracing: true,
+  tracing: true,
   cacheControl: {
     // TODO fix which default age for app...
-    // defaultMaxAge: 60,
+    defaultMaxAge: 60,
   },
 });
 

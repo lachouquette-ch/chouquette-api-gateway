@@ -5,7 +5,7 @@ import _ from "lodash";
 export default class WordpressChouquetteAPI extends RESTDataSource {
   constructor() {
     super();
-    this.baseURL = "https://wordpress.lachouquette.ch/wp-json/chouquette/v1/";
+    this.baseURL = `${process.env.WP_URL}/wp-json/chouquette/v1`;
   }
 
   async getCriteriaForCategory(id) {

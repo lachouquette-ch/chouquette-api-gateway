@@ -19,7 +19,7 @@ const TOPS_TAG_ID = 1246;
 export default class WordpressPostAPI extends RESTDataSource {
   constructor() {
     super();
-    this.baseURL = "https://wordpress.lachouquette.ch/wp-json/wp/v2/posts";
+    this.baseURL = `${process.env.WP_URL}/wp-json/wp/v2/posts`;
   }
 
   async getBySlug(slug) {
