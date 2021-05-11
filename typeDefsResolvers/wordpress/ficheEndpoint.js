@@ -2,9 +2,10 @@ import he from "he";
 import _ from "lodash";
 import YoastAPI from "./yoastEndpoint";
 import WordpressBaseAPI from "./baseEndpoint";
-import CustomRESTDataSource from "../CustomRESTDataSource";
+import WordpresRESTDataSource from "../WordpresRESTDataSource";
+import { UserInputError } from "apollo-server-express";
 
-export default class WordpressFicheAPI extends CustomRESTDataSource {
+export default class WordpressFicheAPI extends WordpresRESTDataSource {
   constructor() {
     super();
     this.baseURL = `${process.env.WP_URL}/wp-json/wp/v2/fiches`;
@@ -66,6 +67,20 @@ export default class WordpressFicheAPI extends CustomRESTDataSource {
       total,
       totalPages,
     };
+  }
+
+  async postReport(ficheId, name, email, message, recaptcha) {
+    try {
+      const response = await this.post(`${ficheId}/report`, {
+        name,
+        email,
+        message,
+        recaptcha,
+      });
+      return response;
+    } catch (e) {
+      this.throwApolloError(e);
+    }
   }
 
   ficheReducer(fiche) {

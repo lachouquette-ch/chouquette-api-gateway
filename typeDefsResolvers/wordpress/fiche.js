@@ -98,6 +98,22 @@ export const resolvers = {
       ),
   },
 
+  Mutation: {
+    ficheReport: async (
+      _,
+      { ficheId, name, email, message, recaptcha },
+      { dataSources }
+    ) => {
+      await dataSources.wordpressFicheAPI.postReport(
+        ficheId,
+        name,
+        email,
+        message,
+        recaptcha
+      );
+    },
+  },
+
   Fiche: {
     postCards(parent, _, { dataSources }) {
       const postIds = parent.linkedPostIds.map(({ id }) => id);
