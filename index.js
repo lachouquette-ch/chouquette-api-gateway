@@ -69,7 +69,7 @@ const Query = gql`
   }
 
   type Mutation {
-    ficheReport(
+    reportFicheInfo(
       ficheId: Int!
       name: String!
       email: String!
@@ -77,10 +77,19 @@ const Query = gql`
       recaptcha: String!
     ): String
 
-    ficheContact(
+    contactFicheOwner(
       ficheId: Int!
       name: String!
       email: String!
+      message: String!
+      recaptcha: String!
+    ): String
+
+    contactStaff(
+      name: String!
+      email: String!
+      subject: String!
+      to: String!
       message: String!
       recaptcha: String!
     ): String

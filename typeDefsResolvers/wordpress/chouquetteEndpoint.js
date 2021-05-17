@@ -1,8 +1,6 @@
-import { RESTDataSource } from "apollo-datasource-rest";
-import he from "he";
-import _ from "lodash";
+import WordpresRESTDataSource from "../WordpresRESTDataSource";
 
-export default class WordpressChouquetteAPI extends RESTDataSource {
+export default class WordpressChouquetteAPI extends WordpresRESTDataSource {
   constructor() {
     super();
     this.baseURL = `${process.env.WP_URL}/wp-json/chouquette/v1`;
@@ -44,5 +42,21 @@ export default class WordpressChouquetteAPI extends RESTDataSource {
       name: criteriaTerm.name,
       description: criteriaTerm.description,
     };
+  }
+
+  async postContact(name, email, subject, to, message, recaptcha) {
+    try {
+      const response = await this.post(`contact`, {
+        name,
+        email,
+        subject,
+        to,
+        message,
+        recaptcha,
+      });
+      return response;
+    } catch (e) {
+      this.throwApolloError(e);
+    }
   }
 }

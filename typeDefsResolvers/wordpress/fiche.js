@@ -99,7 +99,7 @@ export const resolvers = {
   },
 
   Mutation: {
-    ficheContact: async (
+    contactFicheOwner: async (
       _,
       { ficheId, name, email, message, recaptcha },
       { dataSources }
@@ -113,7 +113,7 @@ export const resolvers = {
       );
     },
 
-    ficheReport: async (
+    reportFicheInfo: async (
       _,
       { ficheId, name, email, message, recaptcha },
       { dataSources }

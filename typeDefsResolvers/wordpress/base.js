@@ -89,6 +89,23 @@ export const resolvers = {
     },
   },
 
+  Mutation: {
+    contactStaff: async (
+      _,
+      { name, email, subject, to, message, recaptcha },
+      { dataSources }
+    ) => {
+      await dataSources.wordpressChouquetteAPI.postContact(
+        name,
+        email,
+        subject,
+        to,
+        message,
+        recaptcha
+      );
+    },
+  },
+
   NuxtServerInit: {
     settings(parent, _, { dataSources }) {
       return dataSources.wordpressBaseAPI.getSettings();
