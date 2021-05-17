@@ -105,12 +105,12 @@ export default class WordpressFicheAPI extends WordpresRESTDataSource {
       date: new Date(fiche.date).toISOString(),
       content: he.decode(fiche.content.rendered),
       categoryIds: fiche.categories,
-      locationId: fiche.locations[0],
+      locationId: fiche.locations ? fiche.locations[0] : null,
       linkedPostIds: fiche.linked_posts,
 
       info: this.infoReducer(fiche.info),
       isChouquettise: fiche.info.chouquettise,
-      address: fiche.info.location && fiche.info.location.address,
+      address: fiche.info.location?.address,
 
       principalCategoryId: fiche.main_category.id,
       logo: this.logoReducer(fiche.main_category),
@@ -119,10 +119,12 @@ export default class WordpressFicheAPI extends WordpresRESTDataSource {
         : null,
 
       // embedded
-      image: WordpressBaseAPI.mediaReducer(
-        fiche._embedded["wp:featuredmedia"][0]
-      ),
-      criteria: fiche._embedded.criteria[0].flat(),
+      image: fiche._embedded["wp:featuredmedia"]
+        ? WordpressBaseAPI.mediaReducer(fiche._embedded["wp:featuredmedia"][0])
+        : null,
+      criteria: fiche._embedded.criteria
+        ? fiche._embedded.criteria[0]?.flat()
+        : null,
       seo: YoastAPI.seoReducer(fiche),
     };
   }
