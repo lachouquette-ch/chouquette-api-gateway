@@ -76,6 +76,14 @@ const Query = gql`
       message: String!
       recaptcha: String!
     ): String
+
+    ficheContact(
+      ficheId: Int!
+      name: String!
+      email: String!
+      message: String!
+      recaptcha: String!
+    ): String
   }
 
   input CriteriaSearch {

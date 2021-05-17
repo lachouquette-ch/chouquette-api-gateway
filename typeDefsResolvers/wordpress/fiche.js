@@ -99,6 +99,20 @@ export const resolvers = {
   },
 
   Mutation: {
+    ficheContact: async (
+      _,
+      { ficheId, name, email, message, recaptcha },
+      { dataSources }
+    ) => {
+      await dataSources.wordpressFicheAPI.postContact(
+        ficheId,
+        name,
+        email,
+        message,
+        recaptcha
+      );
+    },
+
     ficheReport: async (
       _,
       { ficheId, name, email, message, recaptcha },

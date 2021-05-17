@@ -69,6 +69,20 @@ export default class WordpressFicheAPI extends WordpresRESTDataSource {
     };
   }
 
+  async postContact(ficheId, name, email, message, recaptcha) {
+    try {
+      const response = await this.post(`${ficheId}/contact`, {
+        name,
+        email,
+        message,
+        recaptcha,
+      });
+      return response;
+    } catch (e) {
+      this.throwApolloError(e);
+    }
+  }
+
   async postReport(ficheId, name, email, message, recaptcha) {
     try {
       const response = await this.post(`${ficheId}/report`, {

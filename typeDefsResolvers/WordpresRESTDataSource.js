@@ -5,19 +5,19 @@ import { AuthenticationError, ForbiddenError } from "apollo-server-errors";
 
 export default class WordpresRESTDataSource extends RESTDataSource {
   throwApolloError(error) {
-    if (error.extensions.response.body) {
+    if (error.extensions?.response?.body) {
       /* eslint-disable indent */
-      switch (error.extensions.response.status) {
+      switch (error.extensions?.response?.status) {
         case 400:
         case 404:
         case 412:
           throw new UserInputError(
-            error.extensions.response.body.message,
+            error.extensions?.response?.body?.message,
             error.extensions
           );
         default:
           throw new ApolloError(
-            error.extensions.response.body.message,
+            error.extensions?.response?.body?.message,
             null,
             error.extensions
           );
