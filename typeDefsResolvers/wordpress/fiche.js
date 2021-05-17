@@ -13,7 +13,7 @@ export const typeDefs = gql`
     # ids (should be prefetched)
     principalCategoryId: Int
     categoryIds: [Int!]
-    locationId: Int!
+    locationId: Int
     # embedded
     info: FicheInfo
     logo: FicheLogo
