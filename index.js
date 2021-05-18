@@ -60,12 +60,13 @@ const Query = gql`
     pageBySlug(slug: String!): Page
 
     postBySlug(slug: String!): Post
+    latestPostsWithSticky(number: Int): [PostCard]
 
     criteriaByCategory(id: Int!): [Criteria!]
 
     home: Home!
 
-    latestPostsWithSticky(number: Int): [PostCard]
+    team: Team!
   }
 
   type Mutation {

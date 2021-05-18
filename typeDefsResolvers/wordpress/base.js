@@ -15,6 +15,11 @@ export const typeDefs = gql`
     seo: Seo
   }
 
+  type Team {
+    page: Page!
+    authors: [Author!]
+  }
+
   type Settings {
     name: String
     description: String
@@ -87,6 +92,9 @@ export const resolvers = {
     home() {
       return {};
     },
+    team() {
+      return {};
+    },
   },
 
   Mutation: {
@@ -150,6 +158,15 @@ export const resolvers = {
     },
     seo(parent, _, { dataSources }) {
       return dataSources.wordpressYoastAPI.getHome();
+    },
+  },
+
+  Team: {
+    page(parent, _, { dataSources }) {
+      return dataSources.wordpressPageAPI.getBySlug("equipe");
+    },
+    authors(parent, _, { dataSources }) {
+      return dataSources.wordpressBaseAPI.getTeam();
     },
   },
 };

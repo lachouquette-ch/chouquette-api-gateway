@@ -119,7 +119,7 @@ export default class WordpressBaseAPI extends RESTDataSource {
       slug: author.id,
       name: author.name,
       description: he.decode(author.description),
-      avatar: this.avatarReducer(author.avatar_urls),
+      avatar: WordpressBaseAPI.avatarReducer(author.avatar_urls),
     };
   }
 
@@ -150,5 +150,11 @@ export default class WordpressBaseAPI extends RESTDataSource {
       date: new Date(comment.date).toISOString(),
       content: he.decode(comment.content.rendered),
     };
+  }
+
+  async getTeam() {
+    const authors = await this.get(`users/team`);
+
+    return authors.map(WordpressBaseAPI.authorReducer, this);
   }
 }
