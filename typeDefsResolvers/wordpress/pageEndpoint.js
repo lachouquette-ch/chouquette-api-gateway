@@ -17,9 +17,13 @@ export default class WordpressPageAPI extends RESTDataSource {
     }
     const page = result[0];
 
+    return this.pageReducer(page);
+  }
+
+  pageReducer(page) {
     return {
       id: page.id,
-      slug,
+      slug: page.slug,
       title: he.decode(page.title.rendered),
       date: page.date,
       modified: page.modified,
