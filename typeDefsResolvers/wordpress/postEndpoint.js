@@ -3,6 +3,7 @@ import he from "he";
 import _ from "lodash";
 import WordpressBaseAPI from "./baseEndpoint";
 import YoastAPI from "./yoastEndpoint";
+import WordpresRESTDataSource from "../WordpresRESTDataSource";
 
 const POST_CARD_FIELDS = [
   "id",
@@ -16,7 +17,7 @@ const POST_CARD_FIELDS = [
 
 const TOPS_TAG_ID = 1246;
 
-export default class WordpressPostAPI extends RESTDataSource {
+export default class WordpressPostAPI extends WordpresRESTDataSource {
   constructor() {
     super();
     this.baseURL = `${process.env.WP_URL}/wp-json/wp/v2/posts`;
@@ -122,5 +123,25 @@ export default class WordpressPostAPI extends RESTDataSource {
     });
 
     return postCards.map(this.postCardReducer, this);
+  }
+
+  async searchPosts(text, page = 1, pageSize = 10) {
+    const result = await this.getWithHeader("", {
+      search: text,
+      page,
+      per_page: pageSize,
+      _fields: POST_CARD_FIELDS.join(","),
+      _embed: "wp:featuredmedia",
+    });
+    const { body: postCards, headers } = result;
+    const total = parseInt(headers["x-wp-total"]);
+    const totalPages = parseInt(headers["x-wp-totalpages"]);
+
+    return {
+      postCards: postCards.map(this.postCardReducer, this),
+      hasMore: page < totalPages,
+      total,
+      totalPages,
+    };
   }
 }

@@ -41,12 +41,22 @@ export const typeDefs = gql`
     date: String
     content: String
   }
+
+  type PostsPage implements Pagination {
+    postCards: [PostCard!]
+    hasMore: Boolean!
+    total: Int!
+    totalPages: Int!
+  }
 `;
 
 export const resolvers = {
   Query: {
     postBySlug: (_, { slug }, { dataSources }) =>
       dataSources.wordpressPostAPI.getBySlug(slug),
+
+    postsByText: (_, { text, page }, { dataSources }) =>
+      dataSources.wordpressPostAPI.searchPosts(text, page),
   },
 
   Post: {

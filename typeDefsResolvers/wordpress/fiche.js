@@ -25,7 +25,7 @@ export const typeDefs = gql`
     postCards: [PostCard!]
   }
 
-  type FichesPage {
+  type FichesPage implements Pagination {
     fiches: [Fiche!]
     hasMore: Boolean!
     total: Int!
@@ -96,6 +96,9 @@ export const resolvers = {
         search,
         criteria
       ),
+
+    fichesByText: (_, { text, page }, { dataSources }) =>
+      dataSources.wordpressFicheAPI.searchFiches(text, page),
   },
 
   Mutation: {

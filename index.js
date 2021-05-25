@@ -56,11 +56,13 @@ const Query = gql`
       page: Int!
       pageSize: Int!
     ): FichesPage!
+    fichesByText(text: String!, page: Int!): FichesPage!
 
     pageBySlug(slug: String!): Page
 
     postBySlug(slug: String!): Post
     latestPostsWithSticky(number: Int): [PostCard]
+    postsByText(text: String!, page: Int!): PostsPage!
 
     criteriaByCategory(id: Int!): [Criteria!]
 

@@ -69,6 +69,25 @@ export default class WordpressFicheAPI extends WordpresRESTDataSource {
     };
   }
 
+  async searchFiches(text, page = 1, pageSize = 10) {
+    const result = await this.getWithHeader("", {
+      search: text,
+      page,
+      per_page: pageSize,
+      _embed: true,
+    });
+    const { body: fiches, headers } = result;
+    const total = parseInt(headers["x-wp-total"]);
+    const totalPages = parseInt(headers["x-wp-totalpages"]);
+
+    return {
+      fiches: fiches.map(this.ficheReducer, this),
+      hasMore: page < totalPages,
+      total,
+      totalPages,
+    };
+  }
+
   async postContact(ficheId, name, email, message, recaptcha) {
     try {
       const response = await this.post(`${ficheId}/contact`, {
