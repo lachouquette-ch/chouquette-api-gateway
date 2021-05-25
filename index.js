@@ -65,7 +65,6 @@ const Query = gql`
     criteriaByCategory(id: Int!): [Criteria!]
 
     home: Home!
-
     team: Team!
   }
 

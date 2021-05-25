@@ -98,7 +98,7 @@ export default class WordpressFicheAPI extends WordpresRESTDataSource {
   }
 
   ficheReducer(fiche) {
-    return {
+    const result = {
       id: fiche.id,
       slug: fiche.slug,
       title: he.decode(fiche.title.rendered),
@@ -119,14 +119,30 @@ export default class WordpressFicheAPI extends WordpresRESTDataSource {
         : null,
 
       // embedded
-      image: fiche._embedded["wp:featuredmedia"]
-        ? WordpressBaseAPI.mediaReducer(fiche._embedded["wp:featuredmedia"][0])
-        : null,
       criteria: fiche._embedded.criteria
         ? fiche._embedded.criteria[0]?.flat()
         : null,
       seo: YoastAPI.seoReducer(fiche),
     };
+
+    // special treatment for featuredmedia
+    const image = fiche._embedded["wp:featuredmedia"]
+      ? fiche._embedded["wp:featuredmedia"][0]
+      : null;
+    if (!image) {
+      console.error(
+        `Fiche '${result.title}' (${result.id}) has not featured media`
+      );
+    } else if (image.code && image.code === "rest_forbidden") {
+      // TODO send error to sentry
+      console.error(
+        `Fiche '${result.title}' (${result.id}) : cannot access featured media. Is it published ?`
+      );
+    } else {
+      result.image = WordpressBaseAPI.mediaReducer(image);
+    }
+
+    return result;
   }
 
   infoReducer(info) {

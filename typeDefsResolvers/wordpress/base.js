@@ -20,6 +20,12 @@ export const typeDefs = gql`
     authors: [Author!]
   }
 
+  interface Pagination {
+    hasMore: Boolean!
+    total: Int!
+    totalPages: Int!
+  }
+
   type Settings {
     name: String
     description: String
