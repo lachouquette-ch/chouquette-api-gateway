@@ -1,5 +1,6 @@
 import { RESTDataSource } from "apollo-datasource-rest";
 import he from "he";
+import _ from "lodash";
 
 const IMAGE_SIZES = ["medium", "medium_large", "large", "thumbnail", "full"];
 
@@ -67,12 +68,12 @@ export default class WordpressBaseAPI extends RESTDataSource {
   }
 
   async getMediaForCategories(categories) {
-    const categoryLogoIds = categories.flatMap(
-      ({ logoYellowId, logoWhiteId, logoBlackId }) => [
+    const categoryLogoIds = _.filter(
+      categories.flatMap(({ logoYellowId, logoWhiteId, logoBlackId }) => [
         logoYellowId,
         logoWhiteId,
         logoBlackId,
-      ]
+      ])
     );
 
     const media = await this.get(
