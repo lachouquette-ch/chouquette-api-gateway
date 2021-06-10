@@ -1,9 +1,0 @@
-{
-  "uid": "chouquette-api-gateway",
-  "max": 5,  // restart the app successively maximum of 5 times
-  "spinSleepTime": 1000, // time to wait until a next restart is attempted (in ms)
-  "append": true, // append the logs, do not overwrite
-  "watch": false, // watch for changes and restart if they occur
-  "script": "dist/server.js",  // main startup script (almost like issuing node server.js)
-  "args": [] // pass any arguments to your app
-}
