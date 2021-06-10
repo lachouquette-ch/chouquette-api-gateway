@@ -154,6 +154,8 @@ const server = new ApolloServer({
   }),
   plugins: [responseCachePlugin()],
   tracing: true,
+  playground: true,
+  introspection: true,
   cacheControl: {
     // TODO fix which default age for app...
     defaultMaxAge: 60,
@@ -180,6 +182,9 @@ app.use(limiter);
 
 server.applyMiddleware({ app });
 
-app.listen({ port: 4000 }, () =>
-  console.log(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`)
+const port = process.env.PORT || 4000;
+app.listen({ port }, () =>
+  console.log(
+    `🚀 Server ready at http://localhost:${port}${server.graphqlPath}`
+  )
 );

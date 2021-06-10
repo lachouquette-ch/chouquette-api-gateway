@@ -18,7 +18,7 @@
     "build": "webpack --watch --progress",
     "run:watch": "nodemon dist/server.js",
     "dev": "run-p build run:watch",
-    "run": "node dist/server.js"
+    "start": "node dist/server.js"
   },
   "dependencies": {
     "apollo-datasource-rest": "^0.9.7",
