@@ -2,7 +2,6 @@
 FROM node:16.3.0-slim
 LABEL maintainer="La Chouquette"
 LABEL description="API Gateway"
-LABEL version="1.0"
 
 # Create app dir
 RUN mkdir -p /usr/src/app
@@ -24,7 +23,7 @@ ENV PORT 4000
 COPY . .
 # override .env with the appropriate file
 COPY $env .env
-RUN npx webpack
+RUN npm run build
 RUN yarn cache clean
 
 EXPOSE $PORT

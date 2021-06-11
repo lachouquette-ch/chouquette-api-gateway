@@ -15,9 +15,10 @@
     ]
   },
   "scripts": {
-    "build": "webpack --watch --progress",
-    "run:watch": "nodemon dist/server.js",
-    "dev": "run-p build run:watch",
+    "watch:build": "webpack --watch --progress",
+    "watch:start": "nodemon --inspect dist/server.js",
+    "dev": "run-p watch:*",
+    "build": "webpack --progress",
     "start": "node dist/server.js"
   },
   "dependencies": {
