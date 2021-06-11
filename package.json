@@ -16,7 +16,7 @@
   },
   "scripts": {
     "watch:build": "webpack --watch --progress",
-    "watch:start": "nodemon --inspect dist/server.js",
+    "watch:start": "nodemon --inspect=0.0.0.0:9229 dist/server.js",
     "dev": "run-p watch:*",
     "build": "webpack --progress",
     "start": "node dist/server.js"
