@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-gateway-deployment
+  labels:
+      app: api-gateway
+      environment: uat
+      tier: frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: api-gateway
+      environment: uat
+  template:
+    metadata:
+      labels:
+        app: api-gateway
+        environment: uat
+    spec:
+      containers:
+        - name: api-gateway
+          image: docker.lachouquette.ch/api-gateway
+          ports:
+            - containerPort: 4000
+          env:
+            - name: NODE_ENV
+              value: development
