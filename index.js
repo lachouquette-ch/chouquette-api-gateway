@@ -8,7 +8,16 @@ import cors from "cors";
 import { ApolloServer, gql } from "apollo-server-express";
 import { makeExecutableSchema } from "graphql-tools";
 import responseCachePlugin from "apollo-server-plugin-response-cache";
+import { BaseRedisCache } from "apollo-server-cache-redis";
+import Redis from "ioredis";
 
+// configure with env
+dotenv.config();
+const port = process.env.PORT || 4000;
+const redisHost = process.env.REDIS_HOST;
+const redisPort = process.env.REDIS_PORT || 6379;
+
+/* Import all typedefs */
 import {
   typeDefs as WordpressBase,
   resolvers as wordpressBaseResolvers,
@@ -38,8 +47,6 @@ import WordpressPageAPI from "./typeDefsResolvers/wordpress/pageEndpoint";
 import WordpressChouquetteAPI from "./typeDefsResolvers/wordpress/chouquetteEndpoint";
 import WordpressMenuAPI from "./typeDefsResolvers/wordpress/menuEndpoint";
 import WordpressYoastAPI from "./typeDefsResolvers/wordpress/yoastEndpoint";
-
-dotenv.config();
 
 // Queries
 const Query = gql`
@@ -114,7 +121,7 @@ const Query = gql`
   }
 `;
 
-const resolvers = {
+const Resolver = {
   Query: {
     criteriaByCategory: (_, { id }, { dataSources }) =>
       dataSources.wordpressChouquetteAPI.getCriteriaForCategory(id),
@@ -132,7 +139,7 @@ const schema = makeExecutableSchema({
     WordpressYoast,
   ],
   resolvers: merge(
-    resolvers,
+    Resolver,
     wordpressBaseResolvers,
     wordpressFicheResolvers,
     wordpressPostResolvers,
@@ -141,6 +148,7 @@ const schema = makeExecutableSchema({
   ),
 });
 
+// Build Apollo Server
 const server = new ApolloServer({
   schema,
   dataSources: () => ({
@@ -152,6 +160,12 @@ const server = new ApolloServer({
     wordpressMenuAPI: new WordpressMenuAPI(),
     wordpressYoastAPI: new WordpressYoastAPI(),
   }),
+  cache: new BaseRedisCache({
+    client: new Redis({
+      host: redisHost,
+      port: redisPort,
+    }),
+  }),
   plugins: [responseCachePlugin()],
   tracing: true,
   playground: true,
@@ -162,29 +176,29 @@ const server = new ApolloServer({
   },
 });
 
+// Build express server
 const app = express();
-// TODO better restrict CORS origins
-app.use(cors());
-// TODO fine tune slow down
+// configure cors
+app.use(cors()); // TODO better restrict CORS origins
+// configure speedlimit
 const speedLimit = slowDown({
   windowMs: 5 * 60 * 100, // 5 minutes window
   delayAfter: 10, // after 10 requests
   delayMs: 100, // add 100ms each request
   maxDelayMs: 5000, // to max 5 seconds of delay
 });
-app.use(speedLimit);
-// TODO fine tune rate timit
+app.use(speedLimit); // TODO fine tune slow down
+// configure ratelimit
 const limiter = rateLimit({
   windowMs: 60 * 1000, // 1 minute window
   max: 25, // limit to 25 requests
 });
-app.use(limiter);
+app.use(limiter); // TODO fine tune rate timit
 
 server.applyMiddleware({ app });
 
-const port = process.env.PORT || 4000;
 app.listen({ port }, () =>
   console.log(
-    `🚀 Server ready at http://localhost:${port}${server.graphqlPath}`
+    `🚀 Server ready listening on port ${port} with enpoint ${server.graphqlPath}`
   )
 );
