@@ -1,3 +1,6 @@
 node_modules
-.git
+.git*
 dist
+k8s
+Dockerfile
+docker-compose.yml
