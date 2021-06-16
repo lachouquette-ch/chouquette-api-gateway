@@ -20,9 +20,17 @@ spec:
     spec:
       containers:
         - name: api-gateway
-          image: docker.lachouquette.ch/api-gateway
+          image: docker.lachouquette.ch/api-gateway:latest
           ports:
             - containerPort: 4000
           env:
             - name: NODE_ENV
               value: development
+            - name: WP_URL
+              value: https://wordpress.jcloud-ver-jpc.ik-server.com
+            - name: REDIS_HOST
+              value: 10.101.6.134
+            - name: REDIS_PORT
+              value: "6379"
+            - name: REDIS_PASSWORD
+              value: "DKPibn46439"

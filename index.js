@@ -16,6 +16,7 @@ dotenv.config();
 const port = process.env.PORT || 4000;
 const redisHost = process.env.REDIS_HOST;
 const redisPort = process.env.REDIS_PORT || 6379;
+const redisPassword = process.env.REDIS_PASSWORD;
 
 /* Import all typedefs */
 import {
@@ -160,10 +161,12 @@ const server = new ApolloServer({
     wordpressMenuAPI: new WordpressMenuAPI(),
     wordpressYoastAPI: new WordpressYoastAPI(),
   }),
+  // TODO build redis cluster
   cache: new BaseRedisCache({
     client: new Redis({
       host: redisHost,
       port: redisPort,
+      password: redisPassword,
     }),
   }),
   plugins: [responseCachePlugin()],
