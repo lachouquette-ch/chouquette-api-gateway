@@ -2,6 +2,7 @@
 FROM node:16.3.0-slim
 LABEL maintainer="La Chouquette"
 LABEL description="API Gateway"
+LABEL version="1.0"
 
 # Create app dir
 RUN mkdir -p /usr/src/app
