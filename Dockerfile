@@ -13,8 +13,6 @@ COPY package.json .
 COPY yarn.lock .
 RUN yarn install
 
-# Set build variables
-ARG env=.env
 # Set env variables
 ENV NODE_ENV production
 ENV HOSTNAME 0.0.0.0
