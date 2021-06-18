@@ -2,16 +2,15 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: api-gateway-ingress
-  annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /graphql
 spec:
   rules:
-    - http:
+    - host: api-gateway.uat.lachouquette.ch
+      http:
         paths:
           - path: /graphql
             pathType: Prefix
             backend:
               service:
-                name: api-gateway-deployment-service
+                name: api-gateway-uat
                 port:
                   number: 4000

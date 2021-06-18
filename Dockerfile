@@ -22,8 +22,7 @@ ENV PORT 4000
 
 # Bundle app source
 COPY . .
-# override .env with the appropriate file
-COPY $env .env
+# Build and clean
 RUN npm run build
 RUN yarn cache clean
 

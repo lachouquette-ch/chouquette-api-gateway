@@ -1,8 +1,0 @@
-version: "3.9"
-services:
-  api-gateway:
-    environment:
-      WP_URL: https://wordpress.jcloud-ver-jpc.ik-server.com
-      REDIS_HOST: redis
-      REDIS_PORT: 6379
-      REDIS_PASSWORD: FrtLtvV80L
