@@ -2,3 +2,5 @@
 /.idea/
 /dist/
 .env
+docker-compose.override.yml
+*.log
