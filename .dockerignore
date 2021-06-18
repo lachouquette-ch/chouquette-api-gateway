@@ -1,1 +1,7 @@
-udep
+dist
+k8s
+node_modules
+.*
+docker-compose*
+Dockerfile
+*.log

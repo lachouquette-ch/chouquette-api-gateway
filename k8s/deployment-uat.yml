@@ -3,19 +3,19 @@ kind: Deployment
 metadata:
   name: api-gateway-uat
   labels:
-      app: api-gateway-uat
+      app: api-gateway
       environment: uat
       tier: frontend
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: api-gateway-uat
+      app: api-gateway
       environment: uat
   template:
     metadata:
       labels:
-        app: api-gateway-uat
+        app: api-gateway
         environment: uat
     spec:
       containers:
