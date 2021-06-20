@@ -19,7 +19,7 @@ services:
       WAIT_HOST_CONNECT_TIMEOUT: 30
     volumes:
       - ".:/usr/src/app"
-    entrypoint: ["npm", "run", "dev"]
+    entrypoint: yarn dev
   redis:
     container_name: redis
     hostname: redis

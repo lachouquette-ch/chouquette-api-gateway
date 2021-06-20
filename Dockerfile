@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1
-FROM node:16.3.0-alpine
+FROM node:14.17.1-alpine
 LABEL maintainer="La Chouquette"
 LABEL description="API Gateway"
 LABEL version="1.0"
@@ -11,7 +11,7 @@ WORKDIR /usr/src/app
 # Install app dependencies
 COPY package.json .
 COPY yarn.lock .
-RUN yarn install
+RUN yarn
 
 # Set env variables
 ENV NODE_ENV production
@@ -21,8 +21,8 @@ ENV PORT 4000
 # Bundle app source
 COPY . .
 # Build and clean
-RUN npm run build
+RUN yarn build
 RUN yarn cache clean
 
 EXPOSE $PORT
-CMD npm run start
+CMD yarn start
