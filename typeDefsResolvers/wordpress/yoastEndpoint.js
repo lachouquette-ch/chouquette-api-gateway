@@ -1,4 +1,5 @@
 import { RESTDataSource } from "apollo-datasource-rest";
+import he from "he";
 
 export default class YoastAPI extends RESTDataSource {
   constructor() {
@@ -29,7 +30,7 @@ export default class YoastAPI extends RESTDataSource {
 
   static seoReducer(entity) {
     return {
-      title: entity.yoast_title,
+      title: he.decode(entity.yoast_title),
       metadata: JSON.stringify(entity.yoast_meta),
       jsonLD: JSON.stringify(entity.yoast_json_ld),
     };
