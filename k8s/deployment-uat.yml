@@ -22,7 +22,20 @@ spec:
         - name: api-gateway-uat
           image: docker.lachouquette.ch/api-gateway:latest
           ports:
-            - containerPort: 4000
+            - name: container-port
+              containerPort: 4000
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: container-port
+            failureThreshold: 1
+            periodSeconds: 5
+          startupProbe:
+            httpGet:
+              path: /graphql
+              port: container-port
+            failureThreshold: 12
+            periodSeconds: 5
           envFrom:
             - configMapRef:
                 name: api-gateway-uat

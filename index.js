@@ -181,6 +181,8 @@ const server = new ApolloServer({
 
 // Build express server
 const app = express();
+const router = express.Router();
+
 // configure cors
 app.use(cors()); // TODO better restrict CORS origins
 // configure speedlimit
@@ -197,6 +199,16 @@ const limiter = rateLimit({
   max: 25, // limit to 25 requests
 });
 app.use(limiter); // TODO fine tune rate timit
+
+// Setup health check
+router.use((req, res, next) => {
+  res.header("Access-Control-Allow-Methods", "GET");
+  next();
+});
+router.get("/health", (req, res) => {
+  res.status(200).send("OK");
+});
+app.use("/", router);
 
 server.applyMiddleware({ app });
 
