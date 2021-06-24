@@ -32,7 +32,7 @@ spec:
             periodSeconds: 5
           startupProbe:
             httpGet:
-              path: /graphql
+              path: /ready
               port: container-port
             failureThreshold: 12
             periodSeconds: 5

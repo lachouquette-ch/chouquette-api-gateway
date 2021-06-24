@@ -200,17 +200,35 @@ const limiter = rateLimit({
 });
 app.use(limiter); // TODO fine tune rate timit
 
+server.applyMiddleware({ app });
+
 // Setup health check
-router.use((req, res, next) => {
-  res.header("Access-Control-Allow-Methods", "GET");
-  next();
-});
-router.get("/health", (req, res) => {
+app.get("/health", (req, res) => {
   res.status(200).send("OK");
 });
-app.use("/", router);
-
-server.applyMiddleware({ app });
+// Setup ready check by calling the graphql api as a client
+import { ApolloClient, HttpLink, InMemoryCache } from "@apollo/client/core";
+import fetch from "cross-fetch";
+const client = new ApolloClient({
+  link: new HttpLink({ uri: `http://localhost:${port}/graphql`, fetch }),
+  cache: new InMemoryCache(),
+});
+app.get("/ready", async (req, res) => {
+  const result = await client.query({
+    query: gql`
+      query {
+        nuxtServerInit {
+          settings {
+            name
+            description
+            url
+          }
+        }
+      }
+    `,
+  });
+  res.status(200).send(result.data.nuxtServerInit);
+});
 
 app.listen({ port }, () =>
   console.log(
