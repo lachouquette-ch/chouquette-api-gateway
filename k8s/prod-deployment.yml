@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-gateway-prod
+  labels:
+      app: api-gateway
+      environment: prod
+      tier: frontend
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: api-gateway
+      environment: prod
+  template:
+    metadata:
+      labels:
+        app: api-gateway
+        environment: prod
+    spec:
+      containers:
+        - name: api-gateway-prod
+          image: docker.lachouquette.ch/api-gateway:latest
+          ports:
+            - name: container-port
+              containerPort: 4000
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: container-port
+            failureThreshold: 1
+            periodSeconds: 5
+          startupProbe:
+            httpGet:
+              path: /ready
+              port: container-port
+            failureThreshold: 12
+            periodSeconds: 5
+          envFrom:
+            - configMapRef:
+                name: api-gateway-prod
+          env:
+            - name: REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: api-gateway-prod
+                  key: REDIS_PASSWORD

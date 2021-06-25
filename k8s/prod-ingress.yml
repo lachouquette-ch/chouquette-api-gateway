@@ -1,0 +1,16 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: api-gateway-prod
+spec:
+  rules:
+    - host: api-gateway.lachouquette.ch
+      http:
+        paths:
+          - path: /graphql
+            pathType: Prefix
+            backend:
+              service:
+                name: api-gateway-prod
+                port:
+                  number: 4000
