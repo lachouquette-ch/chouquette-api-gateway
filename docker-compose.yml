@@ -13,26 +13,6 @@ services:
     environment:
       NODE_ENV: development
       HOSTNAME: localhost
-      WAIT_HOSTS: redis:6379
-      WAIT_HOSTS_TIMEOUT: 300
-      WAIT_SLEEP_INTERVAL: 30
-      WAIT_HOST_CONNECT_TIMEOUT: 30
     volumes:
       - ".:/usr/src/app"
     entrypoint: yarn dev
-  redis:
-    container_name: redis
-    hostname: redis
-    image: redis:alpine
-    ports:
-      - "6379:6379"
-  redis-commander:
-    container_name: redis-commander
-    hostname: redis-commander
-    image: rediscommander/redis-commander
-    depends_on:
-      - redis
-    environment:
-      - REDIS_HOSTS=local:redis:6379
-    ports:
-      - "8082:8081"

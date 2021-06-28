@@ -150,6 +150,21 @@ const schema = makeExecutableSchema({
 });
 
 // Build Apollo Server
+let cache = null;
+if (process.env.NODE_ENV === "production") {
+  cache = {
+    cache: new BaseRedisCache({
+      client: new Redis({
+        host: redisHost,
+        port: redisPort,
+        password: redisPassword,
+      }),
+    }),
+  };
+} else {
+  cache = { plugins: [responseCachePlugin()] };
+}
+
 const server = new ApolloServer({
   schema,
   dataSources: () => ({
@@ -161,15 +176,6 @@ const server = new ApolloServer({
     wordpressMenuAPI: new WordpressMenuAPI(),
     wordpressYoastAPI: new WordpressYoastAPI(),
   }),
-  // TODO build redis cluster
-  cache: new BaseRedisCache({
-    client: new Redis({
-      host: redisHost,
-      port: redisPort,
-      password: redisPassword,
-    }),
-  }),
-  plugins: [responseCachePlugin()],
   tracing: true,
   playground: true,
   introspection: true,
@@ -177,6 +183,7 @@ const server = new ApolloServer({
     // TODO fix which default age for app...
     defaultMaxAge: 60,
   },
+  ...cache,
 });
 
 // Build express server
