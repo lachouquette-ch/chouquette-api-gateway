@@ -39,9 +39,3 @@ spec:
           envFrom:
             - configMapRef:
                 name: api-gateway-uat
-          env:
-            - name: REDIS_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: api-gateway-uat
-                  key: REDIS_PASSWORD

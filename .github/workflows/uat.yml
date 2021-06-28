@@ -1,0 +1,33 @@
+name: UAT - Continuous Deployment
+on:
+  push:
+    branches:
+      - master
+jobs:
+  update-uat:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Build image and push to private repository
+        id: docker_build
+        uses: docker/build-push-action@v2
+        with:
+          context: ./
+          file: ./Dockerfile
+          push: true
+          tags: docker.lachouquette.ch/api-gateway-uat:${{ github.sha }}
+        env:
+          NODE_ENV: development
+      - name: Image digest
+        run: echo ${{ steps.docker_build.outputs.digest }}
+      - name: Deploy image to cluster
+        uses: nickgronow/kubectl@master
+        with:
+          config_data: ${{ secrets.KUBE_CONFIG_DATA }}
+          args: set image deployment/api-gateway-uat api-gateway-uat=docker.lachouquette.ch/api-gateway-uat:${{ github.sha }} --record
+      - name: Verify deployment
+        uses: nickgronow/kubectl@master
+        with:
+          config_data: ${{ secrets.KUBE_CONFIG_DATA }}
+          args: '"rollout status deployment/api-gateway-uat"'
