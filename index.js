@@ -56,8 +56,8 @@ const Query = gql`
     nuxtServerInit: NuxtServerInit!
 
     ficheBySlug(slug: String!): Fiche
-    fichesByCategory(
-      slug: String!
+    fichesByFilters(
+      slug: String
       location: String
       search: String
       criteria: [CriteriaSearch!]

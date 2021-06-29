@@ -83,12 +83,12 @@ export const resolvers = {
     ficheBySlug: (_, { slug }, { dataSources }) =>
       dataSources.wordpressFicheAPI.getBySlug(slug),
 
-    fichesByCategory: (
+    fichesByFilters: (
       _,
       { slug, location, search, criteria, page, pageSize },
       { dataSources }
     ) =>
-      dataSources.wordpressFicheAPI.getByCategorySlug(
+      dataSources.wordpressFicheAPI.getByFilters(
         slug,
         page,
         pageSize,
@@ -98,7 +98,7 @@ export const resolvers = {
       ),
 
     fichesByText: (_, { text, page }, { dataSources }) =>
-      dataSources.wordpressFicheAPI.searchFiches(text, page),
+      dataSources.wordpressFicheAPI.getBySearchText(text, page),
   },
 
   Mutation: {

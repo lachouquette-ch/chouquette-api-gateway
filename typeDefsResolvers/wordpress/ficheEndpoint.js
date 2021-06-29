@@ -30,7 +30,7 @@ export default class WordpressFicheAPI extends WordpresRESTDataSource {
     return this.ficheReducer(fiche);
   }
 
-  async getByCategorySlug(
+  async getByFilters(
     slug,
     page = 1,
     pageSize = 10,
@@ -69,7 +69,7 @@ export default class WordpressFicheAPI extends WordpresRESTDataSource {
     };
   }
 
-  async searchFiches(text, page = 1, pageSize = 10) {
+  async getBySearchText(text, page = 1, pageSize = 10) {
     const result = await this.getWithHeader("", {
       search: text,
       page,
