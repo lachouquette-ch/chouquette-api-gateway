@@ -21,6 +21,8 @@ spec:
       containers:
         - name: api-gateway-uat
           image: docker.lachouquette.ch/api-gateway:latest
+          command: [ "yarn" ]
+          args: [ "dev" ]
           ports:
             - name: container-port
               containerPort: 4000
