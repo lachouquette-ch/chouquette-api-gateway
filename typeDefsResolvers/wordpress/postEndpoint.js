@@ -65,13 +65,18 @@ export default class WordpressPostAPI extends WordpresRESTDataSource {
   }
 
   async getPostCardByTagIds(ids, postId = null) {
-    const postCards = await this.get("", {
-      tags: ids.join(","),
+    const params = {
       exclude: postId,
       per_page: 6,
       _fields: POST_CARD_FIELDS.join(","),
       _embed: "wp:featuredmedia",
-    });
+    };
+    if (_.isEmpty(ids)) {
+      console.warn(`No tags for post ${postId}`);
+    } else {
+      params["tags"] = ids.join(",");
+    }
+    const postCards = await this.get("", params);
 
     return postCards.map(this.postCardReducer, this);
   }
