@@ -1,4 +1,3 @@
-import { RESTDataSource } from "apollo-datasource-rest";
 import he from "he";
 import _ from "lodash";
 import WordpressBaseAPI from "./baseEndpoint";
@@ -67,7 +66,7 @@ export default class WordpressPostAPI extends WordpresRESTDataSource {
 
   async getPostCardByTagIds(ids, postId = null) {
     const postCards = await this.get("", {
-      tags: ids,
+      tags: ids.join(","),
       exclude: postId,
       per_page: 6,
       _fields: POST_CARD_FIELDS.join(","),
