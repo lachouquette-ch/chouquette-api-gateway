@@ -24,7 +24,7 @@ jobs:
         uses: nickgronow/kubectl@master
         with:
           config_data: ${{ secrets.KUBE_CONFIG_DATA }}
-          args: set image deployment/api-gateway api-gateway-prod=docker.lachouquette.ch/api-gateway:latest --record
+          args: set image deployment/api-gateway-prod api-gateway-prod=docker.lachouquette.ch/api-gateway:latest --record
       - name: Verify deployment
         uses: nickgronow/kubectl@master
         with:
