@@ -4,7 +4,7 @@ metadata:
   name: api-gateway-uat
 spec:
   rules:
-    - host: api-gateway.uat.lachouquette.ch
+    - host: api-gateway-uat.lachouquette.ch
       http:
         paths:
           - path: /graphql
