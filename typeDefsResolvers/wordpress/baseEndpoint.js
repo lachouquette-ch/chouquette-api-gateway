@@ -154,7 +154,7 @@ export default class WordpressBaseAPI extends RESTDataSource {
   }
 
   async getTeam() {
-    const authors = await this.get(`users/team`);
+    const authors = await this.get(`team`);
 
     return authors.map(WordpressBaseAPI.authorReducer, this);
   }
