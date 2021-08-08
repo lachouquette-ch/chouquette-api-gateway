@@ -26,17 +26,19 @@ spec:
           ports:
             - name: container-port
               containerPort: 4000
-          livenessProbe:
-            httpGet:
-              path: /health
-              port: container-port
-            failureThreshold: 1
-            periodSeconds: 5
           startupProbe:
             httpGet:
               path: /ready
               port: container-port
+            timeoutSeconds: 5
             failureThreshold: 12
+            periodSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: container-port
+            timeoutSeconds: 3
+            failureThreshold: 1
             periodSeconds: 5
           envFrom:
             - configMapRef:
