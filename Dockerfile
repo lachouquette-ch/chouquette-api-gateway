@@ -14,7 +14,7 @@ COPY yarn.lock .
 RUN yarn
 
 # Set env variables
-ENV REDIS_HOST redis-tmp.jcloud-ver-jpc.ik-server.com
+ENV REDIS_HOST localhost
 ENV NODE_ENV production
 ENV HOSTNAME 0.0.0.0
 ENV PORT 4000

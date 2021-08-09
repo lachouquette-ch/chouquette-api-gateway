@@ -36,8 +36,8 @@ spec:
               path: /health
               port: container-port
             timeoutSeconds: 3
-            failureThreshold: 1
-            periodSeconds: 5
+            failureThreshold: 3
+            periodSeconds: 15
           envFrom:
             - configMapRef:
                 name: api-gateway-prod
