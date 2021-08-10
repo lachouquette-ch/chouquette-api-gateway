@@ -2,6 +2,7 @@ import dotenv from "dotenv";
 import { merge } from "lodash";
 
 import express from "express";
+import compression from "compression";
 import rateLimit from "express-rate-limit";
 import slowDown from "express-slow-down";
 import cors from "cors";
@@ -190,6 +191,8 @@ const server = new ApolloServer({
 const app = express();
 const router = express.Router();
 
+// configure compression
+app.use(compression());
 // configure cors
 app.use(cors()); // TODO better restrict CORS origins
 // configure speedlimit
