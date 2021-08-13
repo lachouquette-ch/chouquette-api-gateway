@@ -11,6 +11,7 @@ export const typeDefs = gql`
 
   type Home {
     latestPosts: [PostCard!]
+    latestChouquettises: [Fiche!]
     topPosts: [PostCard!]
     seo: Seo
   }
@@ -157,10 +158,13 @@ export const resolvers = {
 
   Home: {
     latestPosts(parent, _, { dataSources }) {
-      return dataSources.wordpressPostAPI.getLatestPostsWithSticky();
+      return dataSources.wordpressPostAPI.getLatestPostsWithSticky(4);
+    },
+    latestChouquettises(parent, _, { dataSources }) {
+      return dataSources.wordpressFicheAPI.getLatestChouquettises(5);
     },
     topPosts(parent, _, { dataSources }) {
-      return dataSources.wordpressPostAPI.getTopPostCards();
+      return dataSources.wordpressPostAPI.getTopPostCards(5);
     },
     seo(parent, _, { dataSources }) {
       return dataSources.wordpressYoastAPI.getHome();

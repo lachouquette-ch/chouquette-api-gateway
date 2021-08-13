@@ -30,6 +30,16 @@ export default class WordpressFicheAPI extends WordpresRESTDataSource {
     return this.ficheReducer(fiche);
   }
 
+  async getLatestChouquettises(number = 10) {
+    const result = await this.get("", {
+      chouquettise: "only",
+      per_page: number,
+      _embed: true,
+    });
+
+    return result.map(this.ficheReducer, this);
+  }
+
   async getByFilters(
     slug,
     page = 1,

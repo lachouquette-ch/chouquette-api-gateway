@@ -95,7 +95,7 @@ export default class WordpressPostAPI extends WordpresRESTDataSource {
     };
   }
 
-  async getLatestPostsWithSticky(number = 6) {
+  async getLatestPostsWithSticky(number = 10) {
     // first get sticky posts (mise en avant)
     const postCards = await this.get("", {
       sticky: true,
@@ -118,7 +118,7 @@ export default class WordpressPostAPI extends WordpresRESTDataSource {
     return postCards.map(this.postCardReducer, this);
   }
 
-  async getTopPostCards(number = 8) {
+  async getTopPostCards(number = 10) {
     const postCards = await this.get("", {
       tags: TOPS_TAG_ID,
       per_page: number,
