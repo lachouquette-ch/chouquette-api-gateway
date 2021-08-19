@@ -58,9 +58,10 @@ const Query = gql`
 
     ficheBySlug(slug: String!): Fiche
     fichesByFilters(
-      slug: String
+      category: String
       location: String
       search: String
+      chouquettiseOnly: Boolean
       criteria: [CriteriaSearch!]
       page: Int!
       pageSize: Int!

@@ -85,16 +85,25 @@ export const resolvers = {
 
     fichesByFilters: (
       _,
-      { slug, location, search, criteria, page, pageSize },
+      {
+        category,
+        location,
+        search,
+        chouquettiseOnly,
+        criteria,
+        page,
+        pageSize,
+      },
       { dataSources }
     ) =>
       dataSources.wordpressFicheAPI.getByFilters(
-        slug,
-        page,
-        pageSize,
+        category,
         location,
         search,
-        criteria
+        chouquettiseOnly,
+        criteria,
+        page,
+        pageSize
       ),
 
     fichesByText: (_, { text, page }, { dataSources }) =>

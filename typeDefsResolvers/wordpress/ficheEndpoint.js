@@ -41,16 +41,17 @@ export default class WordpressFicheAPI extends WordpresRESTDataSource {
   }
 
   async getByFilters(
-    slug,
-    page = 1,
-    pageSize = 10,
+    category = null,
     location = null,
     search = null,
-    criteria = null
+    chouquettiseOnly = false,
+    criteria = null,
+    page = 1,
+    pageSize = 10
   ) {
     const params = _.omitBy(
       {
-        category: slug,
+        category,
         location,
         search,
         page,
@@ -59,6 +60,7 @@ export default class WordpressFicheAPI extends WordpresRESTDataSource {
       },
       _.isNil
     );
+    if (chouquettiseOnly) params["chouquettise"] = "only";
     const urlSearchParams = new URLSearchParams(params);
     if (criteria) {
       criteria.forEach(({ taxonomy, values }) => {
