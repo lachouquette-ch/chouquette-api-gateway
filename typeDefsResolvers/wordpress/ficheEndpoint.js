@@ -3,7 +3,17 @@ import _ from "lodash";
 import YoastAPI from "./yoastEndpoint";
 import WordpressBaseAPI from "./baseEndpoint";
 import WordpresRESTDataSource from "../WordpresRESTDataSource";
-import { UserInputError } from "apollo-server-express";
+
+const FICHE_CARD_FIELDS = [
+  "id",
+  "slug",
+  "title",
+  "info.chouquettise",
+  "main_category.id",
+  "locationId",
+  "featured_media",
+  "_links.wp:featuredmedia",
+];
 
 export default class WordpressFicheAPI extends WordpresRESTDataSource {
   constructor() {
@@ -100,6 +110,23 @@ export default class WordpressFicheAPI extends WordpresRESTDataSource {
     };
   }
 
+  async getFicheCardByTagIds(ids, ficheId = null) {
+    const params = {
+      exclude: ficheId,
+      per_page: 6,
+      _fields: FICHE_CARD_FIELDS.join(","),
+      _embed: "wp:featuredmedia",
+    };
+    if (_.isEmpty(ids)) {
+      console.warn(`No tags for fiche ${ficheId}`);
+    } else {
+      params["tags"] = ids.join(",");
+    }
+    const ficheCards = await this.get("", params);
+
+    return ficheCards.map(this.ficheCardReducer, this);
+  }
+
   async postContact(ficheId, name, email, message, recaptcha) {
     try {
       const response = await this.post(`${ficheId}/contact`, {
@@ -174,6 +201,23 @@ export default class WordpressFicheAPI extends WordpresRESTDataSource {
     }
 
     return result;
+  }
+
+  ficheCardReducer(ficheCard) {
+    return {
+      id: ficheCard.id,
+      slug: ficheCard.slug,
+      title: he.decode(ficheCard.title.rendered),
+      isChouquettise: ficheCard.info.chouquettise,
+      principalCategoryId: ficheCard.main_category.id,
+      categoryId: ficheCard.principalCategoryId,
+      locationId: ficheCard.locationId,
+
+      // embedded
+      image: WordpressBaseAPI.mediaReducer(
+        ficheCard._embedded["wp:featuredmedia"][0]
+      ),
+    };
   }
 
   infoReducer(info) {

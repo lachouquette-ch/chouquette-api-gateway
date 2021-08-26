@@ -23,6 +23,18 @@ export const typeDefs = gql`
     seo: Seo
     # external
     postCards: [PostCard!]
+    similarFiches: [FicheCard!]
+  }
+
+  type FicheCard {
+    id: ID!
+    slug: String!
+    title: String
+    isChouquettise: Boolean! # computed
+    principalCategoryId: Int
+    locationId: Int
+    # embedded
+    image: Media
   }
 
   type FichesPage implements Pagination {
@@ -146,6 +158,13 @@ export const resolvers = {
       return lodash.isEmpty(postIds)
         ? null
         : dataSources.wordpressPostAPI.getPostCardByIds(postIds);
+    },
+
+    similarFiches(parent, _, { dataSources }) {
+      return dataSources.wordpressFicheAPI.getFicheCardByTagIds(
+        parent.tags,
+        parent.id
+      );
     },
   },
 };
