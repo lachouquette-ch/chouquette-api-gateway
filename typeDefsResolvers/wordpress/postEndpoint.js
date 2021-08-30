@@ -8,6 +8,7 @@ const POST_CARD_FIELDS = [
   "id",
   "slug",
   "title",
+  "date",
   "categories",
   "top_categories",
   "featured_media",
@@ -85,6 +86,7 @@ export default class WordpressPostAPI extends WordpresRESTDataSource {
     return {
       id: postCard.id,
       slug: postCard.slug,
+      date: new Date(postCard.date).toISOString(),
       title: he.decode(postCard.title.rendered),
       categoryId: postCard.top_categories[0],
 
@@ -129,11 +131,21 @@ export default class WordpressPostAPI extends WordpresRESTDataSource {
     return postCards.map(this.postCardReducer, this);
   }
 
-  async searchPosts(text, page = 1, pageSize = 10) {
+  async findPosts(category, search, asc = false, page = 1, pageSize = 10) {
+    const params = _.omitBy(
+      {
+        category,
+        search,
+        order: asc ? "asc" : null,
+        page,
+        per_page: pageSize,
+        _embed: true,
+      },
+      _.isNil
+    );
+
     const result = await this.getWithHeader("", {
-      search: text,
-      page,
-      per_page: pageSize,
+      ...params,
       _fields: POST_CARD_FIELDS.join(","),
       _embed: "wp:featuredmedia",
     });

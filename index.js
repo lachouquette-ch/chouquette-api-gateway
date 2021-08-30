@@ -72,6 +72,13 @@ const Query = gql`
 
     postBySlug(slug: String!): Post
     latestPostsWithSticky(number: Int): [PostCard]
+    postsByFilters(
+      category: String
+      search: String
+      asc: Boolean
+      page: Int!
+      pageSize: Int!
+    ): PostsPage!
     postsByText(text: String!, page: Int!): PostsPage!
 
     criteriaByCategory(id: Int!): [Criteria!]

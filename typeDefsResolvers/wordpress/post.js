@@ -27,6 +27,7 @@ export const typeDefs = gql`
     id: ID!
     slug: String!
     title: String
+    date: String
     categoryId: Int
     # embedded
     image: Media
@@ -55,8 +56,21 @@ export const resolvers = {
     postBySlug: (_, { slug }, { dataSources }) =>
       dataSources.wordpressPostAPI.getBySlug(slug),
 
+    postsByFilters: (
+      _,
+      { category, search, page, pageSize, asc },
+      { dataSources }
+    ) =>
+      dataSources.wordpressPostAPI.findPosts(
+        category,
+        search,
+        asc,
+        page,
+        pageSize
+      ),
+
     postsByText: (_, { text, page }, { dataSources }) =>
-      dataSources.wordpressPostAPI.searchPosts(text, page),
+      dataSources.wordpressPostAPI.findPosts(null, text, false, page),
   },
 
   Post: {
