@@ -28,6 +28,7 @@ export const typeDefs = gql`
     slug: String!
     title: String
     date: String
+    authorName: String
     categoryId: Int
     # embedded
     image: Media

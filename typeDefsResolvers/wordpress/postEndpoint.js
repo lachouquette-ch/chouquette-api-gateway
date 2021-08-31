@@ -9,6 +9,7 @@ const POST_CARD_FIELDS = [
   "slug",
   "title",
   "date",
+  "author_meta.display_name",
   "categories",
   "top_categories",
   "featured_media",
@@ -87,6 +88,7 @@ export default class WordpressPostAPI extends WordpresRESTDataSource {
       id: postCard.id,
       slug: postCard.slug,
       date: new Date(postCard.date).toISOString(),
+      authorName: postCard.author_meta.display_name,
       title: he.decode(postCard.title.rendered),
       categoryId: postCard.top_categories[0],
 
@@ -95,6 +97,16 @@ export default class WordpressPostAPI extends WordpresRESTDataSource {
         postCard._embedded["wp:featuredmedia"][0]
       ),
     };
+  }
+
+  async getLatestPosts(number = 10) {
+    const postCards = await this.get("", {
+      per_page: number,
+      _fields: POST_CARD_FIELDS.join(","),
+      _embed: "wp:featuredmedia",
+    });
+
+    return postCards.map(this.postCardReducer, this);
   }
 
   async getLatestPostsWithSticky(number = 10) {

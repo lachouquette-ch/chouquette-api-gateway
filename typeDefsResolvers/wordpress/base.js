@@ -158,7 +158,7 @@ export const resolvers = {
 
   Home: {
     latestPosts(parent, _, { dataSources }) {
-      return dataSources.wordpressPostAPI.getLatestPostsWithSticky(4);
+      return dataSources.wordpressPostAPI.getLatestPosts(4);
     },
     latestChouquettises(parent, _, { dataSources }) {
       return dataSources.wordpressFicheAPI.getLatestChouquettises(5);
