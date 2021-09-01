@@ -117,18 +117,10 @@ export default class WordpressBaseAPI extends RESTDataSource {
   static authorReducer(author) {
     return {
       id: author.id,
-      slug: author.id,
+      slug: author.slug,
       name: author.name,
       description: he.decode(author.description),
-      avatar: WordpressBaseAPI.avatarReducer(author.avatar_urls),
-    };
-  }
-
-  static avatarReducer(avatar) {
-    return {
-      size24: avatar["24"],
-      size48: avatar["48"],
-      size96: avatar["96"],
+      avatar: author.avatar_urls[96],
     };
   }
 
@@ -147,7 +139,7 @@ export default class WordpressBaseAPI extends RESTDataSource {
       parentId: comment.parent,
       authorId: comment.author ? comment.author : null,
       authorName: comment.author_name,
-      authorAvatar: WordpressBaseAPI.avatarReducer(comment.author_avatar_urls),
+      authorAvatar: comment.author_avatar_urls[96],
       date: new Date(comment.date).toISOString(),
       content: he.decode(comment.content.rendered),
     };
