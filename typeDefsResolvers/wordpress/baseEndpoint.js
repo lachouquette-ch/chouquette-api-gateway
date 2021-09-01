@@ -73,39 +73,27 @@ export default class WordpressBaseAPI extends RESTDataSource {
       name: he.decode(category.name),
       description: he.decode(category.description),
       parentId: category.parent,
-      logoYellowId: category.logos.logo_yellow,
-      logoWhiteId: category.logos.logo_white,
-      logoBlackId: category.logos.logo_black,
+
+      // embedded
+      logoYellow: WordpressBaseAPI.mediaReducer(
+        category._embedded["logo_yellow"][0]
+      ),
+      logoWhite: WordpressBaseAPI.mediaReducer(
+        category._embedded["logo_white"][0]
+      ),
+      logoBlack: WordpressBaseAPI.mediaReducer(
+        category._embedded["logo_black"][0]
+      ),
     };
   }
 
   async getCategories(dataSources) {
-    const categories = await this.get(`categories`, { per_page: 100 });
+    const categories = await this.get(`categories`, {
+      per_page: 100,
+      _embed: "true",
+    });
 
     return categories.map(WordpressBaseAPI.categoryReducer);
-  }
-
-  async getMediaForCategories(categories) {
-    const categoryLogoIds = _.filter(
-      categories.flatMap(({ logoYellowId, logoWhiteId, logoBlackId }) => [
-        logoYellowId,
-        logoWhiteId,
-        logoBlackId,
-      ])
-    );
-
-    const media = await this.get(
-      `media`,
-      WordpressBaseAPI.queryParamBuilderForIds(categoryLogoIds)
-    );
-
-    return media.map(WordpressBaseAPI.mediaReducer);
-  }
-
-  async getMediaById(id) {
-    const media = await this.get(`media/${id}`);
-
-    return WordpressBaseAPI.mediaReducer(media);
   }
 
   static mediaReducer(media) {

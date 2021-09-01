@@ -134,25 +134,8 @@ export const resolvers = {
     menus(parent, _, { dataSources }) {
       return dataSources.wordpressMenuAPI.getMenus();
     },
-    async categories(parent, _, { dataSources }) {
-      const categories = await dataSources.wordpressBaseAPI.getCategories();
-      const mediaList = await dataSources.wordpressBaseAPI.getMediaForCategories(
-        categories
-      );
-
-      for (let category of categories) {
-        category.logoYellow = category.logoYellowId
-          ? mediaList.find(({ id }) => id === category.logoYellowId)
-          : null;
-        category.logoWhite = category.logoWhiteId
-          ? mediaList.find(({ id }) => id === category.logoWhiteId)
-          : null;
-        category.logoBlack = category.logoBlackId
-          ? mediaList.find(({ id }) => id === category.logoBlackId)
-          : null;
-      }
-
-      return categories;
+    categories(parent, _, { dataSources }) {
+      return dataSources.wordpressBaseAPI.getCategories();
     },
     locations(parent, _, { dataSources }) {
       return dataSources.wordpressBaseAPI.getLocations();
