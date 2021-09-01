@@ -103,9 +103,9 @@ export default class WordpressPostAPI extends WordpresRESTDataSource {
       categoryId: postCard.top_categories[0],
 
       // embedded
-      image: WordpressBaseAPI.mediaReducer(
-        postCard._embedded["wp:featuredmedia"][0]
-      ),
+      image: postCard._embedded
+        ? WordpressBaseAPI.mediaReducer(postCard._embedded["wp:featuredmedia"][0])
+        : null, // prettier-ignore
     };
   }
 
