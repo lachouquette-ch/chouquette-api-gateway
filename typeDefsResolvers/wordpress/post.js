@@ -16,7 +16,7 @@ export const typeDefs = gql`
     image: Media
     tags: [Tag!]
     seo: Seo
-    author: Author
+    authors: [Author]
     # external
     fiches: [Fiche!]
     comments: [Comment!]
@@ -37,7 +37,7 @@ export const typeDefs = gql`
     parentId: Int!
     authorId: Int
     authorName: String
-    authorAvatar: Avatar
+    authorAvatar: String
     date: String
     content: String
   }

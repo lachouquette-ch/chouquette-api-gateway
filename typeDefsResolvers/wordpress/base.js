@@ -74,13 +74,7 @@ export const typeDefs = gql`
     slug: String!
     name: String
     description: String
-    avatar: Avatar
-  }
-
-  type Avatar {
-    size24: String!
-    size48: String!
-    size96: String!
+    avatar: String
   }
 
   type Tag {
