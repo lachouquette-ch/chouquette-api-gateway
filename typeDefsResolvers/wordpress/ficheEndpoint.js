@@ -8,9 +8,11 @@ const FICHE_CARD_FIELDS = [
   "id",
   "slug",
   "title",
+  "content.rendered",
   "info.chouquettise",
   "main_category.id",
   "locationId",
+  "values",
   "featured_media",
   "_links.wp:featuredmedia",
 ];
@@ -66,6 +68,7 @@ export default class WordpressFicheAPI extends WordpresRESTDataSource {
         search,
         page,
         per_page: pageSize,
+        _fields: FICHE_CARD_FIELDS.join(","),
         _embed: true,
       },
       _.isNil
@@ -84,7 +87,7 @@ export default class WordpressFicheAPI extends WordpresRESTDataSource {
     const totalPages = parseInt(headers["x-wp-totalpages"]);
 
     return {
-      fiches: fiches.map(this.ficheReducer, this),
+      fiches: fiches.map(this.ficheCardReducer, this),
       hasMore: page < totalPages,
       total,
       totalPages,
@@ -164,6 +167,7 @@ export default class WordpressFicheAPI extends WordpresRESTDataSource {
       content: he.decode(fiche.content.rendered),
       categoryIds: fiche.categories,
       locationId: fiche.locations ? fiche.locations[0] : null,
+      valueIds: fiche.values,
       linkedPostIds: fiche.linked_posts,
 
       info: this.infoReducer(fiche.info),
@@ -208,10 +212,12 @@ export default class WordpressFicheAPI extends WordpresRESTDataSource {
       id: ficheCard.id,
       slug: ficheCard.slug,
       title: he.decode(ficheCard.title.rendered),
+      content: he.decode(ficheCard.content.rendered),
       isChouquettise: ficheCard.info.chouquettise,
       principalCategoryId: ficheCard.main_category.id,
       categoryId: ficheCard.principalCategoryId,
       locationId: ficheCard.locationId,
+      valueIds: ficheCard.values,
 
       // embedded
       image: WordpressBaseAPI.mediaReducer(

@@ -7,6 +7,7 @@ export const typeDefs = gql`
     categories: [Category!]
     menus: [Menu!]
     locations: [Location!]
+    values: [Value!]
   }
 
   type Home {
@@ -39,6 +40,14 @@ export const typeDefs = gql`
     name: String
     slug: String
     description: String
+  }
+
+  type Value {
+    id: ID!
+    name: String
+    slug: String
+    description: String
+    image: Media
   }
 
   type MediaSize {
@@ -147,6 +156,9 @@ export const resolvers = {
     },
     locations(parent, _, { dataSources }) {
       return dataSources.wordpressBaseAPI.getLocations();
+    },
+    values(parent, _, { dataSources }) {
+      return dataSources.wordpressBaseAPI.getValues();
     },
   },
 

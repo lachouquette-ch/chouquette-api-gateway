@@ -14,6 +14,7 @@ export const typeDefs = gql`
     principalCategoryId: Int
     categoryIds: [Int!]
     locationId: Int
+    valueIds: [Int!]
     # embedded
     info: FicheInfo
     logo: FicheLogo
@@ -30,15 +31,18 @@ export const typeDefs = gql`
     id: ID!
     slug: String!
     title: String
+    content: String
     isChouquettise: Boolean! # computed
+    # ids (should be prefetched)
     principalCategoryId: Int
     locationId: Int
+    valueIds: [Int!]
     # embedded
     image: Media
   }
 
   type FichesPage implements Pagination {
-    fiches: [Fiche!]
+    fiches: [FicheCard!]
     hasMore: Boolean!
     total: Int!
     totalPages: Int!

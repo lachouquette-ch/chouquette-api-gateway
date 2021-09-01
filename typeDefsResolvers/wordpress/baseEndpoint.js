@@ -38,6 +38,12 @@ export default class WordpressBaseAPI extends RESTDataSource {
     return locations.map(WordpressBaseAPI.locationReducer);
   }
 
+  async getValues() {
+    const values = await this.get(`values`, { _embed: "icon" });
+
+    return values.map(WordpressBaseAPI.valueReducer, this);
+  }
+
   static locationReducer(location) {
     return {
       id: location.id,
@@ -45,6 +51,18 @@ export default class WordpressBaseAPI extends RESTDataSource {
       name: location.name,
       slug: location.slug,
       description: location.description,
+    };
+  }
+
+  static valueReducer(value) {
+    return {
+      id: value.id,
+      name: value.name,
+      slug: value.slug,
+      description: value.description,
+
+      // embedded
+      image: WordpressBaseAPI.mediaReducer(value._embedded["icon"][0]),
     };
   }
 
