@@ -10,10 +10,14 @@ const FICHE_CARD_FIELDS = [
   "title",
   "content.rendered",
   "info.chouquettise",
-  "main_category.id",
-  "locationId",
+  "info.location",
   "values",
   "featured_media",
+  "main_category.marker_icon",
+
+  "main_category.id",
+  "locationId",
+
   "_links.wp:featuredmedia",
 ];
 
@@ -218,6 +222,14 @@ export default class WordpressFicheAPI extends WordpresRESTDataSource {
       categoryId: ficheCard.principalCategoryId,
       locationId: ficheCard.locationId,
       valueIds: ficheCard.values,
+      /* eslint-disable indent */
+      poi: ficheCard.info.location
+        ? this.poiReducer(
+            ficheCard.info.location,
+            ficheCard.main_category.marker_icon
+          )
+        : null,
+      /* eslint-enable indent */
 
       // embedded
       image: WordpressBaseAPI.mediaReducer(

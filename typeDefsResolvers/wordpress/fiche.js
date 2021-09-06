@@ -39,6 +39,7 @@ export const typeDefs = gql`
     valueIds: [Int!]
     # embedded
     image: Media
+    poi: FichePOI
   }
 
   type FichesPage implements Pagination {
