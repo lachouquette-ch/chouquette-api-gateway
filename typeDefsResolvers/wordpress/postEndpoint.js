@@ -10,6 +10,7 @@ const POST_CARD_FIELDS = [
   "title",
   "date",
   "author_meta.display_name",
+  "tags",
   "categories",
   "top_categories",
   "featured_media",
@@ -39,6 +40,7 @@ export default class WordpressPostAPI extends WordpresRESTDataSource {
       date: new Date(post.date).toISOString(),
       modified: new Date(post.modified).toISOString(),
       content: he.decode(post.content.rendered),
+      isTop: post.tags.includes(TOPS_TAG_ID),
 
       ficheIds: post.meta.link_fiche,
 
@@ -100,6 +102,7 @@ export default class WordpressPostAPI extends WordpresRESTDataSource {
       date: new Date(postCard.date).toISOString(),
       authorName: postCard.author_meta.display_name,
       title: he.decode(postCard.title.rendered),
+      isTop: postCard.tags.includes(TOPS_TAG_ID),
       categoryId: postCard.top_categories[0],
 
       // embedded

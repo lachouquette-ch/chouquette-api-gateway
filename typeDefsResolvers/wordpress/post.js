@@ -9,6 +9,7 @@ export const typeDefs = gql`
     date: String!
     modified: String!
     content: String
+    isTop: Boolean!
     # ids (should be prefetched)
     categoryId: Int
     ficheIds: [Int!]
@@ -29,6 +30,8 @@ export const typeDefs = gql`
     title: String
     date: String
     authorName: String
+    isTop: Boolean!
+    # ids
     categoryId: Int
     # embedded
     image: Media
