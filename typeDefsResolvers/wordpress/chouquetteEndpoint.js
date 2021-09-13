@@ -6,41 +6,41 @@ export default class WordpressChouquetteAPI extends WordpresRESTDataSource {
     this.baseURL = `${process.env.WP_URL}/wp-json/chouquette/v1`;
   }
 
-  async getCriteriaForCategory(id) {
-    const criteria = await this.get(`criteria/category/${id}`);
+  async getFiltersForCategory(id) {
+    const categoryFilters = await this.get(`criteria/category/${id}`);
 
-    return criteria.map(this.criteriaReducer, this);
+    return categoryFilters.map(this.categoryFilterReducer, this);
   }
 
-  async getCriteriaForFiche(id) {
-    const criteriaCategories = await this.get(`criteria/fiche/${id}`);
+  async getCategoryFiltersForFiche(id) {
+    const filtersCategories = await this.get(`criteria/fiche/${id}`);
 
     const result = [];
-    for (const criteriaCategory of criteriaCategories) {
+    for (const filterCategory of filtersCategories) {
       result.push(
-        ...criteriaCategory.flatMap(({ values }) =>
-          values.map(this.criteriaTermReducer, this)
+        ...filterCategory.flatMap(({ values }) =>
+          values.map(this.categoryFilterTermReducer, this)
         )
       );
     }
     return result;
   }
 
-  criteriaReducer(criteria) {
+  categoryFilterReducer(filter) {
     return {
-      id: criteria.id,
-      name: criteria.name,
-      taxonomy: criteria.taxonomy,
-      values: criteria.values.map(this.criteriaTermReducer),
+      id: filter.id,
+      name: filter.name,
+      taxonomy: filter.taxonomy,
+      values: filter.values.map(this.categoryFilterTermReducer),
     };
   }
 
-  criteriaTermReducer(criteriaTerm) {
+  categoryFilterTermReducer(filterTerm) {
     return {
-      id: criteriaTerm.id,
-      slug: criteriaTerm.slug,
-      name: criteriaTerm.name,
-      description: criteriaTerm.description,
+      id: filterTerm.id,
+      slug: filterTerm.slug,
+      name: filterTerm.name,
+      description: filterTerm.description,
     };
   }
 

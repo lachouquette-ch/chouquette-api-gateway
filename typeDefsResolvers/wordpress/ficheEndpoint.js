@@ -61,7 +61,7 @@ export default class WordpressFicheAPI extends WordpresRESTDataSource {
     location = null,
     search = null,
     chouquettiseOnly = false,
-    criteria = null,
+    categoryFilters = null,
     page = 1,
     pageSize = 10
   ) {
@@ -79,8 +79,8 @@ export default class WordpressFicheAPI extends WordpresRESTDataSource {
     );
     if (chouquettiseOnly) params["chouquettise"] = "only";
     const urlSearchParams = new URLSearchParams(params);
-    if (criteria) {
-      criteria.forEach(({ taxonomy, values }) => {
+    if (categoryFilters) {
+      categoryFilters.forEach(({ taxonomy, values }) => {
         urlSearchParams.append(`filter[${taxonomy}]`, values.join(","));
       });
     }
@@ -185,7 +185,7 @@ export default class WordpressFicheAPI extends WordpresRESTDataSource {
         : null,
 
       // embedded
-      criteria: fiche._embedded.criteria
+      categoryFilters: fiche._embedded.criteria
         ? fiche._embedded.criteria[0]?.flat()
         : null,
       seo: YoastAPI.seoReducer(fiche),

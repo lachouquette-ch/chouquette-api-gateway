@@ -19,7 +19,7 @@ export const typeDefs = gql`
     info: FicheInfo
     logo: FicheLogo
     image: Media
-    criteria: [Criteria!]
+    criteria: [CategoryFilter!]
     poi: FichePOI
     seo: Seo
     # external
@@ -80,14 +80,14 @@ export const typeDefs = gql`
     openings: [String]
   }
 
-  type Criteria {
+  type CategoryFilter {
     id: ID!
     taxonomy: String!
     name: String
-    values: [CriteriaTerm!]
+    values: [FilterTerm!]
   }
 
-  type CriteriaTerm {
+  type FilterTerm {
     id: ID!
     slug: String!
     name: String
@@ -107,7 +107,7 @@ export const resolvers = {
         location,
         search,
         chouquettiseOnly,
-        criteria,
+        categoryFilters,
         page,
         pageSize,
       },
@@ -118,7 +118,7 @@ export const resolvers = {
         location,
         search,
         chouquettiseOnly,
-        criteria,
+        categoryFilters,
         page,
         pageSize
       ),

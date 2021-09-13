@@ -62,7 +62,7 @@ const Query = gql`
       location: String
       search: String
       chouquettiseOnly: Boolean
-      criteria: [CriteriaSearch!]
+      categoryFilters: [TaxonomyFilter!]
       page: Int!
       pageSize: Int!
     ): FichesPage!
@@ -81,7 +81,7 @@ const Query = gql`
     ): PostsPage!
     postsByText(text: String!, page: Int!): PostsPage!
 
-    criteriaByCategory(id: Int!): [Criteria!]
+    filtersByCategory(id: Int!): [CategoryFilter!]
 
     home: Home!
     team: Team!
@@ -114,7 +114,7 @@ const Query = gql`
     ): String
   }
 
-  input CriteriaSearch {
+  input TaxonomyFilter {
     taxonomy: String!
     values: [String!]
   }
@@ -133,8 +133,8 @@ const Query = gql`
 
 const Resolver = {
   Query: {
-    criteriaByCategory: (_, { id }, { dataSources }) =>
-      dataSources.wordpressChouquetteAPI.getCriteriaForCategory(id),
+    filtersByCategory: (_, { id }, { dataSources }) =>
+      dataSources.wordpressChouquetteAPI.getFiltersForCategory(id),
   },
 };
 
