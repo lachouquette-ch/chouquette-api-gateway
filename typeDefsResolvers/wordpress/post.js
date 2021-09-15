@@ -1,4 +1,4 @@
-import { gql } from "apollo-server-express";
+import {gql} from "apollo-server-express";
 import lodash from "lodash";
 
 export const typeDefs = gql`
@@ -19,7 +19,7 @@ export const typeDefs = gql`
     seo: Seo
     authors: [Author]
     # external
-    fiches: [Fiche!]
+    ficheCards: [FicheCard!]
     comments: [Comment!]
     similarPosts: [PostCard!]
   }
@@ -78,9 +78,9 @@ export const resolvers = {
   },
 
   Post: {
-    fiches(parent, _, { dataSources }) {
+    ficheCards(parent, _, { dataSources }) {
       return !lodash.isEmpty(parent.ficheIds)
-        ? dataSources.wordpressFicheAPI.getByIds(parent.ficheIds)
+        ? dataSources.wordpressFicheAPI.getCardsByIds(parent.ficheIds)
         : null;
     },
     comments(parent, _, { dataSources }) {

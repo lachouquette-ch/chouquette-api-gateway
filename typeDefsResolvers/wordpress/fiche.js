@@ -1,4 +1,4 @@
-import { gql } from "apollo-server-express";
+import {gql} from "apollo-server-express";
 import lodash from "lodash";
 
 export const typeDefs = gql`
@@ -113,7 +113,7 @@ export const resolvers = {
       },
       { dataSources }
     ) =>
-      dataSources.wordpressFicheAPI.getByFilters(
+      dataSources.wordpressFicheAPI.getCardsByFilters(
         category,
         location,
         search,
@@ -124,7 +124,7 @@ export const resolvers = {
       ),
 
     fichesByText: (_, { text, page }, { dataSources }) =>
-      dataSources.wordpressFicheAPI.getBySearchText(text, page),
+      dataSources.wordpressFicheAPI.getCardsBySearchText(text, page),
   },
 
   Mutation: {
@@ -166,7 +166,7 @@ export const resolvers = {
     },
 
     similarFiches(parent, _, { dataSources }) {
-      return dataSources.wordpressFicheAPI.getFicheCardByTagIds(
+      return dataSources.wordpressFicheAPI.getCardsByTagIds(
         parent.tags,
         parent.id
       );

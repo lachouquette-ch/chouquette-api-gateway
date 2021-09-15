@@ -27,13 +27,16 @@ export default class WordpressFicheAPI extends WordpresRESTDataSource {
     this.baseURL = `${process.env.WP_URL}/wp-json/wp/v2/fiches`;
   }
 
-  async getByIds(ids) {
-    const fiches = await this.get(
+  async getCardsByIds(ids) {
+    const ficheCards = await this.get(
       "",
-      WordpressBaseAPI.queryParamBuilderForIds(ids, { _embed: true })
+      WordpressBaseAPI.queryParamBuilderForIds(ids, {
+        _fields: FICHE_CARD_FIELDS.join(","),
+        _embed: true,
+      })
     );
 
-    return fiches.map(this.ficheReducer, this);
+    return ficheCards.map(this.ficheCardReducer, this);
   }
 
   async getBySlug(slug) {
@@ -56,7 +59,7 @@ export default class WordpressFicheAPI extends WordpresRESTDataSource {
     return result.map(this.ficheReducer, this);
   }
 
-  async getByFilters(
+  async getCardsByFilters(
     category = null,
     location = null,
     search = null,
@@ -98,11 +101,12 @@ export default class WordpressFicheAPI extends WordpresRESTDataSource {
     };
   }
 
-  async getBySearchText(text, page = 1, pageSize = 10) {
+  async getCardsBySearchText(text, page = 1, pageSize = 10) {
     const result = await this.getWithHeader("", {
       search: text,
       page,
       per_page: pageSize,
+      _fields: FICHE_CARD_FIELDS.join(","),
       _embed: true,
     });
     const { body: fiches, headers } = result;
@@ -117,7 +121,7 @@ export default class WordpressFicheAPI extends WordpresRESTDataSource {
     };
   }
 
-  async getFicheCardByTagIds(ids, ficheId = null) {
+  async getCardsByTagIds(ids, ficheId = null) {
     const params = {
       exclude: ficheId,
       per_page: 6,
