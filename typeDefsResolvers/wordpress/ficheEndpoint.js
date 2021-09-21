@@ -16,7 +16,7 @@ const FICHE_CARD_FIELDS = [
   "main_category.marker_icon",
 
   "main_category.id",
-  "locationId",
+  "locations",
 
   "_links.wp:featuredmedia",
 ];
@@ -224,7 +224,7 @@ export default class WordpressFicheAPI extends WordpresRESTDataSource {
       isChouquettise: ficheCard.info.chouquettise,
       principalCategoryId: ficheCard.main_category.id,
       categoryId: ficheCard.principalCategoryId,
-      locationId: ficheCard.locationId,
+      locationId: ficheCard.locations ? ficheCard.locations[0] : null,
       valueIds: ficheCard.values,
       /* eslint-disable indent */
       poi: ficheCard.info.location
