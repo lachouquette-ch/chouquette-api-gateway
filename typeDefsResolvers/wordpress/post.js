@@ -62,13 +62,14 @@ export const resolvers = {
 
     postsByFilters: (
       _,
-      { category, search, page, pageSize, asc },
+      { category, search, page, pageSize, asc, topOnly },
       { dataSources }
     ) =>
       dataSources.wordpressPostAPI.findPosts(
         category,
         search,
         asc,
+        topOnly,
         page,
         pageSize
       ),

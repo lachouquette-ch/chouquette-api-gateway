@@ -156,7 +156,14 @@ export default class WordpressPostAPI extends WordpresRESTDataSource {
     return postCards.map(this.postCardReducer, this);
   }
 
-  async findPosts(category, search, asc = false, page = 1, pageSize = 10) {
+  async findPosts(
+    category,
+    search,
+    asc = false,
+    topOnly = false,
+    page = 1,
+    pageSize = 10
+  ) {
     const params = _.omitBy(
       {
         category,
@@ -168,6 +175,9 @@ export default class WordpressPostAPI extends WordpresRESTDataSource {
       },
       _.isNil
     );
+    if (topOnly) {
+      params["tags"] = TOPS_TAG_ID;
+    }
 
     const result = await this.getWithHeader("", {
       ...params,

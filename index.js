@@ -1,46 +1,23 @@
 import dotenv from "dotenv";
-import { merge } from "lodash";
+import {merge} from "lodash";
 
 import express from "express";
 import compression from "compression";
 import rateLimit from "express-rate-limit";
 import slowDown from "express-slow-down";
 import cors from "cors";
-import { ApolloServer, gql } from "apollo-server-express";
-import { makeExecutableSchema } from "graphql-tools";
+import {ApolloServer, gql} from "apollo-server-express";
+import {makeExecutableSchema} from "graphql-tools";
 import responseCachePlugin from "apollo-server-plugin-response-cache";
-import { BaseRedisCache } from "apollo-server-cache-redis";
+import {BaseRedisCache} from "apollo-server-cache-redis";
 import Redis from "ioredis";
-
-// configure with env
-dotenv.config();
-const port = process.env.PORT || 4000;
-const redisHost = process.env.REDIS_HOST;
-const redisPort = process.env.REDIS_PORT || 6379;
-const redisPassword = process.env.REDIS_PASSWORD;
-
 /* Import all typedefs */
-import {
-  typeDefs as WordpressBase,
-  resolvers as wordpressBaseResolvers,
-} from "./typeDefsResolvers/wordpress/base";
-import {
-  typeDefs as WordpressFiche,
-  resolvers as wordpressFicheResolvers,
-} from "./typeDefsResolvers/wordpress/fiche";
-import {
-  typeDefs as WordpressPost,
-  resolvers as wordpressPostResolvers,
-} from "./typeDefsResolvers/wordpress/post";
-import {
-  typeDefs as WordpressPage,
-  resolvers as wordpressPageResolvers,
-} from "./typeDefsResolvers/wordpress/page";
-import {
-  typeDefs as WordpressMenu,
-  resolvers as wordpressMenuResolvers,
-} from "./typeDefsResolvers/wordpress/menu";
-import { typeDefs as WordpressYoast } from "./typeDefsResolvers/wordpress/yoast";
+import {resolvers as wordpressBaseResolvers, typeDefs as WordpressBase,} from "./typeDefsResolvers/wordpress/base";
+import {resolvers as wordpressFicheResolvers, typeDefs as WordpressFiche,} from "./typeDefsResolvers/wordpress/fiche";
+import {resolvers as wordpressPostResolvers, typeDefs as WordpressPost,} from "./typeDefsResolvers/wordpress/post";
+import {resolvers as wordpressPageResolvers, typeDefs as WordpressPage,} from "./typeDefsResolvers/wordpress/page";
+import {resolvers as wordpressMenuResolvers, typeDefs as WordpressMenu,} from "./typeDefsResolvers/wordpress/menu";
+import {typeDefs as WordpressYoast} from "./typeDefsResolvers/wordpress/yoast";
 
 import WordpressBaseAPI from "./typeDefsResolvers/wordpress/baseEndpoint";
 import WordpressFicheAPI from "./typeDefsResolvers/wordpress/ficheEndpoint";
@@ -49,6 +26,16 @@ import WordpressPageAPI from "./typeDefsResolvers/wordpress/pageEndpoint";
 import WordpressChouquetteAPI from "./typeDefsResolvers/wordpress/chouquetteEndpoint";
 import WordpressMenuAPI from "./typeDefsResolvers/wordpress/menuEndpoint";
 import WordpressYoastAPI from "./typeDefsResolvers/wordpress/yoastEndpoint";
+// Setup ready check by calling the graphql api as a client
+import {ApolloClient, HttpLink, InMemoryCache} from "@apollo/client/core";
+import fetch from "cross-fetch";
+
+// configure with env
+dotenv.config();
+const port = process.env.PORT || 4000;
+const redisHost = process.env.REDIS_HOST;
+const redisPort = process.env.REDIS_PORT || 6379;
+const redisPassword = process.env.REDIS_PASSWORD;
 
 // Queries
 const Query = gql`
@@ -76,6 +63,7 @@ const Query = gql`
       category: String
       search: String
       asc: Boolean
+      topOnly: Boolean
       page: Int!
       pageSize: Int!
     ): PostsPage!
@@ -224,9 +212,6 @@ server.applyMiddleware({ app });
 app.get("/health", (req, res) => {
   res.status(200).send("OK");
 });
-// Setup ready check by calling the graphql api as a client
-import { ApolloClient, HttpLink, InMemoryCache } from "@apollo/client/core";
-import fetch from "cross-fetch";
 const client = new ApolloClient({
   link: new HttpLink({ uri: `http://localhost:${port}/graphql`, fetch }),
   cache: new InMemoryCache(),
