@@ -1,4 +1,4 @@
-import { gql } from "apollo-server-express";
+import {gql} from "apollo-server-express";
 
 export const typeDefs = gql`
   type NuxtServerInit {
@@ -150,10 +150,10 @@ export const resolvers = {
       return dataSources.wordpressPostAPI.getLatestPosts(4);
     },
     latestChouquettises(parent, _, { dataSources }) {
-      return dataSources.wordpressFicheAPI.getLatestChouquettises(5);
+      return dataSources.wordpressFicheAPI.getLatestChouquettises(6);
     },
     topPosts(parent, _, { dataSources }) {
-      return dataSources.wordpressPostAPI.getTopPostCards(5);
+      return dataSources.wordpressPostAPI.getTopPostCards(6);
     },
     seo(parent, _, { dataSources }) {
       return dataSources.wordpressYoastAPI.getHome();
