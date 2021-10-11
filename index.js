@@ -1,23 +1,38 @@
 import dotenv from "dotenv";
-import {merge} from "lodash";
+import { merge } from "lodash";
 
 import express from "express";
 import compression from "compression";
 import rateLimit from "express-rate-limit";
 import slowDown from "express-slow-down";
 import cors from "cors";
-import {ApolloServer, gql} from "apollo-server-express";
-import {makeExecutableSchema} from "graphql-tools";
+import { ApolloServer, gql } from "apollo-server-express";
+import { makeExecutableSchema } from "graphql-tools";
 import responseCachePlugin from "apollo-server-plugin-response-cache";
-import {BaseRedisCache} from "apollo-server-cache-redis";
+import { BaseRedisCache } from "apollo-server-cache-redis";
 import Redis from "ioredis";
 /* Import all typedefs */
-import {resolvers as wordpressBaseResolvers, typeDefs as WordpressBase,} from "./typeDefsResolvers/wordpress/base";
-import {resolvers as wordpressFicheResolvers, typeDefs as WordpressFiche,} from "./typeDefsResolvers/wordpress/fiche";
-import {resolvers as wordpressPostResolvers, typeDefs as WordpressPost,} from "./typeDefsResolvers/wordpress/post";
-import {resolvers as wordpressPageResolvers, typeDefs as WordpressPage,} from "./typeDefsResolvers/wordpress/page";
-import {resolvers as wordpressMenuResolvers, typeDefs as WordpressMenu,} from "./typeDefsResolvers/wordpress/menu";
-import {typeDefs as WordpressYoast} from "./typeDefsResolvers/wordpress/yoast";
+import {
+  resolvers as wordpressBaseResolvers,
+  typeDefs as WordpressBase,
+} from "./typeDefsResolvers/wordpress/base";
+import {
+  resolvers as wordpressFicheResolvers,
+  typeDefs as WordpressFiche,
+} from "./typeDefsResolvers/wordpress/fiche";
+import {
+  resolvers as wordpressPostResolvers,
+  typeDefs as WordpressPost,
+} from "./typeDefsResolvers/wordpress/post";
+import {
+  resolvers as wordpressPageResolvers,
+  typeDefs as WordpressPage,
+} from "./typeDefsResolvers/wordpress/page";
+import {
+  resolvers as wordpressMenuResolvers,
+  typeDefs as WordpressMenu,
+} from "./typeDefsResolvers/wordpress/menu";
+import { typeDefs as WordpressYoast } from "./typeDefsResolvers/wordpress/yoast";
 
 import WordpressBaseAPI from "./typeDefsResolvers/wordpress/baseEndpoint";
 import WordpressFicheAPI from "./typeDefsResolvers/wordpress/ficheEndpoint";
@@ -27,7 +42,7 @@ import WordpressChouquetteAPI from "./typeDefsResolvers/wordpress/chouquetteEndp
 import WordpressMenuAPI from "./typeDefsResolvers/wordpress/menuEndpoint";
 import WordpressYoastAPI from "./typeDefsResolvers/wordpress/yoastEndpoint";
 // Setup ready check by calling the graphql api as a client
-import {ApolloClient, HttpLink, InMemoryCache} from "@apollo/client/core";
+import { ApolloClient, HttpLink, InMemoryCache } from "@apollo/client/core";
 import fetch from "cross-fetch";
 
 // configure with env
