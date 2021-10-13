@@ -114,7 +114,7 @@ export default class WordpressFicheAPI extends WordpresRESTDataSource {
     const totalPages = parseInt(headers["x-wp-totalpages"]);
 
     return {
-      fiches: fiches.map(this.ficheReducer, this),
+      fiches: fiches.map(this.ficheCardReducer, this),
       hasMore: page < totalPages,
       total,
       totalPages,
