@@ -19,7 +19,7 @@ export const typeDefs = gql`
     info: FicheInfo
     logo: FicheLogo
     image: Media
-    criteria: [CategoryFilter!]
+    categoryFilters: [CategoryFilter!]
     poi: FichePOI
     seo: Seo
     # external
