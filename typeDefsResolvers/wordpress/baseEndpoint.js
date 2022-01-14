@@ -125,6 +125,7 @@ export default class WordpressBaseAPI extends RESTDataSource {
       id: author.id,
       slug: author.slug,
       name: author.name,
+      title: author.title,
       description: he.decode(author.description),
       avatar: author.avatar_urls[96],
     };

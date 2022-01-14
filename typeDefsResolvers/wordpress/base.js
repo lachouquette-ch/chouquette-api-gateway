@@ -85,6 +85,7 @@ export const typeDefs = gql`
     name: String
     description: String
     avatar: String
+    title: String
   }
 
   type Tag {
