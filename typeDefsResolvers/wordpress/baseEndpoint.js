@@ -39,7 +39,7 @@ export default class WordpressBaseAPI extends RESTDataSource {
   }
 
   async getValues() {
-    const values = await this.get(`values`, { _embed: "icon" });
+    const values = await this.get(`values`, { _embed: 1 });
 
     return values.map(WordpressBaseAPI.valueReducer, this);
   }
@@ -67,30 +67,36 @@ export default class WordpressBaseAPI extends RESTDataSource {
   }
 
   static categoryReducer(category) {
-    return {
+    const result = {
       id: category.id,
       slug: category.slug,
       name: he.decode(category.name),
       description: he.decode(category.description),
       parentId: category.parent,
-
-      // embedded
-      logoYellow: WordpressBaseAPI.mediaReducer(
-        category._embedded["logo_yellow"][0]
-      ),
-      logoWhite: WordpressBaseAPI.mediaReducer(
-        category._embedded["logo_white"][0]
-      ),
-      logoBlack: WordpressBaseAPI.mediaReducer(
-        category._embedded["logo_black"][0]
-      ),
     };
+
+    // only logo for top level categories
+    // TODO remove secondary level categories logos
+    if (category.parent === 0) {
+      // embedded
+      result["logoYellow"] = WordpressBaseAPI.mediaReducer(
+        category._embedded["logo_yellow"][0]
+      );
+      result["logoWhite"] = WordpressBaseAPI.mediaReducer(
+        category._embedded["logo_white"][0]
+      );
+      result["logoBlack"] = WordpressBaseAPI.mediaReducer(
+        category._embedded["logo_black"][0]
+      );
+    }
+
+    return result;
   }
 
   async getCategories(dataSources) {
     const categories = await this.get(`categories`, {
       per_page: 100,
-      _embed: "true",
+      _embed: 1,
     });
 
     return categories.map(WordpressBaseAPI.categoryReducer);

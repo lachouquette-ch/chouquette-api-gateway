@@ -32,7 +32,7 @@ export default class WordpressFicheAPI extends WordpresRESTDataSource {
       "",
       WordpressBaseAPI.queryParamBuilderForIds(ids, {
         _fields: FICHE_CARD_FIELDS.join(","),
-        _embed: true,
+        _embed: 1,
       })
     );
 
@@ -40,7 +40,7 @@ export default class WordpressFicheAPI extends WordpresRESTDataSource {
   }
 
   async getBySlug(slug) {
-    const result = await this.get("", { slug, _embed: true });
+    const result = await this.get("", { slug, _embed: 1 });
 
     if (_.isEmpty(result)) {
       return null;
@@ -53,7 +53,7 @@ export default class WordpressFicheAPI extends WordpresRESTDataSource {
     const result = await this.get("", {
       chouquettise: "only",
       per_page: number,
-      _embed: true,
+      _embed: 1,
     });
 
     return result.map(this.ficheReducer, this);
@@ -76,7 +76,7 @@ export default class WordpressFicheAPI extends WordpresRESTDataSource {
         page,
         per_page: pageSize,
         _fields: FICHE_CARD_FIELDS.join(","),
-        _embed: true,
+        _embed: 1,
       },
       _.isNil
     );
@@ -107,7 +107,7 @@ export default class WordpressFicheAPI extends WordpresRESTDataSource {
       page,
       per_page: pageSize,
       _fields: FICHE_CARD_FIELDS.join(","),
-      _embed: true,
+      _embed: 1,
     });
     const { body: fiches, headers } = result;
     const total = parseInt(headers["x-wp-total"]);
@@ -126,7 +126,7 @@ export default class WordpressFicheAPI extends WordpresRESTDataSource {
       exclude: ficheId,
       per_page: 6,
       _fields: FICHE_CARD_FIELDS.join(","),
-      _embed: "wp:featuredmedia",
+      _embed: 1,
     };
     if (_.isEmpty(ids)) {
       console.warn(`No tags for fiche ${ficheId}`);
