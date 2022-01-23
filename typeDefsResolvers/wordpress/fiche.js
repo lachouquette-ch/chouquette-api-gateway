@@ -53,7 +53,7 @@ export const typeDefs = gql`
   type FicheLogo {
     slug: String!
     name: String!
-    url: String!
+    url: String
   }
 
   type FichePOI {
