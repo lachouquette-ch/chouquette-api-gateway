@@ -67,30 +67,35 @@ export default class WordpressBaseAPI extends RESTDataSource {
   }
 
   static categoryReducer(category) {
-    const result = {
-      id: category.id,
-      slug: category.slug,
-      name: he.decode(category.name),
-      description: he.decode(category.description),
-      parentId: category.parent,
-    };
+    try {
+      const result = {
+        id: category.id,
+        slug: category.slug,
+        name: he.decode(category.name),
+        description: he.decode(category.description),
+        parentId: category.parent,
+      };
 
-    // only logo for top level categories
-    // TODO remove secondary level categories logos
-    if (category.parent === 0) {
-      // embedded
-      result["logoYellow"] = WordpressBaseAPI.mediaReducer(
-        category._embedded["logo_yellow"][0]
-      );
-      result["logoWhite"] = WordpressBaseAPI.mediaReducer(
-        category._embedded["logo_white"][0]
-      );
-      result["logoBlack"] = WordpressBaseAPI.mediaReducer(
-        category._embedded["logo_black"][0]
-      );
+      // only logo for top level categories
+      // TODO remove secondary level categories logos
+      if (category.parent === 0) {
+        // embedded
+        result["logoYellow"] = WordpressBaseAPI.mediaReducer(
+          category._embedded["logo_yellow"][0]
+        );
+        result["logoWhite"] = WordpressBaseAPI.mediaReducer(
+          category._embedded["logo_white"][0]
+        );
+        result["logoBlack"] = WordpressBaseAPI.mediaReducer(
+          category._embedded["logo_black"][0]
+        );
+      }
+
+      return result;
+    } catch (e) {
+      console.error(`Error with category ${category.slug} : ${e}`);
+      throw e;
     }
-
-    return result;
   }
 
   async getCategories(dataSources) {
