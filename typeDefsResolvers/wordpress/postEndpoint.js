@@ -26,7 +26,7 @@ export default class WordpressPostAPI extends WordpresRESTDataSource {
   }
 
   async getBySlug(slug) {
-    const result = await this.get("", { slug, _embed: true });
+    const result = await this.get("", { slug, _embed: 1 });
 
     if (_.isEmpty(result)) {
       return null;
@@ -171,7 +171,7 @@ export default class WordpressPostAPI extends WordpresRESTDataSource {
         order: asc ? "asc" : null,
         page,
         per_page: pageSize,
-        _embed: true,
+        _embed: 1,
       },
       _.isNil
     );
