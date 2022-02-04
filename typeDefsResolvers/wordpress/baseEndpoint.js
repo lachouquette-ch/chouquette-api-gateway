@@ -39,7 +39,7 @@ export default class WordpressBaseAPI extends RESTDataSource {
   }
 
   async getValues() {
-    const values = await this.get(`values`, { _embed: 1 });
+    const values = await this.get(`values`, { _embed: "icon" });
 
     return values.map(WordpressBaseAPI.valueReducer, this);
   }

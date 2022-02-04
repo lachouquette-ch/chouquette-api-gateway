@@ -26,7 +26,7 @@ export default class WordpressPostAPI extends WordpresRESTDataSource {
   }
 
   async getBySlug(slug) {
-    const result = await this.get("", { slug, _embed: 1 });
+    const result = await this.get("", { slug, _embed: true });
 
     if (_.isEmpty(result)) {
       return null;
@@ -71,7 +71,7 @@ export default class WordpressPostAPI extends WordpresRESTDataSource {
       "",
       WordpressBaseAPI.queryParamBuilderForIds(ids, {
         _fields: POST_CARD_FIELDS.join(","),
-        _embed: 1,
+        _embed: "wp:featuredmedia",
       })
     );
 
@@ -83,7 +83,7 @@ export default class WordpressPostAPI extends WordpresRESTDataSource {
       exclude: postId,
       per_page: 6,
       _fields: POST_CARD_FIELDS.join(","),
-      _embed: 1,
+      _embed: "wp:featuredmedia",
     };
     if (_.isEmpty(ids)) {
       console.warn(`No tags for post ${postId}`);
@@ -116,7 +116,7 @@ export default class WordpressPostAPI extends WordpresRESTDataSource {
     const postCards = await this.get("", {
       per_page: number,
       _fields: POST_CARD_FIELDS.join(","),
-      _embed: 1,
+      _embed: "wp:featuredmedia",
     });
 
     return postCards.map(this.postCardReducer, this);
@@ -128,7 +128,7 @@ export default class WordpressPostAPI extends WordpresRESTDataSource {
       sticky: true,
       per_page: number,
       _fields: POST_CARD_FIELDS.join(","),
-      _embed: 1,
+      _embed: "wp:featuredmedia",
     });
     // any left to fetch ?
     number -= postCards.length;
@@ -137,7 +137,7 @@ export default class WordpressPostAPI extends WordpresRESTDataSource {
         per_page: number,
         exclude: postCards.map(({ id }) => id),
         _fields: POST_CARD_FIELDS.join(","),
-        _embed: 1,
+        _embed: "wp:featuredmedia",
       });
       postCards.push(...remainingPostCards);
     }
@@ -150,7 +150,7 @@ export default class WordpressPostAPI extends WordpresRESTDataSource {
       tags: TOPS_TAG_ID,
       per_page: number,
       _fields: POST_CARD_FIELDS.join(","),
-      _embed: 1,
+      _embed: "wp:featuredmedia",
     });
 
     return postCards.map(this.postCardReducer, this);
@@ -171,7 +171,7 @@ export default class WordpressPostAPI extends WordpresRESTDataSource {
         order: asc ? "asc" : null,
         page,
         per_page: pageSize,
-        _embed: 1,
+        _embed: true,
       },
       _.isNil
     );
@@ -182,7 +182,7 @@ export default class WordpressPostAPI extends WordpresRESTDataSource {
     const result = await this.getWithHeader("", {
       ...params,
       _fields: POST_CARD_FIELDS.join(","),
-      _embed: 1,
+      _embed: "wp:featuredmedia",
     });
     const { body: postCards, headers } = result;
     const total = parseInt(headers["x-wp-total"]);
