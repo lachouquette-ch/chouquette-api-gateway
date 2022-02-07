@@ -16,7 +16,7 @@ jobs:
           context: ./
           file: ./Dockerfile
           push: true
-          tags: docker.lachouquette.ch/api-gateway-uat:latest
+          tags: docker.lachouquette.ch/api-gateway-uat:${{ github.sha }},docker.lachouquette.ch/api-gateway-uat:latest
         env:
           NODE_ENV: development
       - name: Image digest
@@ -25,7 +25,7 @@ jobs:
         uses: nickgronow/kubectl@master
         with:
           config_data: ${{ secrets.KUBE_CONFIG_DATA }}
-          args: set image deployment/api-gateway-uat api-gateway-uat=docker.lachouquette.ch/api-gateway-uat:latest --record
+          args: set image deployment/api-gateway-uat api-gateway-uat=docker.lachouquette.ch/api-gateway-uat:${{ github.sha }} --record
       - name: Verify deployment
         uses: nickgronow/kubectl@master
         with:
