@@ -25,19 +25,15 @@ spec:
             - name: container-port
               containerPort: 4000
           startupProbe:
-            httpGet:
-              path: /ready
+            tcpSocket:
               port: container-port
-            timeoutSeconds: 5
-            failureThreshold: 12
-            periodSeconds: 5
-          livenessProbe:
+            initialDelaySeconds: 5
+            failureThreshold: 3
+            periodSeconds: 10
+          readinessProbe:
             httpGet:
               path: /health
               port: container-port
-            timeoutSeconds: 3
-            failureThreshold: 3
-            periodSeconds: 15
           envFrom:
             - configMapRef:
                 name: api-gateway-prod
