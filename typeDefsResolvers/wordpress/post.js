@@ -29,6 +29,7 @@ export const typeDefs = gql`
     slug: String!
     title: String
     date: String
+    modified: String
     authorName: String
     isTop: Boolean!
     # ids
