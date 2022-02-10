@@ -167,7 +167,7 @@ export const resolvers = {
 
     similarFiches(parent, _, { dataSources }) {
       return dataSources.wordpressFicheAPI.getCardsByTagIds(
-        parent.tags,
+        parent.tagIds,
         parent.id
       );
     },

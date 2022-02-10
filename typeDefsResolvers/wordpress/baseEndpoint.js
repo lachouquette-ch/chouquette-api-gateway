@@ -168,4 +168,8 @@ export default class WordpressBaseAPI extends RESTDataSource {
 
     return authors.map(WordpressBaseAPI.authorReducer, this);
   }
+
+  static filterTags(embeddedTerms) {
+    return embeddedTerms.flat().filter((term) => term.taxonomy === "post_tag");
+  }
 }

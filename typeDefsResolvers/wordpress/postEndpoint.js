@@ -49,9 +49,7 @@ export default class WordpressPostAPI extends WordpresRESTDataSource {
         post._embedded["wp:featuredmedia"][0]
       ),
       authors: post.coauthors.map(this.coAuthorReducer),
-      tags: post._embedded["wp:term"]
-        .flat()
-        .filter((term) => term.taxonomy === "post_tag"),
+      tags: WordpressBaseAPI.filterTags(post._embedded["wp:term"]),
       seo: YoastAPI.seoReducer(post),
     };
   }

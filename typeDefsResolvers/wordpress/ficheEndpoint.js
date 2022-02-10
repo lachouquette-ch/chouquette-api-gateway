@@ -177,6 +177,7 @@ export default class WordpressFicheAPI extends WordpresRESTDataSource {
       locationId: fiche.locations ? fiche.locations[0] : null,
       valueIds: fiche.values,
       linkedPostIds: fiche.linked_posts,
+      tagIds: fiche.tags,
 
       info: this.infoReducer(fiche.info),
       isChouquettise: fiche.info.chouquettise,
