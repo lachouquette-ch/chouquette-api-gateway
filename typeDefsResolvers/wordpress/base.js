@@ -93,6 +93,25 @@ export const typeDefs = gql`
     slug: String!
     name: String
   }
+
+  type Comment {
+    id: ID!
+    parentId: Int!
+    authorId: Int
+    authorName: String
+    authorAvatar: String
+    date: String
+    content: String
+  }
+
+  type NewComment {
+    postId: Int!
+    parentId: Int
+    authorName: String!
+    authorEmail: String!
+    content: String!
+    recaptcha: String!
+  }
 `;
 
 export const resolvers = {
@@ -120,6 +139,21 @@ export const resolvers = {
         subject,
         to,
         message,
+        recaptcha
+      );
+    },
+
+    commentPost: async (
+      _,
+      { postId, parentId, authorName, authorEmail, content, recaptcha },
+      { dataSources }
+    ) => {
+      await dataSources.wordpressBaseAPI.postComment(
+        postId,
+        parentId,
+        authorName,
+        authorEmail,
+        content,
         recaptcha
       );
     },

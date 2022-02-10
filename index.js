@@ -115,6 +115,15 @@ const Query = gql`
       message: String!
       recaptcha: String!
     ): String
+
+    commentPost(
+      postId: Int!
+      parentId: Int
+      authorName: String!
+      authorEmail: String!
+      content: String!
+      recaptcha: String!
+    ): String
   }
 
   input TaxonomyFilter {

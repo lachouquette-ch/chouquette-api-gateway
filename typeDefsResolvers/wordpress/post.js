@@ -37,16 +37,6 @@ export const typeDefs = gql`
     image: Media
   }
 
-  type Comment {
-    id: ID!
-    parentId: Int!
-    authorId: Int
-    authorName: String
-    authorAvatar: String
-    date: String
-    content: String
-  }
-
   type PostsPage implements Pagination {
     postCards: [PostCard!]
     hasMore: Boolean!

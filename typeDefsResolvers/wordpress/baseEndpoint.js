@@ -1,10 +1,10 @@
 import { RESTDataSource } from "apollo-datasource-rest";
 import he from "he";
-import _ from "lodash";
+import WordpresRESTDataSource from "../WordpresRESTDataSource";
 
 const IMAGE_SIZES = ["medium", "medium_large", "large", "thumbnail", "full"];
 
-export default class WordpressBaseAPI extends RESTDataSource {
+export default class WordpressBaseAPI extends WordpresRESTDataSource {
   constructor() {
     super();
     this.baseURL = `${process.env.WP_URL}/wp-json/wp/v2`;
@@ -171,5 +171,28 @@ export default class WordpressBaseAPI extends RESTDataSource {
 
   static filterTags(embeddedTerms) {
     return embeddedTerms.flat().filter((term) => term.taxonomy === "post_tag");
+  }
+
+  async postComment(
+    postId,
+    parentId,
+    authorName,
+    authorEmail,
+    content,
+    recaptcha
+  ) {
+    try {
+      const response = await this.post(`comments`, {
+        post: postId,
+        parent: parentId,
+        author_name: authorName,
+        author_email: authorEmail,
+        content,
+        recaptcha,
+      });
+      return response;
+    } catch (e) {
+      this.throwApolloError(e);
+    }
   }
 }
