@@ -154,7 +154,7 @@ export const resolvers = {
       return dataSources.wordpressFicheAPI.getLatestChouquettises(6);
     },
     topPosts(parent, _, { dataSources }) {
-      return dataSources.wordpressPostAPI.getTopPostCards(6);
+      return dataSources.wordpressPostAPI.getTopPostCards(6, true);
     },
     seo(parent, _, { dataSources }) {
       return dataSources.wordpressYoastAPI.getHome();

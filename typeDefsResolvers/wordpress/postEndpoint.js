@@ -117,41 +117,36 @@ export default class WordpressPostAPI extends WordpresRESTDataSource {
       per_page: number,
       _fields: POST_CARD_FIELDS.join(","),
       _embed: "wp:featuredmedia",
+      tags_exclude: TOPS_TAG_ID,
     });
 
     return postCards.map(this.postCardReducer, this);
   }
 
-  async getLatestPostsWithSticky(number = 10) {
-    // first get sticky posts (mise en avant)
-    const postCards = await this.get("", {
-      sticky: true,
-      per_page: number,
-      _fields: POST_CARD_FIELDS.join(","),
-      _embed: "wp:featuredmedia",
-    });
+  async getTopPostCards(number = 10, stickyFirst = false) {
+    let postCards = [];
+    if (stickyFirst) {
+      // first get sticky posts (mise en avant)
+      postCards = await this.get("", {
+        sticky: true,
+        tags: TOPS_TAG_ID,
+        per_page: number,
+        _fields: POST_CARD_FIELDS.join(","),
+        _embed: "wp:featuredmedia",
+      });
+    }
     // any left to fetch ?
     number -= postCards.length;
     if (number) {
       const remainingPostCards = await this.get("", {
         per_page: number,
+        tags: TOPS_TAG_ID,
         exclude: postCards.map(({ id }) => id),
         _fields: POST_CARD_FIELDS.join(","),
         _embed: "wp:featuredmedia",
       });
       postCards.push(...remainingPostCards);
     }
-
-    return postCards.map(this.postCardReducer, this);
-  }
-
-  async getTopPostCards(number = 10) {
-    const postCards = await this.get("", {
-      tags: TOPS_TAG_ID,
-      per_page: number,
-      _fields: POST_CARD_FIELDS.join(","),
-      _embed: "wp:featuredmedia",
-    });
 
     return postCards.map(this.postCardReducer, this);
   }
