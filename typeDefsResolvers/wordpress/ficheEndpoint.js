@@ -218,6 +218,12 @@ export default class WordpressFicheAPI extends WordpresRESTDataSource {
   }
 
   ficheCardReducer(ficheCard) {
+    if (_.isEmpty(ficheCard.main_category.marker_icon)) {
+      console.error(
+        `${ficheCard.slug} should have a marker for its main category ${ficheCard.main_category.id}`
+      );
+    }
+
     return {
       id: ficheCard.id,
       slug: ficheCard.slug,
