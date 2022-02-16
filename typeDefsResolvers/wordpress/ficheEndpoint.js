@@ -125,6 +125,7 @@ export default class WordpressFicheAPI extends WordpresRESTDataSource {
     const params = {
       exclude: ficheId,
       per_page: 6,
+      chouquettise_unsort: true,
       _fields: FICHE_CARD_FIELDS.join(","),
       _embed: "wp:featuredmedia",
     };
