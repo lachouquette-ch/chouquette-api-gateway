@@ -15,7 +15,7 @@ jobs:
           context: ./
           file: ./Dockerfile
           push: true
-          tags: docker.lachouquette.ch/api-gateway:${{ github.event.release.tag_name }}
+          tags: docker.lachouquette.ch/api-gateway-prod:${{ github.event.release.tag_name }},docker.lachouquette.ch/api-gateway-prod:latest
         env:
           NODE_ENV: production
       - name: Image digest
@@ -24,7 +24,7 @@ jobs:
         uses: nickgronow/kubectl@master
         with:
           config_data: ${{ secrets.KUBE_CONFIG_DATA }}
-          args: set image deployment/api-gateway-prod api-gateway-prod=docker.lachouquette.ch/api-gateway:${{ github.event.release.tag_name }} --record
+          args: set image deployment/api-gateway-prod api-gateway-prod=docker.lachouquette.ch/api-gateway-prod:${{ github.event.release.tag_name }} --record
       - name: Verify deployment
         uses: nickgronow/kubectl@master
         with:
