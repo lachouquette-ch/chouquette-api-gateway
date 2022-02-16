@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
         - name: api-gateway-prod
-          image: docker.lachouquette.ch/api-gateway:latest
+          image: docker.lachouquette.ch/api-gateway-prod:latest
           ports:
             - name: container-port
               containerPort: 4000
