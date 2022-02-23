@@ -224,7 +224,7 @@ export default class WordpressFicheAPI extends WordpresRESTDataSource {
       );
     }
 
-    return {
+    const result = {
       id: ficheCard.id,
       slug: ficheCard.slug,
       title: he.decode(ficheCard.title.rendered),
@@ -242,12 +242,18 @@ export default class WordpressFicheAPI extends WordpresRESTDataSource {
           )
         : null,
       /* eslint-enable indent */
-
-      // embedded
-      image: WordpressBaseAPI.mediaReducer(
-        ficheCard._embedded["wp:featuredmedia"][0]
-      ),
     };
+
+    const featuredMedia = ficheCard._embedded["wp:featuredmedia"][0];
+    if (featuredMedia.code === "rest_forbidden") {
+      console.warn(
+        `Cannot load featuredmedia for fiche '${ficheCard.slug}' (${featuredMedia.message}). Does it exist ? or is it linked to an unplublished post ?`
+      );
+    } else {
+      result.image = WordpressBaseAPI.mediaReducer(featuredMedia);
+    }
+
+    return result;
   }
 
   infoReducer(info) {

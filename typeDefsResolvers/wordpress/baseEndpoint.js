@@ -1,5 +1,6 @@
 import { RESTDataSource } from "apollo-datasource-rest";
 import he from "he";
+import _ from "lodash";
 import WordpresRESTDataSource from "../WordpresRESTDataSource";
 
 const IMAGE_SIZES = ["medium", "medium_large", "large", "thumbnail", "full"];
@@ -114,6 +115,11 @@ export default class WordpressBaseAPI extends WordpresRESTDataSource {
       source: media.source_url,
       sizes: [],
     };
+
+    console.assert(
+      _.isEmpty(media.media_details.sizes),
+      `Cannot access sizes for media ${mediaDTO.source} (${mediaDTO.id})`
+    );
 
     for (const [name, rawInfo] of Object.entries(media.media_details.sizes)) {
       if (IMAGE_SIZES.includes(name)) {
