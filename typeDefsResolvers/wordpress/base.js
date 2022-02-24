@@ -3,6 +3,7 @@ import { gql } from "apollo-server-express";
 export const typeDefs = gql`
   type NuxtServerInit {
     settings: Settings!
+    theme: Theme
     redirects: [Redirect!]
     categories: [Category!]
     menus: [Menu!]
@@ -32,6 +33,10 @@ export const typeDefs = gql`
     name: String
     description: String
     url: String
+  }
+
+  type Theme {
+    systemText: String
   }
 
   type Location {
@@ -162,6 +167,9 @@ export const resolvers = {
   NuxtServerInit: {
     settings(parent, _, { dataSources }) {
       return dataSources.wordpressBaseAPI.getSettings();
+    },
+    theme(parent, _, { dataSources }) {
+      return dataSources.wordpressChouquetteAPI.getTheme();
     },
     redirects(parent, _, { dataSources }) {
       return dataSources.wordpressYoastAPI.getRedirects();

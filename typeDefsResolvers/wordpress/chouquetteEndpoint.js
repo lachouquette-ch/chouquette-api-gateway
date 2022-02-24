@@ -6,6 +6,10 @@ export default class WordpressChouquetteAPI extends WordpresRESTDataSource {
     this.baseURL = `${process.env.WP_URL}/wp-json/chouquette/v1`;
   }
 
+  async getTheme() {
+    return await this.get(`theme`);
+  }
+
   async getFiltersForCategory(id) {
     const categoryFilters = await this.get(`criteria/category/${id}`);
 
