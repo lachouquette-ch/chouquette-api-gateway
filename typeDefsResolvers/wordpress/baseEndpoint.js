@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2023.
+ * This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ * You should have received a copy of the GNU General Public License along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 import { RESTDataSource } from "apollo-datasource-rest";
 import he from "he";
 import _ from "lodash";
@@ -116,10 +123,9 @@ export default class WordpressBaseAPI extends WordpresRESTDataSource {
       sizes: [],
     };
 
-    console.assert(
-      _.isEmpty(media.media_details.sizes),
-      `Cannot access sizes for media ${mediaDTO.source} (${mediaDTO.id})`
-    );
+    if (!media.media_details || _.isEmpty(media.media_details.sizes)) {
+      return null;
+    }
 
     for (const [name, rawInfo] of Object.entries(media.media_details.sizes)) {
       if (IMAGE_SIZES.includes(name)) {
